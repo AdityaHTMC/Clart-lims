@@ -90,6 +90,15 @@ const AddCollectionList = () => {
     formDataToSend.append("serviceable_pin_code", inputData.serviceable_pin_code );
     formDataToSend.append("geofencing_km", inputData.geofencing_km );
 
+    allSelectedProductIds.forEach((id, index) => {
+      formDataToSend.append(`associated_units[${index}]`, id);
+    });
+  
+    // Append associated_labs with array index
+    allSelectedProduct2Ids.forEach((id, index) => {
+      formDataToSend.append(`associated_labs[${index}]`, id);
+    });
+
     // inputData.images.forEach((image, index) => {
     //   formDataToSend.append(`images[${index}]`, image);
     // });

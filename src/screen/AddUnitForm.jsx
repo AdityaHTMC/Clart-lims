@@ -4,15 +4,18 @@ import { Button, FormGroup, Input, Label } from "reactstrap";
 import { useCategoryContext } from "../helper/CategoryProvider";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import { Autocomplete, Chip, TextField } from "@mui/material";
 const AddUnitForm = () => {
   const navigate = useNavigate();
 
   const {
-    getSubCategoryList,
-    addUnit,
+    addUnit,getAllLabs,labDropdown,getAllCollection,collectionDropdown
   } = useCategoryContext();
+
+  useEffect(()=>{
+    getAllCollection()
+    getAllLabs()
+  },[])
 
   const [inputData, setInputData] = useState({
     organization_name: "",
@@ -26,14 +29,10 @@ const AddUnitForm = () => {
     pincode: "",
   });
 
-  // useEffect(() => {
-  //   getCategoryList();
-  //   getVarityList();
-  //   getBrandList();
-  //   getpackList();
-  //   getUnitList();
-  //   getBagTypeList();
-  // }, []);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedProducts2, setSelectedProducts2] = useState([]);
+
+
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -43,24 +42,9 @@ const AddUnitForm = () => {
     }));
   };
 
-  const handleOfferEndDateChange = (e) => {
-    const { value } = e.target;
 
-    // Convert the date to ISO format
-    const formattedDate = new Date(value).toISOString();
 
-    setInputData((prevData) => ({
-      ...prevData,
-      offer_end_date: formattedDate,
-    }));
-  };
 
-  const handleDescriptionChange = (value) => {
-    setInputData((prevState) => ({
-      ...prevState,
-      description: value,
-    }));
-  };
 
 
   const handleImageChange = (e) => {
@@ -80,6 +64,15 @@ const AddUnitForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+  
+    const allSelectedProductIds = [
+      ...selectedProducts.map(product => product._id)
+    ];
+    
+    const allSelectedProduct2Ids = [
+      ...selectedProducts2.map(product => product._id)
+    ];
+
     const formDataToSend = new FormData();
 
     formDataToSend.append("organization_name", inputData.organization_name);
@@ -91,7 +84,15 @@ const AddUnitForm = () => {
     formDataToSend.append("district", inputData.district );
     formDataToSend.append("state", inputData.state );
     formDataToSend.append("pincode", inputData.pincode );
+    
+    allSelectedProductIds.forEach((id, index) => {
+      formDataToSend.append(`associated_collection_centers[${index}]`, id);
+    });
   
+    // Append associated_labs with array index
+    allSelectedProduct2Ids.forEach((id, index) => {
+      formDataToSend.append(`associated_labs[${index}]`, id);
+    });
     // inputData.images.forEach((image, index) => {
     //   formDataToSend.append(`images[${index}]`, image);
     // });
@@ -240,17 +241,62 @@ const AddUnitForm = () => {
           </div>
         </div>
 
-        {/* Continue the pattern for the rest of the form */}
+        <div className="row">
+            <div className="col-md-6">
+              <FormGroup>
+                <Label for="New">Add Collection Center</Label>
+                <Autocomplete
+                  sx={{ m: 1 }}
+                  multiple
+                  options={collectionDropdown.data || []}
+                  getOptionLabel={(option) => option?.organization_name || ""}
+                  value={selectedProducts}
+                  onChange={(event, newValue) => setSelectedProducts(newValue)}
+                  disableCloseOnSelect
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Select Collection Center"
+                      placeholder="Select Collection Center"
+                    />
+                  )}
+                />
+              </FormGroup>
+            </div>
+
+            <div className="col-md-6">
+              <FormGroup>
+                <Label for="New">Add New Lab Center</Label>
+                <Autocomplete
+                  sx={{ m: 1 }}
+                  multiple
+                  options={labDropdown.data || []}
+                  getOptionLabel={(option) => option?.organization_name || ""}
+                  value={selectedProducts2}
+                  onChange={(event, newValue) => setSelectedProducts2(newValue)}
+                  disableCloseOnSelect
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Select Collection Center"
+                      placeholder="Select Collection Center"
+                    />
+                  )}
+                />
+              </FormGroup>
+            </div>
+          </div>
 
         <div className="row">
-         
           <div className="col-md-6">
             <FormGroup>
               <Label htmlFor="pincode" className="col-form-label">
                 Pincode:
               </Label>
               <Input
-                type="text"
+                type="number"
                 name="pincode"
                 value={inputData.pincode}
                 onChange={handleInputChange}

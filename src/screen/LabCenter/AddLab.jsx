@@ -13,11 +13,12 @@ const AddLab = () => {
   const navigate = useNavigate();
 
   const {
-    addlab,getAllCollection,collectionDropdown
+    addlab,getAllCollection,collectionDropdown,getAllUnit,unitDropdown
   } = useCategoryContext();
 
   useEffect(()=>{
     getAllCollection()
+    getAllUnit()
   },[])
 
   const [inputData, setInputData] = useState({
@@ -33,6 +34,7 @@ const AddLab = () => {
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedProducts2, setSelectedProducts2] = useState([]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -78,6 +80,11 @@ const AddLab = () => {
     const allSelectedProductIds = [
       ...selectedProducts.map(product => product._id)
     ];
+    
+    const allSelectedProduct2Ids = [
+      ...selectedProducts2.map(product => product._id)
+    ];
+
     const formDataToSend = new FormData();
 
     formDataToSend.append("organization_name", inputData.organization_name);
@@ -89,7 +96,14 @@ const AddLab = () => {
     formDataToSend.append("district", inputData.district );
     formDataToSend.append("state", inputData.state );
     formDataToSend.append("pincode", inputData.pincode );
-    formDataToSend.append("pincode", allSelectedProductIds );
+    allSelectedProductIds.forEach((id, index) => {
+      formDataToSend.append(`associated_collection_centers[${index}]`, id);
+    });
+  
+    // Append associated_labs with array index
+    allSelectedProduct2Ids.forEach((id, index) => {
+      formDataToSend.append(`associated_units[${index}]`, id);
+    });
   
     // inputData.images.forEach((image, index) => {
     //   formDataToSend.append(`images[${index}]`, image);
@@ -241,7 +255,7 @@ const AddLab = () => {
           </div>
 
           <div className="row">
-            <div className="col-md-12">
+            <div className="col-md-6">
               <FormGroup>
                 <Label for="New">Add New Collection Center</Label>
                 <Autocomplete
@@ -251,6 +265,28 @@ const AddLab = () => {
                   getOptionLabel={(option) => option?.organization_name || ""}
                   value={selectedProducts}
                   onChange={(event, newValue) => setSelectedProducts(newValue)}
+                  disableCloseOnSelect
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Select Collection Center"
+                      placeholder="Select Collection Center"
+                    />
+                  )}
+                />
+              </FormGroup>
+            </div>
+            <div className="col-md-6">
+              <FormGroup>
+                <Label for="New">Add New Unit Center</Label>
+                <Autocomplete
+                  sx={{ m: 1 }}
+                  multiple
+                  options={unitDropdown.data || []}
+                  getOptionLabel={(option) => option?.organization_name || ""}
+                  value={selectedProducts2}
+                  onChange={(event, newValue) => setSelectedProducts2(newValue)}
                   disableCloseOnSelect
                   renderInput={(params) => (
                     <TextField
