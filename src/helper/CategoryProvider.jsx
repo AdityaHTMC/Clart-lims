@@ -15,6 +15,7 @@ export const CategoryProvider = ({ children }) => {
   const [collectionDropdown, setCollectionDropdown] = useState({loading: true,data: []});
   const [labDropdown, setlabDropdown] = useState({loading: true,data: []});
   const [unitDropdown, setUnitDropdown] = useState({loading: true,data: []});
+  const [phlebotomistList, setPhlebotomistList] = useState({loading: true,data: [],total: ""});
   const AuthToken = localStorage.getItem("Authtoken");
   // console.log(AuthToken)
   const base_url = import.meta.env.VITE_API_URL;
@@ -238,8 +239,57 @@ export const CategoryProvider = ({ children }) => {
   };
 
 
+  const getAllphlebotomist = async (data) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/phlebotomist/list`,
+        {},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setPhlebotomistList({
+          data: response?.data?.data || [],
+          total: response.data.total,
+          loading: false,
+        });
+      } else {
+        setPhlebotomistList({ data: [],  loading: false });
+        // toast.error("Failed to fetch product list");
+      }
+    } catch (error) {
+      setPhlebotomistList({ data: [], loading: false });
+      toast.error("Failed to fetch unit Center list");
+    }
+  };
+
+  const addphlebotomist = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/phlebotomist/add`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            "Content-Type": "multipart/form-data", 
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("phlebotomist added successfully");
+        navigate("/phlebotomist-list");
+      } else {
+        toast.error("Failed to add phlebotomist ");
+      }
+    } catch (error) {
+      
+      toast.error("An error occurred while adding the phlebotomist ");
+    }
+  };
+
+
   const values = {
-   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown
+   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

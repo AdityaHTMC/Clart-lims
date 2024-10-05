@@ -12,6 +12,7 @@ import { CategoryProvider } from './helper/CategoryProvider.jsx'
 import { CommonProvider } from './helper/CommonProvider.jsx';
 import { CMsProvider } from './helper/CmsProvider.jsx';
 import { DashboardProvider } from './helper/DashboardProvider.jsx';
+import { MasterProvider } from './helper/MasterProvider.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -22,7 +23,9 @@ createRoot(document.getElementById('root')).render(
             <CategoryProvider>
               <CMsProvider>
                 <DashboardProvider>
+                  <MasterProvider>
                   <App />
+                  </MasterProvider>
                 </DashboardProvider>
               </CMsProvider>
             </CategoryProvider>

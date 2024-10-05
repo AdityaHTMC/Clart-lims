@@ -89,7 +89,7 @@ const LabList = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Lab List" parent="Physical" />
+      <CommonBreadcrumb title="Lab List" />
       <Container fluid>
         <Row>
           <Col sm="12">

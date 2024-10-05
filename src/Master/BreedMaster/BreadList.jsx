@@ -37,9 +37,8 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
-import { useCategoryContext } from "../../helper/CategoryProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
-
+import { useMasterContext } from "../../helper/MasterProvider";
 
 // Register the necessary Chart.js components
 ChartJS.register(
@@ -57,21 +56,21 @@ ChartJS.register(
   RadialLinearScale
 );
 
-const CollectionList = () => {
+const BreadList = () => {
   const navigate = useNavigate();
 
-  const { collectionLists , getCollectionList } = useCategoryContext();
+  const { breedLists , getBreedList } = useMasterContext();
 
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    getCollectionList();
+    getBreedList();
   }, []);
 
-  console.log(collectionLists, "labLists");
+  console.log(breedLists, "breedLists");
 
   const onOpenModal = () => {
-    navigate("/add-connection");
+    navigate("/add-breed");
   };
   const handleEdit = (id) => {
     // navigate(`/product-edit/${id}`);
@@ -90,7 +89,9 @@ const CollectionList = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Collection List" />
+      <CommonBreadcrumb
+        title="Animal and Breed Master List"
+      />
       <Container fluid>
         <Row>
           <Col sm="12">
@@ -99,7 +100,7 @@ const CollectionList = () => {
               <CardBody>
                 <div className="btn-popup pull-right">
                   <Button color="primary" onClick={onOpenModal}>
-                    Add Collection Center 
+                    Add
                   </Button>
                 </div>
                 <div className="clearfix"></div>
@@ -108,39 +109,33 @@ const CollectionList = () => {
                     <Table hover responsive>
                       <thead>
                         <tr>
-                          <th>Collection Name </th>
-                          <th>Contact Person Name</th>
-                          <th>Mobile</th>
-                          <th>District</th>
-                          <th>Pin Code</th>
-
+                          <th>Name </th>
+                          <th>Species</th>
+                          <th>Breed</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         {/* Show loading spinner */}
-                        {collectionLists?.loading ? (
+                        {breedLists?.loading ? (
                           <tr>
                             <td colSpan="7" className="text-center">
                               <Spinner color="secondary" className="my-4" />
                             </td>
                           </tr>
-                        ) : collectionLists?.data?.length === 0 ? (
+                        ) : breedLists?.data?.length === 0 ? (
                           // Show "No products found" when there's no data
                           <tr>
                             <td colSpan="7" className="text-center">
-                              No Unit List Found
+                              No Animal and Breed Master List Found
                             </td>
                           </tr>
                         ) : (
-                          collectionLists?.data?.map((product, index) => (
+                            breedLists?.data?.map((product, index) => (
                             <tr key={index}>
-                              <td>{product.organization_name}</td>
-                              <td>{product.contact_person}</td>
-                              <td>{product.mobile}</td>
-                              <td>{product.district}</td>
-                              <td>{product.pincode}</td>
-
+                              <td>{product?.name}</td>
+                              <td>{product?.species}</td>
+                              <td>{product?.breed}</td>
                               <td>
                                 <div className="circelBtnBx">
                                   <Button
@@ -175,4 +170,4 @@ const CollectionList = () => {
   );
 };
 
-export default CollectionList;
+export default BreadList;

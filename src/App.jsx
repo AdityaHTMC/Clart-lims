@@ -64,6 +64,12 @@ import CollectionList from "./screen/CollectionCenter.jsx/CollectionList";
 import LabList from "./screen/LabCenter/LabList";
 import AddLab from "./screen/LabCenter/AddLab";
 import AddCollectionList from "./screen/CollectionCenter.jsx/AddCollectionList";
+import PhlebotomistList from "./screen/Phlebotomist/PhlebotomistList";
+import AddPhlebotomist from "./screen/Phlebotomist/AddPhlebotomist";
+import BreadList from "./Master/BreedMaster/BreadList";
+import AddBread from "./Master/BreedMaster/AddBread";
+import CustomerList from "./screen/Customers/CustomerList";
+import AddCustomer from "./screen/Customers/AddCustomer";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -101,6 +107,21 @@ function App() {
           <Route path="/add-lab" element={<AddLab />} />
           <Route path="/collection-center-list" element={<CollectionList />} />
           <Route path="/add-connection" element={<AddCollectionList />} />
+          
+          <Route path="/phlebotomist-list" element={<PhlebotomistList />} />
+
+
+          <Route path="/add-phlebotomist" element={<AddPhlebotomist />} />
+
+          <Route path="/customers-list" element={<CustomerList />} />
+
+          <Route path="/add-customer" element={<AddCustomer />} />
+
+          {/* master */}
+
+          <Route path="/breed-management" element={<BreadList />} />
+          <Route path="/add-breed" element={<AddBread />} />
+
           <Route path="/all-orders" element={<OrderList status="" />} />
           <Route
             path="/pending-orders"

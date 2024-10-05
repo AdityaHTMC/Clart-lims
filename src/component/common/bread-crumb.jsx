@@ -23,7 +23,7 @@ const CommonBreadcrumb = ({ title, parent }) => {
                   <Home />
                 </Link>
               </BreadcrumbItem>
-              <BreadcrumbItem>{parent}</BreadcrumbItem>
+              
               <BreadcrumbItem className=" active">{title}</BreadcrumbItem>
             </Breadcrumb>
           </Col>

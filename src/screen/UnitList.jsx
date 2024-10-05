@@ -87,7 +87,7 @@ const UnitList = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Unit List" parent="Physical" />
+      <CommonBreadcrumb title="Unit List" />
       <Container fluid>
         <Row>
           <Col sm="12">
