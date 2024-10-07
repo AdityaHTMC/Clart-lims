@@ -82,7 +82,7 @@ const AddCustomer = () => {
           date_of_birth: "",
           sex: "",
           color: "",
-          breed: "", // Initialize breed as empty
+          breed: "", 
         },
       ],
     }));

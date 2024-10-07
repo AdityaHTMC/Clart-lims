@@ -90,7 +90,7 @@ const BreadList = () => {
   return (
     <>
       <CommonBreadcrumb
-        title="Animal and Breed Master List"
+        title="Animal and Breed List"
       />
       <Container fluid>
         <Row>

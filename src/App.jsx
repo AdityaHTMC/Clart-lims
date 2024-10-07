@@ -70,6 +70,12 @@ import BreadList from "./Master/BreedMaster/BreadList";
 import AddBread from "./Master/BreedMaster/AddBread";
 import CustomerList from "./screen/Customers/CustomerList";
 import AddCustomer from "./screen/Customers/AddCustomer";
+import TestCategory from "./Master/TestCategory/TestCategory";
+import TestList from "./Master/TestMaster/TestList";
+import AddTestList from "./Master/TestMaster/AddTestList";
+import ProfessionalList from "./Master/Professional/ProfessionalList";
+import TestPackageList from "./Master/TestPackage/TestPackageList";
+import AddTestPackage from "./Master/TestPackage/AddTestPackage";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -121,7 +127,14 @@ function App() {
 
           <Route path="/breed-management" element={<BreadList />} />
           <Route path="/add-breed" element={<AddBread />} />
+          <Route path="/test-list" element={<TestList />} />
+          <Route path="/professional-fees" element={<ProfessionalList />} />
 
+          <Route path="/test-packages" element={<TestPackageList />} />
+          <Route path="/add-test-packages" element={<AddTestPackage />} />
+
+          <Route path="/test-categories" element={<TestCategory />} />
+          <Route path="/add-test" element={<AddTestList />} />
           <Route path="/all-orders" element={<OrderList status="" />} />
           <Route
             path="/pending-orders"
