@@ -131,11 +131,11 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                           ) : (
                             testList?.data?.map((product, index) => (
                               <tr key={index}>
-                                <td>{product.test_name}</td>
-                                <td>{product.group_name}</td>
-                                <td>{product.price}</td>
-                                <td>{product.sell_price}</td>
-                                <td>{product.collection_fee}</td>
+                                <td>{product?.test_name}</td>
+                                <td>{product?.group_name}</td>
+                                <td>{product?.price}</td>
+                                <td>{product?.sell_price}</td>
+                                <td>{product?.collection_fee}</td>
                                 {/* <td>{product.pincode}</td> */}
   
                                 <td>
@@ -143,14 +143,14 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                                     <Button
                                       className="btn"
                                       color="link"
-                                      onClick={() => handleEdit(product._id)}
+                                      onClick={() => handleEdit(product?._id)}
                                     >
                                       <FaEdit />
                                     </Button>
                                     <Button
                                       className="btn"
                                       color="link"
-                                      onClick={() => handleDelete(product._id)}
+                                      onClick={() => handleDelete(product?._id)}
                                     >
                                       <FaTrashAlt />
                                     </Button>

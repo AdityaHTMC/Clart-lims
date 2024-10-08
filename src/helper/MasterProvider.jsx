@@ -16,6 +16,7 @@ export const MasterProvider = ({ children }) => {
   const [testList, settestList] = useState({loading: true,data: [],total: ""});
   const [professionalList, setprofessionalList] = useState({loading: true,data: [],total: ""});
   const [testpackageList, settestpackageList] = useState({loading: true,data: [],total: ""});
+  const [taskList, setTaskList] = useState({loading: true,data: [],total: ""});
   const [allbreed, setallbreed] = useState({loading: true,data: []});
   const [alltestCategory, setalltestCategory] = useState({loading: true,data: []});
   const [alltest, setalltest] = useState({loading: true,data: []});
@@ -434,10 +435,58 @@ export const MasterProvider = ({ children }) => {
   };
 
 
+  const addtask = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/task/add`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Task management added successfully");
+       navigate('/task-management')
+      } else {
+        toast.error("Failed to add Task management");
+      }
+    } catch (error) {
+      console.error("Error adding Test package:", error);
+      toast.error("An error occurred while adding the Task management");
+    }
+  };
+
+
+  const getTaskList = async (data) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/task/list`,
+        {},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setTaskList({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setTaskList({ data: [], total: "", loading: false });
+        toast.error("Failed to fetch test list");
+      }
+    } catch (error) {
+      setTaskList({ data: [], total: "", loading: false });
+      toast.error("Failed to fetch test list");
+    }
+  };
+
 
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList
 
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;

@@ -76,6 +76,8 @@ import AddTestList from "./Master/TestMaster/AddTestList";
 import ProfessionalList from "./Master/Professional/ProfessionalList";
 import TestPackageList from "./Master/TestPackage/TestPackageList";
 import AddTestPackage from "./Master/TestPackage/AddTestPackage";
+import TaskList from "./screen/TaskManagement/TaskList";
+import AddTask from "./screen/TaskManagement/AddTask";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -99,7 +101,7 @@ function App() {
           <Route path="/pack-size" element={<PackSize />} />
           <Route path="/unit-master" element={<UnitSize />} />
           <Route path="/bag-type" element={<BagType />} />
-          <Route path="/cms" element={<CmsList />} />
+          <Route path="/cms-management" element={<CmsList />} />
           <Route path="/currency" element={<CurrencyList />} />
           <Route path="/country" element={<Location />} />
           <Route path="/faqs" element={<FaqList />} />
@@ -133,6 +135,8 @@ function App() {
           <Route path="/test-packages" element={<TestPackageList />} />
           <Route path="/add-test-packages" element={<AddTestPackage />} />
 
+          <Route path="/task-management" element={<TaskList />} />
+          <Route path="/add-task" element={<AddTask />} />
           <Route path="/test-categories" element={<TestCategory />} />
           <Route path="/add-test" element={<AddTestList />} />
           <Route path="/all-orders" element={<OrderList status="" />} />

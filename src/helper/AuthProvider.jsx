@@ -143,7 +143,7 @@ export const AuthProvider = ({ children }) => {
                     'Authorization': Authtoken
                 }
             })
-            if(data.success){
+            if(data.status === 200){
                 setRolesList({ loading: false, data: data.data, total_page: data.pages, current_page: data.page})
             }else{
                 setRolesList({...rolesList, loading: false})

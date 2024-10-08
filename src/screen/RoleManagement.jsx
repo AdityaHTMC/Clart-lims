@@ -37,6 +37,8 @@ const RoleManagement = () => {
     allPermission,
     role_detail,
   } = useAuthContext();
+
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -50,6 +52,7 @@ const RoleManagement = () => {
     if (rolesList.data.length === 0) {
       getRolesList();
     }
+    console.log(rolesList,'role')
   }, [rolesList.data]);
 
   useEffect(() => {

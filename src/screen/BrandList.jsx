@@ -220,7 +220,7 @@ const BrandList = () => {
                               />
                             </th>
 
-                            <td>{product.title} </td>
+                            <td>{product?.title} </td>
                             <td>
                               <div className="form-check form-switch">
                                 <input

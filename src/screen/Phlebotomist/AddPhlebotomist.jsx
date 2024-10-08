@@ -221,7 +221,7 @@ const AddPhlebotomist = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="pincode" className="col-form-label">
-                  Pincode:
+                serviceable Pincode:
                 </Label>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <TextField
@@ -261,7 +261,7 @@ const AddPhlebotomist = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="images" className="col-form-label">
-                  Upload Images:
+                  Upload Profile:
                 </Label>
                 <Input
                   type="file"

@@ -1,114 +1,114 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
-    ArcElement,
-    BarController,
-    BarElement,
-    CategoryScale,
-    Chart as ChartJS,
-    Filler,
-    Legend,
-    LineElement,
-    LinearScale,
-    PointElement,
-    RadialLinearScale,
-    Title,
-    Tooltip,
-  } from "chart.js";
-  
-  import {
-    Button,
-    Card,
-    CardBody,
-    Col,
-    Container,
-    Form,
-    FormGroup,
-    Input,
-    Label,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    Row,
-    Spinner,
-    Table,
-  } from "reactstrap";
-  import { useEffect, useState } from "react";
-  import { useNavigate } from "react-router-dom";
-  import { FaEdit, FaTrashAlt } from "react-icons/fa";
+  ArcElement,
+  BarController,
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LineElement,
+  LinearScale,
+  PointElement,
+  RadialLinearScale,
+  Title,
+  Tooltip,
+} from "chart.js";
+
+import {
+  Button,
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Row,
+  Spinner,
+  Table,
+} from "reactstrap";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 
-  
-  // Register the necessary Chart.js components
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    BarController,
-    BarElement,
-    ArcElement,
-    Filler,
-    RadialLinearScale
-  );
-  
-  const TestCategory = () => {
-    const navigate = useNavigate();
-  
-    const { testCategory, gettestCategoryList,addtestCategory } = useMasterContext();
-  
-    const [open, setOpen] = useState(false);
-    const [modalOpen, setModalOpen] = useState(false);
+// Register the necessary Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  BarController,
+  BarElement,
+  ArcElement,
+  Filler,
+  RadialLinearScale
+);
 
-    const [formData, setFormData] = useState({
-        name: "",
-      });
+const TestCategory = () => {
+  const navigate = useNavigate();
 
-    const [selectedvarity, setSelectedvarity] = useState({
-        name: "",
-      });
-  
-    useEffect(() => {
-        gettestCategoryList();
-    }, []);
-  
-    console.log(testCategory, "breedLists");
- 
-    const handleEdit = (id) => {
-      // navigate(`/product-edit/${id}`);
-    };
-  
-    const handleDelete = (id) => {
-      if (window.confirm("Are you sure you wish to delete this item?")) {
-        // delete product logic here
-        // ProductDelete(id);
-      }
-    };
-  
-    const onOpenModal = () => {
-        setOpen(true);
-      };
-      const onOpenModal2 = (product) => {
-        setSelectedvarity(product);
-        setModalOpen(true);
-      };
-    
-      // Close the modal
-      const onCloseModal2 = () => {
-        setModalOpen(false);
-        setSelectedvarity({ name:'' });
-      };
-    
-      const onCloseModal = () => {
-        setOpen(false);
-      };
+  const { testCategory, gettestCategoryList, addtestCategory } =
+    useMasterContext();
 
-        // Handle form input change
+  const [open, setOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const [formData, setFormData] = useState({
+    name: "",
+  });
+
+  const [selectedvarity, setSelectedvarity] = useState({
+    name: "",
+  });
+
+  useEffect(() => {
+    gettestCategoryList();
+  }, []);
+
+  console.log(testCategory, "breedLists");
+
+  const handleEdit = (id) => {
+    // navigate(`/product-edit/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you wish to delete this item?")) {
+      // delete product logic here
+      // ProductDelete(id);
+    }
+  };
+
+  const onOpenModal = () => {
+    setOpen(true);
+  };
+  const onOpenModal2 = (product) => {
+    setSelectedvarity(product);
+    setModalOpen(true);
+  };
+
+  // Close the modal
+  const onCloseModal2 = () => {
+    setModalOpen(false);
+    setSelectedvarity({ name: "" });
+  };
+
+  const onCloseModal = () => {
+    setOpen(false);
+  };
+
+  // Handle form input change
   const handleInputChanges = (e) => {
     const { name, value } = e.target;
     setSelectedvarity((prevState) => ({
@@ -138,88 +138,81 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
     onCloseModal(); // Close modal after saving
   };
 
-  
-    return (
-      <>
-        <CommonBreadcrumb
-          title="Test Category List"
-        />
-        <Container fluid>
-          <Row>
-            <Col sm="12">
-              <Card>
-                {/* <CommonCardHeader title="Product Sub Categoty" /> */}
-                <CardBody>
-                  <div className="btn-popup pull-right">
-                    <Button color="primary" onClick={onOpenModal}>
-                      Add
-                    </Button>
-                  </div>
-                  <div className="clearfix"></div>
-                  <div id="basicScenario" className="product-physical">
-                    <div className="promo-code-list">
-                      <Table hover responsive>
-                        <thead>
+  return (
+    <>
+      <CommonBreadcrumb title="Test Category List" />
+      <Container fluid>
+        <Row>
+          <Col sm="12">
+            <Card>
+              {/* <CommonCardHeader title="Product Sub Categoty" /> */}
+              <CardBody>
+                <div className="btn-popup pull-right">
+                  <Button color="primary" onClick={onOpenModal}>
+                    Add
+                  </Button>
+                </div>
+                <div className="clearfix"></div>
+                <div id="basicScenario" className="product-physical">
+                  <div className="promo-code-list">
+                    <Table hover responsive>
+                      <thead>
+                        <tr>
+                          <th>Name </th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* Show loading spinner */}
+                        {testCategory?.loading ? (
                           <tr>
-                            <th>Name </th>
-                         
-                            <th>Action</th>
+                            <td colSpan="7" className="text-center">
+                              <Spinner color="secondary" className="my-4" />
+                            </td>
                           </tr>
-                        </thead>
-                        <tbody>
-                          {/* Show loading spinner */}
-                          {testCategory?.loading ? (
-                            <tr>
-                              <td colSpan="7" className="text-center">
-                                <Spinner color="secondary" className="my-4" />
+                        ) : testCategory?.data?.length === 0 ? (
+                          // Show "No products found" when there's no data
+                          <tr>
+                            <td colSpan="7" className="text-center">
+                              No Test Category List Found
+                            </td>
+                          </tr>
+                        ) : (
+                          testCategory?.data?.map((product, index) => (
+                            <tr key={index}>
+                              <td>{product?.name}</td>
+                              <td>
+                                <div className="circelBtnBx">
+                                  <Button
+                                    className="btn"
+                                    color="link"
+                                    onClick={() => handleEdit(product._id)}
+                                  >
+                                    <FaEdit />
+                                  </Button>
+                                  <Button
+                                    className="btn"
+                                    color="link"
+                                    onClick={() => handleDelete(product._id)}
+                                  >
+                                    <FaTrashAlt />
+                                  </Button>
+                                </div>
                               </td>
                             </tr>
-                          ) : testCategory?.data?.length === 0 ? (
-                            // Show "No products found" when there's no data
-                            <tr>
-                              <td colSpan="7" className="text-center">
-                                No Animal and Breed Master List Found
-                              </td>
-                            </tr>
-                          ) : (
-                            testCategory?.data?.map((product, index) => (
-                              <tr key={index}>
-                                <td>{product?.name}</td>
-                        
-                                <td>
-                                  <div className="circelBtnBx">
-                                    <Button
-                                      className="btn"
-                                      color="link"
-                                      onClick={() => handleEdit(product._id)}
-                                    >
-                                      <FaEdit />
-                                    </Button>
-                                    <Button
-                                      className="btn"
-                                      color="link"
-                                      onClick={() => handleDelete(product._id)}
-                                    >
-                                      <FaTrashAlt />
-                                    </Button>
-                                  </div>
-                                </td>
-                              </tr>
-                            ))
-                          )}
-                        </tbody>
-                      </Table>
-                    </div>
+                          ))
+                        )}
+                      </tbody>
+                    </Table>
                   </div>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
 
-
-
-        <Modal
+      <Modal
         isOpen={open}
         toggle={onCloseModal}
         className="modal-lg" // Increases the width
@@ -245,7 +238,6 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                 id="title"
               />
             </FormGroup>
-
           </Form>
         </ModalBody>
         <ModalFooter>
@@ -289,9 +281,8 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
           </Button>
         </ModalFooter>
       </Modal>
-      </>
-    );
-  };
-  
-  export default TestCategory;
-  
+    </>
+  );
+};
+
+export default TestCategory;

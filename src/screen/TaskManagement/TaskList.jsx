@@ -37,9 +37,10 @@ import {
   import { useEffect, useState } from "react";
   import { useNavigate } from "react-router-dom";
   import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import { useMasterContext } from "../../helper/MasterProvider";
+import CommonBreadcrumb from "../../component/common/bread-crumb";
   
-  import CommonBreadcrumb from "../../component/common/bread-crumb";
-  import { useCategoryContext } from "../../helper/CategoryProvider";
+
   // Register the necessary Chart.js components
   ChartJS.register(
     CategoryScale,
@@ -56,21 +57,20 @@ import {
     RadialLinearScale
   );
   
-  const PhlebotomistList = () => {
+  const TaskList = () => {
     const navigate = useNavigate();
   
-    const { getAllphlebotomist,phlebotomistList } = useCategoryContext();
+    const { getTaskList , taskList } = useMasterContext();
   
-    const [open, setOpen] = useState(false);
   
     useEffect(() => {
-        getAllphlebotomist();
+        getTaskList();
     }, []);
   
-    console.log(phlebotomistList, "phlebotomistList");
+    console.log(taskList, "testList");
   
     const onOpenModal = () => {
-      navigate("/add-phlebotomist");
+      navigate("/add-task");
     };
     const handleEdit = (id) => {
       // navigate(`/product-edit/${id}`);
@@ -83,13 +83,11 @@ import {
       }
     };
   
-    const onCloseModal = () => {
-      setOpen(false);
-    };
+
   
     return (
       <>
-        <CommonBreadcrumb title="Phlebotomist List" />
+        <CommonBreadcrumb title="Task Management List" />
         <Container fluid>
           <Row>
             <Col sm="12">
@@ -98,7 +96,7 @@ import {
                 <CardBody>
                   <div className="btn-popup pull-right">
                     <Button color="primary" onClick={onOpenModal}>
-                      Add Phlebotomist
+                      Add Task
                     </Button>
                   </div>
                   <div className="clearfix"></div>
@@ -107,38 +105,33 @@ import {
                       <Table hover responsive>
                         <thead>
                           <tr>
-                            <th>Name </th>
-                            <th>Email</th>
-                            <th>Mobile</th>
-                            <th>Address</th>
-                            {/* <th>Pin Code</th> */}
+                            <th>Task </th>
+                            <th>Target Compilation Date</th>
+                            <th>status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
                           {/* Show loading spinner */}
-                          {phlebotomistList?.loading ? (
+                          {taskList?.loading ? (
                             <tr>
                               <td colSpan="7" className="text-center">
                                 <Spinner color="secondary" className="my-4" />
                               </td>
                             </tr>
-                          ) : phlebotomistList?.data?.length === 0 ? (
+                          ) : taskList?.data?.length === 0 ? (
                             // Show "No products found" when there's no data
                             <tr>
                               <td colSpan="7" className="text-center">
-                                No Phlebotomist List Found
+                                No test Package List Found
                               </td>
                             </tr>
                           ) : (
-                            phlebotomistList?.data?.map((product, index) => (
+                            taskList?.data?.map((product, index) => (
                               <tr key={index}>
-                                <td>{product?.name}</td>
-                                <td>{product?.email}</td>
-                                <td>{product?.mobile}</td>
-                                <td>{product?.address}</td>
-                                {/* <td>{product.pincode}</td> */}
-  
+                                <td>{product?.task_title}</td>
+                                <td>{product?.target_compilation_date}</td>
+                                <td>{product?.status}</td>
                                 <td>
                                   <div className="circelBtnBx">
                                     <Button
@@ -151,7 +144,7 @@ import {
                                     <Button
                                       className="btn"
                                       color="link"
-                                      onClick={() => handleDelete(product?._id)}
+                                      onClick={() => handleDelete(product._id)}
                                     >
                                       <FaTrashAlt />
                                     </Button>
@@ -173,5 +166,5 @@ import {
     );
   };
   
-  export default PhlebotomistList;
+  export default TaskList;
   

@@ -134,18 +134,18 @@ const LabList = () => {
                         ) : (
                           labLists?.data?.map((product, index) => (
                             <tr key={index}>
-                              <td>{product.organization_name}</td>
-                              <td>{product.contact_person}</td>
-                              <td>{product.mobile}</td>
-                              <td>{product.district}</td>
-                              <td>{product.pincode}</td>
+                              <td>{product?.organization_name}</td>
+                              <td>{product?.contact_person}</td>
+                              <td>{product?.mobile}</td>
+                              <td>{product?.district}</td>
+                              <td>{product?.pincode}</td>
 
                               <td>
                                 <div className="circelBtnBx">
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleEdit(product._id)}
+                                    onClick={() => handleEdit(product?._id)}
                                   >
                                     <FaEdit />
                                   </Button>

@@ -134,10 +134,10 @@ import { useMasterContext } from "../../helper/MasterProvider";
                           ) : (
                             customerLists?.data?.map((product, index) => (
                               <tr key={index}>
-                                <td>{product.name}</td>
-                                <td>{product.email}</td>
-                                <td>{product.mobile}</td>
-                                <td>{product.address}</td>
+                                <td>{product?.name}</td>
+                                <td>{product?.email}</td>
+                                <td>{product?.mobile}</td>
+                                <td>{product?.address}</td>
                                 {/* <td>{product.pincode}</td> */}
   
                                 <td>
@@ -145,14 +145,14 @@ import { useMasterContext } from "../../helper/MasterProvider";
                                     <Button
                                       className="btn"
                                       color="link"
-                                      onClick={() => handleEdit(product._id)}
+                                      onClick={() => handleEdit(product?._id)}
                                     >
                                       <FaEdit />
                                     </Button>
                                     <Button
                                       className="btn"
                                       color="link"
-                                      onClick={() => handleDelete(product._id)}
+                                      onClick={() => handleDelete(product?._id)}
                                     >
                                       <FaTrashAlt />
                                     </Button>
