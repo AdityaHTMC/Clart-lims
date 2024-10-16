@@ -19,7 +19,11 @@ export const MasterProvider = ({ children }) => {
   const [taskList, setTaskList] = useState({loading: true,data: [],total: ""});
   const [allbreed, setallbreed] = useState({loading: true,data: []});
   const [alltestCategory, setalltestCategory] = useState({loading: true,data: []});
+  const [testParameter, setTestParameter] = useState({loading: true,data: []});
+  const [unitMasterList, setUnitMasterList] = useState({loading: true,data: [],total: ""});
   const [alltest, setalltest] = useState({loading: true,data: []});
+  const [allPPL, setallPPL] = useState({loading: true,data: []});
+  const [allUnitList, setallUnitList] = useState({loading: true,data: []});
   const AuthToken = localStorage.getItem("Authtoken");
   // console.log(AuthToken)
   const base_url = import.meta.env.VITE_API_URL;
@@ -484,9 +488,150 @@ export const MasterProvider = ({ children }) => {
   };
 
 
+  const getTPList = async (dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/test-parameter/list`,
+        {...dataToSend},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setTestParameter({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setTestParameter({ data: [], total: "", loading: false });
+        toast.error("Failed to fetch test parameter list");
+      }
+    } catch (error) {
+      setTestParameter({ data: [], total: "", loading: false });
+      toast.error("Failed to fetch test parameter list");
+    }
+  };
+
+  const getPPL = async (testId) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/test/parent/parameter/list`,
+        {testId: testId},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setallPPL({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setallPPL({ data: [], total: "", loading: false });
+        toast.error("Failed to fetch test parameter list");
+      }
+    } catch (error) {
+      setallPPL({ data: [], total: "", loading: false });
+      toast.error("Failed to fetch test parameter list");
+    }
+  };
+
+
+  const addTestParameter = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/test-parameter/add`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Test Parameter added successfully");
+       navigate('/test-parameters')
+      } else {
+        toast.error("Failed to add Test Parameter");
+      }
+    } catch (error) {
+      console.error("Error adding Test package:", error);
+      toast.error("An error occurred while adding the Test Parameter");
+    }
+  };
+
+  const getDDunitList = async (testId) => {
+    try {
+      const response = await axios.get(
+        `${base_url}/test/parameter/unit/list`,
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setallUnitList({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setallUnitList({ data: [], loading: false });
+        toast.error("Failed to fetch unit list");
+      }
+    } catch (error) {
+      setallUnitList({ data: [], loading: false });
+      toast.error("Failed to fetch unit list");
+    }
+  };
+
+  const getunitMasterList = async (testId) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/test/parameter/units/list`,{},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setUnitMasterList({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setUnitMasterList({ data: [], loading: false });
+        toast.error("Failed to fetch unit list");
+      }
+    } catch (error) {
+      setUnitMasterList({ data: [], loading: false });
+      toast.error("Failed to fetch unit list");
+    }
+  };
+
+
+  const addUnitMasterList = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/test/parameter/unit/add`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Test Parameter unit added successfully");
+       navigate('/test-parameter-units')
+      } else {
+        toast.error("Failed to add Test Parameter unit");
+      }
+    } catch (error) {
+      console.error("Error adding Test parameter unit:", error);
+      toast.error("An error occurred while adding the Test Parameter unit");
+    }
+  };
+
+
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList
 
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;

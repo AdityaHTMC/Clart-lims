@@ -239,11 +239,11 @@ export const CategoryProvider = ({ children }) => {
   };
 
 
-  const getAllphlebotomist = async (data) => {
+  const getAllphlebotomist = async (dataToSend) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/phlebotomist/list`,
-        {},
+        {...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;

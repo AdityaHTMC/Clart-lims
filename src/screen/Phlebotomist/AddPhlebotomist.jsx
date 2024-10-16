@@ -92,7 +92,6 @@ const AddPhlebotomist = () => {
     formDataToSend.append("mobile", inputData.mobile);
     formDataToSend.append("email", inputData.email);
     formDataToSend.append("address", inputData.address);
-    formDataToSend.append("pincode", pincodes);
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`associated_collection_centers[${index}]`, id);
     });

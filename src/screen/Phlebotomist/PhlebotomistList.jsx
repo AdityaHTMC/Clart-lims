@@ -40,6 +40,7 @@ import {
   
   import CommonBreadcrumb from "../../component/common/bread-crumb";
   import { useCategoryContext } from "../../helper/CategoryProvider";
+import { Pagination, Stack } from "@mui/material";
   // Register the necessary Chart.js components
   ChartJS.register(
     CategoryScale,
@@ -62,10 +63,18 @@ import {
     const { getAllphlebotomist,phlebotomistList } = useCategoryContext();
   
     const [open, setOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemperPage = 15;
+
+    const totalPages = phlebotomistList?.total && Math.ceil(phlebotomistList?.total / itemperPage);
   
     useEffect(() => {
-        getAllphlebotomist();
-    }, []);
+      const dataToSend = {
+        page: currentPage,
+        limit: itemperPage,
+      };
+        getAllphlebotomist(dataToSend);
+    }, [currentPage]);
   
     console.log(phlebotomistList, "phlebotomistList");
   
@@ -85,6 +94,10 @@ import {
   
     const onCloseModal = () => {
       setOpen(false);
+    };
+
+    const handlepagechange = (newpage) => {
+      setCurrentPage(newpage);
     };
   
     return (
@@ -161,6 +174,15 @@ import {
                             ))
                           )}
                         </tbody>
+                        <Stack className="rightPagination mt10" spacing={2}>
+                          <Pagination
+                            color="primary"
+                            count={totalPages}
+                            page={currentPage}
+                            shape="rounded"
+                            onChange={(event, value) => handlepagechange(value)}
+                          />
+                        </Stack>
                       </Table>
                     </div>
                   </div>

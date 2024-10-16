@@ -78,6 +78,9 @@ import TestPackageList from "./Master/TestPackage/TestPackageList";
 import AddTestPackage from "./Master/TestPackage/AddTestPackage";
 import TaskList from "./screen/TaskManagement/TaskList";
 import AddTask from "./screen/TaskManagement/AddTask";
+import TestParameter from "./Master/TestParameter/TestParameter";
+import AddTestParameter from "./Master/TestParameter/AddTestParameter";
+import UnitMasterList from "./Master/UnitList/UnitMasterList";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -134,6 +137,11 @@ function App() {
 
           <Route path="/test-packages" element={<TestPackageList />} />
           <Route path="/add-test-packages" element={<AddTestPackage />} />
+
+          <Route path="/test-parameters" element={<TestParameter />} />
+          <Route path="/test-parameter-units" element={<UnitMasterList />} />
+
+          <Route path="/add-test-parameters" element={<AddTestParameter />} />
 
           <Route path="/task-management" element={<TaskList />} />
           <Route path="/add-task" element={<AddTask />} />
@@ -194,6 +202,8 @@ function App() {
           <Route path="/store-settings" element={<StoreSetting />} />
 
           <Route path="/permission-management" element={<PermissionManagement />} />
+
+          
 
           <Route path="/role-management" element={<RoleManagement />} />
 

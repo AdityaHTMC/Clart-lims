@@ -101,6 +101,7 @@ const CmsList = () => {
 
   const onCloseModal = () => {
     setOpen(false);
+    setFormData({ title: "", description: "" });
   };
 
   const handleStatusToggle = async (product) => {

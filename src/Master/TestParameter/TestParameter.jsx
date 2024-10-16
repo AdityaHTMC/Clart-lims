@@ -37,11 +37,11 @@ import {
   import { useEffect, useState } from "react";
   import { useNavigate } from "react-router-dom";
   import { FaEdit, FaTrashAlt } from "react-icons/fa";
-  
-  import CommonBreadcrumb from "../../component/common/bread-crumb";
-  import { useCategoryContext } from "../../helper/CategoryProvider";
 import { useMasterContext } from "../../helper/MasterProvider";
+import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { Pagination, Stack } from "@mui/material";
+  
+
   // Register the necessary Chart.js components
   ChartJS.register(
     CategoryScale,
@@ -58,30 +58,27 @@ import { Pagination, Stack } from "@mui/material";
     RadialLinearScale
   );
   
-  const CustomerList = () => {
+  const TestParameter = () => {
     const navigate = useNavigate();
   
-    const { allCustomerList,customerLists } = useMasterContext();
-  
-    const [open, setOpen] = useState(false);
-
+    const { getTPList , testParameter } = useMasterContext();
     const [currentPage, setCurrentPage] = useState(1);
     const itemperPage = 10;
 
-    const totalPages = customerLists?.total && Math.ceil(customerLists?.total / itemperPage);
+    const totalPages = testParameter?.total && Math.ceil(testParameter?.total / itemperPage);
   
     useEffect(() => {
-      const dataToSend = {
-        page: currentPage,
-        limit: itemperPage,
-      };
-        allCustomerList(dataToSend);
+        const dataToSend = {
+            page: currentPage,
+            limit: itemperPage,
+          };
+        getTPList(dataToSend);
     }, [currentPage]);
   
-    console.log(customerLists, "phlebotomistList");
+    console.log(testParameter, "test parameter");
   
     const onOpenModal = () => {
-      navigate("/add-customer");
+      navigate("/add-test-parameters");
     };
     const handleEdit = (id) => {
       // navigate(`/product-edit/${id}`);
@@ -93,18 +90,16 @@ import { Pagination, Stack } from "@mui/material";
         // ProductDelete(id);
       }
     };
-  
-    const onCloseModal = () => {
-      setOpen(false);
-    };
 
     const handlepagechange = (newpage) => {
-      setCurrentPage(newpage);
-    };
+        setCurrentPage(newpage);
+      };
+  
+
   
     return (
       <>
-        <CommonBreadcrumb title="Customer List" />
+        <CommonBreadcrumb title="Test parameter List" />
         <Container fluid>
           <Row>
             <Col sm="12">
@@ -113,7 +108,7 @@ import { Pagination, Stack } from "@mui/material";
                 <CardBody>
                   <div className="btn-popup pull-right">
                     <Button color="primary" onClick={onOpenModal}>
-                      Add Customer
+                      Add Test parameter
                     </Button>
                   </div>
                   <div className="clearfix"></div>
@@ -122,38 +117,38 @@ import { Pagination, Stack } from "@mui/material";
                       <Table hover responsive>
                         <thead>
                           <tr>
-                            <th>Name </th>
-                            <th>Email</th>
-                            <th>Mobile</th>
-                            <th>Address</th>
-                            {/* <th>Pin Code</th> */}
+                            <th>Test Name </th>
+                            <th>Parameter</th>
+                            <th>Range</th>
+                            <th>Unit</th>
                             <th>Action</th>
                           </tr>
                         </thead>
                         <tbody>
                           {/* Show loading spinner */}
-                          {customerLists?.loading ? (
+                          {testParameter?.loading ? (
                             <tr>
                               <td colSpan="7" className="text-center">
                                 <Spinner color="secondary" className="my-4" />
                               </td>
                             </tr>
-                          ) : customerLists?.data?.length === 0 ? (
+                          ) : testParameter?.data?.length === 0 ? (
                             // Show "No products found" when there's no data
                             <tr>
                               <td colSpan="7" className="text-center">
-                                No Phlebotomist List Found
+                                No test List Found
                               </td>
                             </tr>
                           ) : (
-                            customerLists?.data?.map((product, index) => (
+                            testParameter?.data?.map((product, index) => (
                               <tr key={index}>
-                                <td>{product?.name}</td>
-                                <td>{product?.email}</td>
-                                <td>{product?.mobile}</td>
-                                <td>{product?.address}</td>
-                                {/* <td>{product.pincode}</td> */}
-  
+                                <td>{product?.test_name}</td>
+                                <td>{product?.parameter}</td>
+                                <td>
+                                  {product?.upper_range} -{" "}
+                                  {product?.lower_range}{" "}
+                                </td>
+                                <td>{product?.unit}</td>
                                 <td>
                                   <div className="circelBtnBx">
                                     <Button
@@ -197,5 +192,5 @@ import { Pagination, Stack } from "@mui/material";
     );
   };
   
-  export default CustomerList;
+  export default TestParameter;
   

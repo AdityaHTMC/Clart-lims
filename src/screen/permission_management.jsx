@@ -21,8 +21,6 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { FaEdit } from "react-icons/fa";
-
-
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useAuthContext } from "../helper/AuthProvider";
 
@@ -109,7 +107,7 @@ import { useAuthContext } from "../helper/AuthProvider";
                         permissionList?.data?.map((item, i) => (
                           <tr key={i}>
                             <td>
-                              <Badge>{item.title}</Badge>
+                              <Badge>{item?.permission}</Badge>
                             </td>
                             <td className="d-flex gap-2 align-items-center">
                               <Badge

@@ -207,7 +207,7 @@ const AddTestPackage = () => {
           </div>
 
           <Button type="submit" color="primary">
-            Add Lab
+            Add Test Package
           </Button>
         </form>
       </div>
