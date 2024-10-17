@@ -21,9 +21,16 @@ export const MasterProvider = ({ children }) => {
   const [alltestCategory, setalltestCategory] = useState({loading: true,data: []});
   const [testParameter, setTestParameter] = useState({loading: true,data: []});
   const [unitMasterList, setUnitMasterList] = useState({loading: true,data: [],total: ""});
+  const [speciesMasterList, setSpeciesMasterList] = useState({loading: true,data: [],total: ""});
+  const [orderMasterList, setorderMasterList] = useState({loading: true,data: [],total: ""});
+  const [districtList, setdistrictList] = useState({loading: true,data: [],total: ""});
+  const [stateList, setstateList] = useState({loading: true,data: [],total: ""});
   const [alltest, setalltest] = useState({loading: true,data: []});
   const [allPPL, setallPPL] = useState({loading: true,data: []});
+  const [allspecies, setallspecies] = useState({loading: true,data: []});
   const [allUnitList, setallUnitList] = useState({loading: true,data: []});
+  const [allDistrictList, setallDistrictList] = useState({loading: true,data: []});
+  const [allStateList, setallStateList] = useState({loading: true,data: []});
   const AuthToken = localStorage.getItem("Authtoken");
   // console.log(AuthToken)
   const base_url = import.meta.env.VITE_API_URL;
@@ -629,9 +636,219 @@ export const MasterProvider = ({ children }) => {
   };
 
 
+  const getSpeciesMasterList = async () => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/species/list`,{},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setSpeciesMasterList({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setSpeciesMasterList({ data: [], loading: false });
+        toast.error("Failed to fetch unit list");
+      }
+    } catch (error) {
+      setSpeciesMasterList({ data: [], loading: false });
+      toast.error("Failed to fetch unit list");
+    }
+  };
+
+  const getAllSpeciesList = async () => {
+    try {
+      const response = await axios.post(
+        `${base_url}/species/list `,{},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setallspecies({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setallspecies({ data: [], loading: false });
+        toast.error("Failed to fetch unit list");
+      }
+    } catch (error) {
+      setallspecies({ data: [], loading: false });
+      toast.error("Failed to fetch unit list");
+    }
+  };
+
+  const addSpeciesMasterList = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/species/add`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Species unit added successfully");
+        getSpeciesMasterList()
+      } else {
+        toast.error("Failed to add Species unit");
+      }
+    } catch (error) {
+      console.error("Error adding Species unit:", error);
+      toast.error("An error occurred while adding the Species unit");
+    }
+  };
+
+  const getOrderMasterList = async (testId) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/order/status/list`,{},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setorderMasterList({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setorderMasterList({ data: [], loading: false });
+        toast.error("Failed to fetch unit list");
+      }
+    } catch (error) {
+      setorderMasterList({ data: [], loading: false });
+      toast.error("Failed to fetch unit list");
+    }
+  };
+
+  const addOrderMasterList = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/order/status/add`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Order Status added successfully");
+        getOrderMasterList()
+      } else {
+        toast.error("Failed to add Order Status");
+      }
+    } catch (error) {
+      console.error("Error adding Order Status:", error);
+      toast.error("An error occurred while adding the Order Status");
+    }
+  };
+
+
+  const getdistrictList = async () => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/district/list`,{},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setdistrictList({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setdistrictList({ data: [], loading: false });
+        toast.error("Failed to fetch district list");
+      }
+    } catch (error) {
+      setdistrictList({ data: [], loading: false });
+      toast.error("Failed to fetch district list");
+    }
+  };
+
+  const getStateList = async () => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/states/list`,{},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setstateList({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setstateList({ data: [], loading: false });
+        toast.error("Failed to fetch district list");
+      }
+    } catch (error) {
+      setstateList({ data: [], loading: false });
+      toast.error("Failed to fetch district list");
+    }
+  };
+
+
+  const getAlldistrictList = async (stateId) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/state/district/list`,{
+          state_id : stateId
+        },
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setallDistrictList({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setallDistrictList({ data: [], loading: false });
+        toast.error("Failed to fetch district list");
+      }
+    } catch (error) {
+      setallDistrictList({ data: [], loading: false });
+      toast.error("Failed to fetch district list");
+    }
+  };
+
+
+  const getAllStateList = async () => {
+    try {
+      const response = await axios.get(
+        `${base_url}/admin/state/list`,
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setallStateList({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setallStateList({ data: [], loading: false });
+        toast.error("Failed to fetch state list");
+      }
+    } catch (error) {
+      setallStateList({ data: [], loading: false });
+      toast.error("Failed to fetch state list");
+    }
+  };
+
+
+
+
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList
 
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;

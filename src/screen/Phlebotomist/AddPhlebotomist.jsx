@@ -10,21 +10,19 @@ import { useCategoryContext } from "../../helper/CategoryProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { Autocomplete, Chip, TextField } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
-import AddLocationIcon from '@mui/icons-material/AddLocation';
+import AddLocationIcon from "@mui/icons-material/AddLocation";
+import { useMasterContext } from "../../helper/MasterProvider";
 const AddPhlebotomist = () => {
   const navigate = useNavigate();
 
-  const {
-    addphlebotomist,
-    getAllCollection,
-    collectionDropdown,
-    getAllUnit,
-    unitDropdown,
-  } = useCategoryContext();
+  const {addphlebotomist,getAllCollection,collectionDropdown,getAllUnit,unitDropdown,} = useCategoryContext();
+
+  const { getAlldistrictList, allDistrictList, getAllStateList, allStateList } =useMasterContext();
 
   useEffect(() => {
     getAllCollection();
     getAllUnit();
+    getAllStateList();
   }, []);
 
   const [inputData, setInputData] = useState({
@@ -58,6 +56,10 @@ const AddPhlebotomist = () => {
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
     }));
+      // If state is selected, fetch districts for the selected state
+  if (name === 'stateId') {
+    getAlldistrictList(value); // Call the API with the selected state's _id
+  }
   };
 
   const handleImageChange = (e) => {
@@ -86,18 +88,27 @@ const AddPhlebotomist = () => {
       ...selectedProducts2.map((product) => product._id),
     ];
 
+    const selectedState = allStateList?.data?.find(
+      (state) => state._id === inputData.stateId
+    );
+    const selectedDistrict = allDistrictList?.data?.find(
+      (district) => district._id === inputData.districtId
+    );
+
     const formDataToSend = new FormData();
 
     formDataToSend.append("name", inputData.name);
     formDataToSend.append("mobile", inputData.mobile);
     formDataToSend.append("email", inputData.email);
     formDataToSend.append("address", inputData.address);
+    formDataToSend.append("state", selectedState?.state);
+    formDataToSend.append("district", selectedDistrict?.district);
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`associated_collection_centers[${index}]`, id);
     });
 
     pincodes.forEach((pin, index) => {
-      formDataToSend.append(`pincode[${index}]`, pin);
+      formDataToSend.append(`serviceable_pincode[${index}]`, pin);
     });
     // // Append associated_labs with array index
     // allSelectedProduct2Ids.forEach((id, index) => {
@@ -189,7 +200,52 @@ const AddPhlebotomist = () => {
             </div>
           </div>
 
-          {/* Add the remaining inputs similarly, organizing them into rows as needed */}
+          <div className="row">
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="stateId" className="col-form-label">
+                  State:
+                </Label>
+                <Input
+                  type="select"
+                  name="stateId"
+                  value={inputData.stateId}
+                  onChange={handleInputChange}
+                  id="stateId"
+                >
+                  <option value="">Select State</option>
+                  {allStateList?.data?.map((state) => (
+                    <option key={state._id} value={state._id}>
+                      {state.state}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </div>
+
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="districtId" className="col-form-label">
+                  District:
+                </Label>
+                <Input
+                  type="select"
+                  name="districtId"
+                  value={inputData.districtId}
+                  onChange={handleInputChange}
+                  id="districtId"
+                  disabled={!inputData.stateId}
+                >
+                  <option value="">Select District</option>
+                  {allDistrictList?.data?.map((district) => (
+                    <option key={district._id} value={district._id}>
+                      {district.district}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </div>
+          </div>
 
           <div className="row">
             <div className="col-md-12">
@@ -220,7 +276,7 @@ const AddPhlebotomist = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="pincode" className="col-form-label">
-                serviceable Pincode:
+                  serviceable Pincode:
                 </Label>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <TextField
@@ -238,7 +294,7 @@ const AddPhlebotomist = () => {
                     onClick={handleAddPincode}
                     style={{ marginLeft: "5px" }}
                   >
-                    <AddLocationIcon/>
+                    <AddLocationIcon />
                   </Button>
                 </div>
 

@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
     const [rolesList, setRolesList] = useState({total_page: 1, current_page: 1, loading: true, data: []})
     const [allRoles, setAllRoles] = useState([]);
     const [subAdminList, setSubAdminList] = useState({total_page: 1, current_page: 1, loading: true, data: []})
+    const [allMenuList, setallMenuList] = useState({loading: true,data: []});
     const navigate = useNavigate()
     const location = useLocation()
 
@@ -114,15 +115,32 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    const create_permission = async (body) => {
+    const CreatePermission = async (formDataToSend) => {
         try {
-            const {data} = await axios.post(`${base_url}/permissions/create`, body, { headers: { 'Authorization': Authtoken }});
-            return data
+          const response = await axios.post(
+            `${base_url}/admin/permission/add`,
+            formDataToSend,
+            {
+              headers: {
+               'Authorization': Authtoken,
+               'Content-Type': 'application/json',
+              },
+            }
+          );
+          if (response.status === 200) {
+            toast.success("permission added successfully");
+            
+          } else {
+            toast.error("Failed to add permission");
+          }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
-            return error?.response?.data || null
+          console.error("Error adding permission:", error);
+          toast.error("An error occurred while adding the permission");
         }
-    }
+      };
+    
+
+
 
     const update_permission = async (id, body) => {
         try {
@@ -225,6 +243,30 @@ export const AuthProvider = ({ children }) => {
     }
 
 
+    const getMenuList = async () => {
+        try {
+          const response = await axios.get(
+            `${base_url}/all/menu/list`,
+            { headers: { 'Authorization': Authtoken } }
+          );
+          const data = response.data;
+          if (response.status === 200) {
+            setallMenuList({
+              data: response?.data?.data || [],
+              loading: false,
+            });
+          } else {
+            setallMenuList({ data: [], loading: false });
+            toast.error("Failed to fetch menu list");
+          }
+        } catch (error) {
+            setallMenuList({ data: [], loading: false });
+          toast.error("Failed to fetch menu list");
+        }
+      };
+    
+
+
 
     useEffect(() => {
         if((!initialLoading && !Authtoken)){
@@ -236,7 +278,7 @@ export const AuthProvider = ({ children }) => {
     }, [initialLoading, user, Authtoken])
 
     const values = {
-        Authtoken, user, admin_login, validate_admin, initialLoading,getPermissionList,permissionList,create_permission,update_permission,getAllPermission,allPermission, getRolesList, rolesList, getAllRoles, allRoles, create_role, update_role, role_detail,getSubAdminList,subAdminList
+        Authtoken, user, admin_login, validate_admin, initialLoading,getPermissionList,permissionList,CreatePermission,update_permission,getAllPermission,allPermission, getRolesList, rolesList, getAllRoles, allRoles, create_role, update_role, role_detail,getSubAdminList,subAdminList,getMenuList,allMenuList,
     }
     return (
         <AppContext.Provider value={values}>

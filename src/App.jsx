@@ -38,7 +38,6 @@ import Categories from "./screen/Categories";
 import SmsSettings from "./screen/SmsSettings";
 import SubscribeEmail from "./screen/SubscribeEmail";
 import SubCategoryList from "./screen/SubCategoryList";
-import StateList from "./screen/StateList";
 import CityList from "./screen/CityList";
 import UserList from "./screen/UserList";
 import OrderList from "./screen/OrderList";
@@ -81,6 +80,10 @@ import AddTask from "./screen/TaskManagement/AddTask";
 import TestParameter from "./Master/TestParameter/TestParameter";
 import AddTestParameter from "./Master/TestParameter/AddTestParameter";
 import UnitMasterList from "./Master/UnitList/UnitMasterList";
+import SpeciesList from "./Master/SpeciesMaster/SpeciesList";
+import OrderStatusList from "./Master/OrderStatus/OrderStatusList";
+import DistrictList from "./LocationManagement/DistrictList";
+import StateList from "./LocationManagement/StateList";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -111,7 +114,7 @@ function App() {
           <Route path="/sms-settings" element={<SmsSettings />} />
           <Route path="/subscribed-email" element={<SubscribeEmail />} />
           <Route path="/subcategory-List/:id" element={<SubCategoryList />} />
-          <Route path="/state-list/:id" element={<StateList />} />
+          
           <Route path="/city-list/:id" element={<CityList />} />
           <Route path="/customer" element={<UserList />} />
           <Route path="/lab-list" element={<LabList />} />
@@ -141,7 +144,13 @@ function App() {
           <Route path="/test-parameters" element={<TestParameter />} />
           <Route path="/test-parameter-units" element={<UnitMasterList />} />
 
+          <Route path="/species-management" element={<SpeciesList />} />
+          <Route path="/order-status" element={<OrderStatusList />} />
           <Route path="/add-test-parameters" element={<AddTestParameter />} />
+
+          <Route path="/district-management" element={<DistrictList />} />
+
+          <Route path="/state-management" element={<StateList />} />
 
           <Route path="/task-management" element={<TaskList />} />
           <Route path="/add-task" element={<AddTask />} />

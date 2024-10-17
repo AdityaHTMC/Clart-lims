@@ -100,7 +100,7 @@ const BreadList = () => {
               <CardBody>
                 <div className="btn-popup pull-right">
                   <Button color="primary" onClick={onOpenModal}>
-                    Add
+                    Add Breed
                   </Button>
                 </div>
                 <div className="clearfix"></div>

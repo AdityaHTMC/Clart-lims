@@ -13,19 +13,17 @@ import { useMasterContext } from "../../helper/MasterProvider";
 const AddBread = () => {
   const navigate = useNavigate();
 
-  const {
-    addBreed
-  } = useMasterContext();
+  const {addBreed,getAllSpeciesList,allspecies} = useMasterContext();
 
+  useEffect(()=>{
+    getAllSpeciesList()
+  },[])
  
-
   const [inputData, setInputData] = useState({
     species: "",
     breed: "",
     name: "",
   });
-
-
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -99,18 +97,24 @@ const AddBread = () => {
               </FormGroup>
             </div>
             <div className="col-md-6">
-              <FormGroup>
+            <FormGroup>
                 <Label htmlFor="species" className="col-form-label">
                   Species:
                 </Label>
                 <Input
-                  type="text"
+                  type="select"
                   name="species"
                   value={inputData.species}
                   onChange={handleInputChange}
                   id="species"
-                  required
-                />
+                >
+                  <option value="">Select Species</option>
+                  {allspecies?.data?.map((variety) => (
+                    <option key={variety._id} value={variety.title}>
+                      {variety.title}
+                    </option>
+                  ))}
+                </Input>
               </FormGroup>
             </div>
           </div>
@@ -133,7 +137,7 @@ const AddBread = () => {
                 />
               </FormGroup>
             </div>
-            <div className="col-md-6">
+            {/* <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="images" className="col-form-label">
                   Upload Images:
@@ -146,19 +150,12 @@ const AddBread = () => {
                   multiple
                 />
               </FormGroup>
-            </div>
+            </div> */}
           </div>
 
-         
-
-          <div className="row">
-        
-
-            
-          </div>
 
           {/* Image previews */}
-          <div className="row">
+          {/* <div className="row">
             {inputData.images?.length > 0 && (
               <div className="col-md-12">
                 <div
@@ -200,7 +197,7 @@ const AddBread = () => {
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
 
           <Button type="submit" color="primary">
             Add Breed

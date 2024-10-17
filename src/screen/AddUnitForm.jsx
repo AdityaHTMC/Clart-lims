@@ -160,16 +160,16 @@ const AddUnitForm = () => {
             </FormGroup>
           </div>
           <div className="col-md-6">
-            <FormGroup>
-              <Label htmlFor="password" className="col-form-label">
-                Password:
+          <FormGroup>
+              <Label htmlFor="pincode" className="col-form-label">
+                Pincode:
               </Label>
               <Input
-                type="password"
-                name="password"
-                value={inputData.password}
+                type="number"
+                name="pincode"
+                value={inputData.pincode}
                 onChange={handleInputChange}
-                id="password"
+                id="pincode"
               />
             </FormGroup>
           </div>
@@ -289,7 +289,7 @@ const AddUnitForm = () => {
             </div>
           </div>
 
-        <div className="row">
+        {/* <div className="row">
           <div className="col-md-6">
             <FormGroup>
               <Label htmlFor="pincode" className="col-form-label">
@@ -322,9 +322,6 @@ const AddUnitForm = () => {
           </div>
         </div>
 
-     
-
-        {/* Image previews */}
         <div className="row">
           {inputData.images?.length > 0 && (
             <div className="col-md-12">
@@ -367,7 +364,7 @@ const AddUnitForm = () => {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
 
         <Button type="submit" color="primary">
           Add Unit

@@ -175,7 +175,6 @@ const AddTestParameter = () => {
                     id="parentId"
                     value={inputData.parentId}
                     onChange={handleInputChange}
-                    required
                   >
                     <option value="">Select Parent</option>
                     {allPPL?.data?.map((parent) => (

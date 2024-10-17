@@ -163,7 +163,7 @@ const AddTestList = () => {
           </div>
 
           <Button type="submit" color="primary">
-            Add Lab
+            Add Test
           </Button>
         </form>
       </div>

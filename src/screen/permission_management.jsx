@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   Badge,
   Button,
@@ -24,24 +25,39 @@ import { FaEdit } from "react-icons/fa";
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useAuthContext } from "../helper/AuthProvider";
 
- const PermissionManagement = () => {
+const PermissionManagement = () => {
   const {
     getPermissionList,
     permissionList,
-    create_permission,
-    update_permission,
+    CreatePermission,
+    getMenuList,
+    allMenuList,
   } = useAuthContext();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [permissionDetail, setPermissionDetail] = useState(null);
   const [title, setTitle] = useState("");
+  const [menuId, setMenuId] = useState("");
+  const [actions, setActions] = useState([]);
+  const availableActions = ["Add", "Edit", "List", "View"];
 
   useEffect(() => {
     setTitle(permissionDetail?.title || "");
   }, [permissionDetail]);
 
+  useEffect(() => {
+    getMenuList();
+  }, []);
 
+  const handleActionChange = (action) => {
+    setActions(
+      (prev) =>
+        prev.includes(action)
+          ? prev.filter((a) => a !== action) // Remove action if unchecked
+          : [...prev, action] // Add action if checked
+    );
+  };
 
   useEffect(() => {
     if (permissionList?.data.length === 0 && permissionList.loading === true) {
@@ -49,27 +65,18 @@ import { useAuthContext } from "../helper/AuthProvider";
     }
   }, [permissionList.data]);
 
-  console.log(permissionList,'permissionList')
+  console.log(permissionList, "permissionList");
 
-  const onSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (title === "") return toast.info("Permission name can not be empty");
-    setIsProcessing(true);
-    let res;
-    if (isEditing) {
-      res = await update_permission(permissionDetail._id, { title });
-    } else {
-      res = await create_permission({ title });
-    }
-    setIsProcessing(false);
-    if (res?.success === true) {
-      toast.success(res.message);
-      setTitle("");
-      setIsOpen(false);
-      getPermissionList({ page: 1, limit: 20 });
-    } else {
-      toast.error(res?.message || "Permission can not be created");
-    }
+
+    const dataToSend = {
+      permission: title,
+      menuId,
+      actions,
+    };
+    CreatePermission(dataToSend)
+    setIsOpen(false);
   };
 
   return (
@@ -152,14 +159,18 @@ import { useAuthContext } from "../helper/AuthProvider";
           </Col>
         </Row>
       </Container>
-      <Modal isOpen={isOpen} toggle={setIsOpen}>
+      <Modal
+        isOpen={isOpen}
+        toggle={setIsOpen}
+        style={{ maxWidth: "600px", minHeight: "600px" }}
+      >
         <ModalHeader toggle={() => setIsOpen(false)}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
             {isEditing ? `Edit ${permissionDetail?.ref}` : "Add New Permission"}
           </h5>
         </ModalHeader>
         <ModalBody>
-          <Form onSubmit={onSubmit}>
+          <Form onSubmit={handleSubmit}>
             <FormGroup>
               <Label htmlFor="recipient-name" className="col-form-label">
                 Permission Name :
@@ -174,6 +185,47 @@ import { useAuthContext } from "../helper/AuthProvider";
                 disabled={isProcessing}
               />
             </FormGroup>
+
+            {/* Dropdown for Menu List */}
+            <FormGroup>
+              <Label htmlFor="menuId">Select Menu :</Label>
+              <Input
+                type="select"
+                onChange={(e) => setMenuId(e.target.value)}
+                value={menuId}
+                disabled={isProcessing}
+              >
+                <option value="">-- Select Menu --</option>
+                {allMenuList?.data?.map((menu) => (
+                  <option key={menu._id} value={menu._id}>
+                    {menu.title}
+                  </option>
+                ))}
+              </Input>
+            </FormGroup>
+
+            {/* Checkboxes for Actions */}
+            <FormGroup>
+          <Label>Actions:</Label>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '20px', paddingTop: '10px' }}>
+            {availableActions.map((action) => (
+              <div key={action} style={{ display: 'flex', alignItems: 'center', padding: '5px 10px', border: '1px solid #ccc', borderRadius: '5px', width: '120px', justifyContent: 'center' }}>
+                <Input
+                  type="checkbox"
+                  id={action}
+                  checked={actions.includes(action)}
+                  onChange={() => handleActionChange(action)}
+                  disabled={isProcessing}
+                  style={{ marginRight: '8px' }}
+                />
+                <Label htmlFor={action} style={{ marginBottom: '0' }}>
+                  {action} {/* Capitalize */}
+                </Label>
+              </div>
+            ))}
+          </div>
+        </FormGroup>
+
             <ModalFooter className="px-0">
               <Button
                 size="sm"

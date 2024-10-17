@@ -353,7 +353,7 @@ const AddCustomer = () => {
           </div>
 
           <Button type="submit" color="primary">
-            Add Breed
+            Add Customer
           </Button>
         </form>
       </div>

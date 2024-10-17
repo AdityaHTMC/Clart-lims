@@ -173,16 +173,16 @@ const AddLab = () => {
               </FormGroup>
             </div>
             <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="password" className="col-form-label">
-                  Password:
+            <FormGroup>
+                <Label htmlFor="pincode" className="col-form-label">
+                  Pincode:
                 </Label>
                 <Input
-                  type="password"
-                  name="password"
-                  value={inputData.password}
+                  type="text"
+                  name="pincode"
+                  value={inputData.pincode}
                   onChange={handleInputChange}
-                  id="password"
+                  id="pincode"
                 />
               </FormGroup>
             </div>
@@ -301,7 +301,7 @@ const AddLab = () => {
             </div>
           </div>
 
-          <div className="row">
+          {/* <div className="row">
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="pincode" className="col-form-label">
@@ -333,7 +333,7 @@ const AddLab = () => {
             </div>
           </div>
 
-          {/* Image previews */}
+        
           <div className="row">
             {inputData.images?.length > 0 && (
               <div className="col-md-12">
@@ -376,7 +376,7 @@ const AddLab = () => {
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
 
           <Button type="submit" color="primary">
             Add Lab
