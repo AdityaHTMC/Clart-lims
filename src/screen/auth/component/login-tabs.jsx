@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Unlock, User } from "react-feather";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import { Card, CardBody, Col } from "reactstrap";
