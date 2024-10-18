@@ -1,4 +1,4 @@
-import Cookies from "js-cookie";
+
 import { Link, useNavigate } from "react-router-dom";
 import { Fragment } from "react";
 
@@ -6,7 +6,7 @@ const UserMenu = () => {
   const navigate = useNavigate();
 
   const handleLogOut = () => {
-    Cookies.remove("token");
+    localStorage.removeItem("Authtoken");
     navigate("/login");
   };
 
