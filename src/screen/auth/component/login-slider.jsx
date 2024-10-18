@@ -21,8 +21,8 @@ const LoginSlider = () => {
           {[...Array(3)].map((_, i) => (
             <div key={i}>
               <div>
-                <h3>Welcome to Jaisal</h3>
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the standard dummy.</p>
+                <h3>Welcome to CLART LIMS</h3>
+                <p>Centre for Laboratory Animal Research and Training (CLART) under West Bengal Livestock Development Corporation Ltd.</p>
               </div>
             </div>
           ))}
