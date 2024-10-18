@@ -1,35 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
-    ArcElement,
-    BarController,
-    BarElement,
-    CategoryScale,
-    Chart as ChartJS,
-    Filler,
-    Legend,
-    LineElement,
-    LinearScale,
-    PointElement,
-    RadialLinearScale,
-    Title,
-    Tooltip,
-  } from "chart.js";
-  
   import {
     Button,
     Card,
     CardBody,
     Col,
     Container,
-    Form,
-    FormGroup,
-    Input,
-    Label,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
     Row,
     Spinner,
     Table,
@@ -40,23 +16,8 @@ import {
   
   import CommonBreadcrumb from "../../component/common/bread-crumb";
   import { useCategoryContext } from "../../helper/CategoryProvider";
-import { Pagination, Stack } from "@mui/material";
-  // Register the necessary Chart.js components
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    BarController,
-    BarElement,
-    ArcElement,
-    Filler,
-    RadialLinearScale
-  );
-  
+import { IconButton, Pagination, Stack, TextField } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
   const PhlebotomistList = () => {
     const navigate = useNavigate();
   
@@ -64,6 +25,7 @@ import { Pagination, Stack } from "@mui/material";
   
     const [open, setOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
     const itemperPage = 15;
 
     const totalPages = phlebotomistList?.total && Math.ceil(phlebotomistList?.total / itemperPage);
@@ -72,12 +34,15 @@ import { Pagination, Stack } from "@mui/material";
       const dataToSend = {
         page: currentPage,
         limit: itemperPage,
+        keyword_search: searchTerm,
       };
         getAllphlebotomist(dataToSend);
-    }, [currentPage]);
+    }, [currentPage,searchTerm]);
   
-    console.log(phlebotomistList, "phlebotomistList");
-  
+    const handleSearchChange = (e) => {
+      setSearchTerm(e.target.value);
+    };
+   
     const onOpenModal = () => {
       navigate("/add-phlebotomist");
     };
@@ -109,11 +74,38 @@ import { Pagination, Stack } from "@mui/material";
               <Card>
                 {/* <CommonCardHeader title="Product Sub Categoty" /> */}
                 <CardBody>
-                  <div className="btn-popup pull-right">
-                    <Button color="primary" onClick={onOpenModal}>
-                      Add Phlebotomist
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <form className="searchBx" style={{ display: "flex", alignItems: "center" }}>
+                    <TextField
+                      id="search-box"
+                      label="Search Phlebotomist"
+                      variant="outlined"
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      fullWidth
+                      sx={{
+                        maxWidth: "400px",
+                        backgroundColor: "#fff",
+                        borderRadius: "4px",
+                      }}
+                    />
+                    <IconButton type="submit" aria-label="search">
+                      <SearchIcon style={{ fill: "#979797" }} />
+                    </IconButton>
+                  </form>
+
+                  {/* Add Test Button */}
+                  <div className="btn-popup">
+                    <Button
+                      color="primary"
+                      onClick={onOpenModal}
+                      style={{ marginLeft: "15px" }}
+                    >
+                       Add Phlebotomist
                     </Button>
                   </div>
+                </div>
+
                   <div className="clearfix"></div>
                   <div id="basicScenario" className="product-physical">
                     <div className="promo-code-list">

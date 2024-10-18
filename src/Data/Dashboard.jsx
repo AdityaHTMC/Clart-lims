@@ -5,8 +5,8 @@ export const TopDashboardCardsData = [
     id: 1,
     type: "Total Unit ",
     bgColor: "bg-warning",
-    count: 6659,
-    label: "This Month",
+    count: 66,
+    
     icon: <Navigation className="font-warning" />,
   },
   {
@@ -14,44 +14,37 @@ export const TopDashboardCardsData = [
     type: "Total Labs",
     bgColor: "bg-secondary",
     icon: <Box className="font-secondary" />,
-    count: 9856,
-    label: "This Month",
+    count: 98,
+   
   },
   {
     id: 3,
     type: "Total Collection Center",
     bgColor: "bg-primary",
     icon: <MessageSquare className="font-primary" />,
-    count: 8933,
-    label: "This Month",
+    count: 89,
+    // label: "This Month",
   },
   {
     id: 4,
-    type: "Total Booking",
+    type: "Total Phlebotomist",
     bgColor: "bg-danger",
     icon: <Users className="font-danger" />,
-    count: 45631,
-    label: "This Month",
+    count: 45,
+   
   },
 ];
 
 export const MarketValueChartData = {
-  labels: ["100", "200", "300", "400", "500", "600", "700", "800"],
+  labels: ["Pending", "In Progress", "Sample Collected", "In Transit"],
   datasets: [
     {
-      data: [2.5, 3, 3, 0.9, 1.3, 1.8, 3.8, 1.5],
+      data: [1, 5, 10, 16],
+      label: "Orders Overview",
       borderColor: "#ff8084",
       backgroundColor: "#ff8084",
       borderWidth: 2,
-      barPercentage: 0.7,
-      categoryPercentage: 0.4,
-    },
-    {
-      data: [3.8, 1.8, 4.3, 2.3, 3.6, 2.8, 2.8, 2.8],
-      borderColor: "#a5a5a5",
-      backgroundColor: "#a5a5a5",
-      borderWidth: 2,
-      barPercentage: 0.7,
+      barPercentage: 0.4,
       categoryPercentage: 0.4,
     },
   ],
@@ -68,6 +61,8 @@ export const MarketValueChartOptions = {
     baselineColor: "transparent",
     gridlineColor: "transparent",
   },
+  responsive: true,
+  maintainAspectRatio: false,
   colors: ["#ff8084"],
   legend: "none",
 };

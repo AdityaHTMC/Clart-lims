@@ -18,7 +18,7 @@ const TopDashboardCards = () => {
                 <Media body className="col-8">
                   <span className="m-0">{item.type}</span>
                   <h3 className="mb-0">
-                    {(item.id === 1 || item.id === 3) && "₹"}
+                   
                     <CountUp className="counter" end={item.count} />
                     <small> {item.label}</small>
                   </h3>

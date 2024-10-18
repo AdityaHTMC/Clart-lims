@@ -196,7 +196,7 @@ const OrderAnalytics = () => {
           </Grid>
 
 
-          <Grid item xs={6} sm={4} md={3} >
+          {/* <Grid item xs={6} sm={4} md={3} >
             <Link to='/pickup-orders' style={{ textDecoration: "none" }}>
               <Box
                 sx={{
@@ -258,7 +258,7 @@ const OrderAnalytics = () => {
                 </Typography>
               </Box>
             </Link>
-          </Grid>
+          </Grid> */}
 
 
           <Grid item xs={6} sm={4} md={3} >
@@ -284,7 +284,7 @@ const OrderAnalytics = () => {
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <CheckCircle />
-                  <Typography> Delivered</Typography>
+                  <Typography> Completed</Typography>
                 </Box>
                 <Typography variant="h6" sx={{ fontWeight: "bold", marginLeft:'15px', boxShadow:'0 0 0 0.4rem #e2e8f0', borderRadius:'50%',width:'39px', height:'39px', background:'#f1f5f9', color:'#000',fontSize:'16px', display: 'flex', padding:'4px 8px',alignItems:'center' }}>
                 {dashboardOrderCount.data.delivered_orders}

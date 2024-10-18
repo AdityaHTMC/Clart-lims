@@ -1,5 +1,20 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
+import {
+    ArcElement,
+    BarController,
+    BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    Filler,
+    Legend,
+    LineElement,
+    LinearScale,
+    PointElement,
+    RadialLinearScale,
+    Title,
+    Tooltip,
+  } from "chart.js";
 
   import {
     Badge,
@@ -26,18 +41,33 @@
 
   import { FaTrashAlt } from "react-icons/fa";
 
-
+  // Register the necessary Chart.js components
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+    BarController,
+    BarElement,
+    ArcElement,
+    Filler,
+    RadialLinearScale
+  );
   import { Spinner } from "reactstrap";
   import ReactQuill from "react-quill";
   import "react-quill/dist/quill.snow.css";
 import { useMasterContext } from "../helper/MasterProvider";
 import CommonBreadcrumb from "../component/common/bread-crumb";
+import { useStockContext } from "../helper/StockManagement";
 
 
-  const DistrictList = () => {
+  const ItemGroup = () => {
     const navigate = useNavigate();
   
-    const {  getdistrictList,districtList } = useMasterContext();
+    const {  getItemGrList, itemgroup,addItemGr } = useStockContext();
   
     const [formData, setFormData] = useState({
       title: "",
@@ -45,11 +75,6 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
   
     const [open, setOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchTerm, setSearchTerm] = useState("");
-    const itemperPage = 15;
-
-    const totalPages = districtList?.total && Math.ceil(districtList?.total / itemperPage);
   
     const [selectedvarity, setSelectedvarity] = useState({
       title: "",
@@ -57,7 +82,7 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
     });
   
     useEffect(() => {
-     getdistrictList();
+      getItemGrList();
     }, []);
   
     const onOpenModal = () => {
@@ -115,14 +140,13 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
   
     // Handle form submission
     const handleSubmit = () => {
-      // Send formData to the backend
-    //   addOrderMasterList(formData);
-      onCloseModal(); // Close modal after saving
+      addItemGr(formData);
+      onCloseModal(); 
     };
   
     return (
       <>
-        <CommonBreadcrumb title="District List"  />
+        <CommonBreadcrumb title="Item Group"  />
         <Container fluid>
           <Row>
             <Col sm="12">
@@ -139,27 +163,27 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
                     <Table striped responsive>
                       <thead>
                         <tr>
-                          <th>District List</th>
+                          <th>Item Group</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {districtList?.loading ? (
+                        {itemgroup?.loading ? (
                           <tr>
                             <td colSpan="4" className="text-center">
                               <Spinner color="secondary" className="my-4" />
                             </td>
                           </tr>
-                        ) : districtList?.data?.length === 0 ? (
+                        ) : itemgroup?.data?.length === 0 ? (
                           <tr>
                             <td colSpan="4" className="text-center">
                               No Data Found
                             </td>
                           </tr>
                         ) : (
-                            districtList?.data?.map((product, index) => (
+                          itemgroup?.data?.map((product, index) => (
                             <tr key={index}>
-                              <td>{product.district}</td>
+                              <td>{product.title}</td>
                               <td>
                                 <div className="circelBtnBx">
                                   <Button
@@ -193,11 +217,11 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
         <Modal
           isOpen={open}
           toggle={onCloseModal}
-          className="modal-lg" // Increases the width
+          className="modal-xs" // Increases the width
         >
           <ModalHeader toggle={onCloseModal}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-             Add Order Status
+              Add Item Group
             </h5>
           </ModalHeader>
           <ModalBody>
@@ -206,7 +230,7 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
             <Form>
               <FormGroup>
                 <Label htmlFor="title" className="col-form-label">
-                  Order Status
+                  Item Group :
                 </Label>
                 <Input
                   type="text"
@@ -236,14 +260,14 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
         >
           <ModalHeader toggle={onCloseModal2}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-              Edit order status
+              Edit Unit
             </h5>
           </ModalHeader>
           <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
             <Form>
               <FormGroup>
                 <Label htmlFor="title" className="col-form-label">
-                  order status:
+                  Unit:
                 </Label>
                 <Input
                   type="text"
@@ -268,5 +292,5 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
     );
   };
   
-  export default DistrictList;
+  export default ItemGroup;
   

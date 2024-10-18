@@ -1,22 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
-  ArcElement,
-  BarController,
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Filler,
-  Legend,
-  LineElement,
-  LinearScale,
-  PointElement,
-  RadialLinearScale,
-  Title,
-  Tooltip,
-} from "chart.js";
-
-import {
   Button,
   Card,
   CardBody,
@@ -39,28 +23,19 @@ import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
+import { Pagination, Stack } from "@mui/material";
 
-// Register the necessary Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  BarController,
-  BarElement,
-  ArcElement,
-  Filler,
-  RadialLinearScale
-);
+
 
 const TestCategory = () => {
   const navigate = useNavigate();
 
-  const { testCategory, gettestCategoryList, addtestCategory } =
-    useMasterContext();
+  const { testCategory, gettestCategoryList, addtestCategory } =useMasterContext();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemperPage = 8;
+
+  const totalPages = testCategory?.total && Math.ceil(testCategory?.total / itemperPage);
 
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -74,8 +49,12 @@ const TestCategory = () => {
   });
 
   useEffect(() => {
-    gettestCategoryList();
-  }, []);
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+    };
+    gettestCategoryList(dataToSend);
+  }, [currentPage]);
 
   console.log(testCategory, "breedLists");
 
@@ -136,6 +115,10 @@ const TestCategory = () => {
     // Send formData to the backend
     addtestCategory(formData);
     onCloseModal(); // Close modal after saving
+  };
+
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
   };
 
   return (
@@ -203,6 +186,15 @@ const TestCategory = () => {
                           ))
                         )}
                       </tbody>
+                      <Stack className="rightPagination mt10" spacing={2}>
+                          <Pagination
+                            color="primary"
+                            count={totalPages}
+                            page={currentPage}
+                            shape="rounded"
+                            onChange={(event, value) => handlepagechange(value)}
+                          />
+                        </Stack>
                     </Table>
                   </div>
                 </div>

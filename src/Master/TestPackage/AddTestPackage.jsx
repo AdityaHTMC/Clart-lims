@@ -29,6 +29,7 @@ const AddTestPackage = () => {
     turn_around_time: "",
     price: "",
     sell_price: "",
+    is_popular: "",
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -42,7 +43,12 @@ const AddTestPackage = () => {
     }));
   };
 
-
+  const handlePopularChange = (e) => {
+    setInputData((prevState) => ({
+      ...prevState,
+      is_popular: e.target.value,
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -61,6 +67,7 @@ const AddTestPackage = () => {
     formDataToSend.append("turn_around_time", inputData.turn_around_time);
     formDataToSend.append("price", inputData.price);
     formDataToSend.append("sell_price", inputData.sell_price );
+    formDataToSend.append("is_popular", inputData.is_popular );
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`tests[${index}]`, id);
     });
@@ -78,9 +85,11 @@ const AddTestPackage = () => {
         <form
           onSubmit={handleSubmit}
           style={{
-            backgroundColor: "#f9f9f9",
-            padding: "20px",
+            backgroundColor: "#ffffff",
+            padding: "30px",
             borderRadius: "10px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            border: "1px solid #e0e0e0",
           }}
         >
           <div className="row">
@@ -197,11 +206,46 @@ const AddTestPackage = () => {
                     <TextField
                       {...params}
                       variant="outlined"
-                      label="Select Collection Center"
-                      placeholder="Select Collection Center"
+                      label="Select Test"
+                      placeholder="Select Test"
                     />
                   )}
                 />
+              </FormGroup>
+            </div>
+            <div className="col-md-6">
+              <FormGroup>
+                <Label className="col-form-label">Is Popular:</Label>
+                <div className="d-flex align-items-center">
+                  <div className="form-check me-3">
+                    <Input
+                      type="radio"
+                      name="is_popular"
+                      value="Yes"
+                      className="form-check-input"
+                      id="radioYes"
+                      checked={inputData.is_popular === "Yes"}
+                      onChange={handlePopularChange}
+                    />
+                    <Label className="form-check-label" htmlFor="radioYes">
+                      Yes
+                    </Label>
+                  </div>
+                  <div className="form-check">
+                    <Input
+                      type="radio"
+                      name="is_popular"
+                      value="No"
+                      className="form-check-input"
+                      id="radioNo"
+                      checked={inputData.is_popular === "No"}
+                      onChange={handlePopularChange}
+                    />
+                    <Label className="form-check-label" htmlFor="radioNo">
+                      No
+                    </Label>
+                  </div>
+                </div>
               </FormGroup>
             </div>
           </div>

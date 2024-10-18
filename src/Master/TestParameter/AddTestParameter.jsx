@@ -9,17 +9,22 @@ import { useMasterContext } from "../../helper/MasterProvider";
 const AddTestParameter = () => {
   const navigate = useNavigate();
 
-  const { getAllTest, alltest, getPPL, allPPL, addTestParameter,getDDunitList,allUnitList } =
-    useMasterContext();
-
-
+  const {
+    getAllTest,
+    alltest,
+    getPPL,
+    allPPL,
+    addTestParameter,
+    getDDunitList,
+    allUnitList,
+  } = useMasterContext();
 
   useEffect(() => {
     getAllTest();
-    getDDunitList()
+    getDDunitList();
   }, []);
 
-  console.log(allUnitList,'all unit list')
+  console.log(allUnitList, "all unit list");
 
   const [inputData, setInputData] = useState({
     parameter: "",
@@ -29,7 +34,7 @@ const AddTestParameter = () => {
     parentId: "",
     test_id: "",
   });
-  
+
   const [selectedTestId, setSelectedTestId] = useState("");
 
   const handleInputChange = (e) => {
@@ -55,7 +60,7 @@ const AddTestParameter = () => {
     const formDataToSend = new FormData();
 
     formDataToSend.append("parameter", inputData.parameter);
-    formDataToSend.append("unit", inputData.unit);
+    formDataToSend.append("parameter_unit_id", inputData.unit);
     formDataToSend.append("upper_range", inputData.upper_range);
     formDataToSend.append("lower_range", inputData.lower_range);
     formDataToSend.append("parentId", inputData.parentId || "");
@@ -71,9 +76,11 @@ const AddTestParameter = () => {
         <form
           onSubmit={handleSubmit}
           style={{
-            backgroundColor: "#f9f9f9",
-            padding: "20px",
+            backgroundColor: "#ffffff",
+            padding: "30px",
             borderRadius: "10px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            border: "1px solid #e0e0e0",
           }}
         >
           <div className="row">
@@ -91,24 +98,24 @@ const AddTestParameter = () => {
               </FormGroup>
             </div>
             <div className="col-md-6">
-            <FormGroup>
-                  <Label for="unit">Choose Unit *</Label>
-                  <Input
-                    type="select"
-                    name="unit"
-                    id="unit"
-                    value={inputData.unit}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Select Unit</option>
-                    {allUnitList?.data?.map((parent) => (
-                      <option key={parent._id} value={parent._id}>
-                        {parent.title}
-                      </option>
-                    ))}
-                  </Input>
-                </FormGroup>
+              <FormGroup>
+                <Label for="unit">Choose Unit *</Label>
+                <Input
+                  type="select"
+                  name="unit"
+                  id="unit"
+                  value={inputData.unit}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Select Unit</option>
+                  {allUnitList?.data?.map((parent) => (
+                    <option key={parent._id} value={parent._id}>
+                      {parent.title}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
             </div>
           </div>
 
@@ -168,7 +175,7 @@ const AddTestParameter = () => {
             <div className="col-md-6">
               {selectedTestId && allPPL && (
                 <FormGroup>
-                  <Label for="parentId">Choose Parent *</Label>
+                  <Label for="parentId">Choose Parent </Label>
                   <Input
                     type="select"
                     name="parentId"

@@ -84,6 +84,7 @@ import SpeciesList from "./Master/SpeciesMaster/SpeciesList";
 import OrderStatusList from "./Master/OrderStatus/OrderStatusList";
 import DistrictList from "./LocationManagement/DistrictList";
 import StateList from "./LocationManagement/StateList";
+import ItemGroup from "./StockManagement/ItemGroup";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -152,6 +153,10 @@ function App() {
 
           <Route path="/state-management" element={<StateList />} />
 
+          {/* stock start */}
+          <Route path="/item-groups" element={<ItemGroup />} />
+
+          {/* stock end */}
           <Route path="/task-management" element={<TaskList />} />
           <Route path="/add-task" element={<AddTask />} />
           <Route path="/test-categories" element={<TestCategory />} />

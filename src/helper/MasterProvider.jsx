@@ -204,11 +204,11 @@ export const MasterProvider = ({ children }) => {
     }
   };
 
-  const gettestCategoryList = async (data) => {
+  const gettestCategoryList = async (dataToSend) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/test-categories/list`,
-        {},
+        {...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
@@ -243,7 +243,7 @@ export const MasterProvider = ({ children }) => {
       );
       if (response.status === 200) {
         toast.success("Test category added successfully");
-        navigate("/test-categories");
+        gettestCategoryList()
       } else {
         toast.error("Failed to add Test category");
       }
@@ -254,11 +254,11 @@ export const MasterProvider = ({ children }) => {
   };
 
 
-  const gettestTestList = async (data) => {
+  const gettestTestList = async (dataToSend) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/test/list`,
-        {},
+        {...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;

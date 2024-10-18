@@ -131,9 +131,11 @@ const AddPhlebotomist = () => {
         <form
           onSubmit={handleSubmit}
           style={{
-            backgroundColor: "#f9f9f9",
-            padding: "20px",
+            backgroundColor: "#ffffff",
+            padding: "30px",
             borderRadius: "10px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            border: "1px solid #e0e0e0",
           }}
         >
           <div className="row">
@@ -161,6 +163,7 @@ const AddPhlebotomist = () => {
                   value={inputData.mobile}
                   onChange={handleInputChange}
                   id="mobile"
+                  required
                 />
               </FormGroup>
             </div>

@@ -1,20 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
-  ArcElement,
-  BarController,
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Filler,
-  Legend,
-  LineElement,
-  LinearScale,
-  PointElement,
-  RadialLinearScale,
-  Title,
-  Tooltip,
-} from "chart.js";
+
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import {
   Badge,
@@ -42,20 +28,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import { HexColorPicker } from "react-colorful";
 // Register the necessary Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  BarController,
-  BarElement,
-  ArcElement,
-  Filler,
-  RadialLinearScale
-);
+
 
 import { Spinner } from "reactstrap";
 import { useCmsContext } from "../helper/CmsProvider";

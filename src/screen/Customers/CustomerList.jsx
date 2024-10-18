@@ -1,35 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
-    ArcElement,
-    BarController,
-    BarElement,
-    CategoryScale,
-    Chart as ChartJS,
-    Filler,
-    Legend,
-    LineElement,
-    LinearScale,
-    PointElement,
-    RadialLinearScale,
-    Title,
-    Tooltip,
-  } from "chart.js";
-  
   import {
     Button,
     Card,
     CardBody,
     Col,
     Container,
-    Form,
-    FormGroup,
-    Input,
-    Label,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
     Row,
     Spinner,
     Table,
@@ -37,26 +13,11 @@ import {
   import { useEffect, useState } from "react";
   import { useNavigate } from "react-router-dom";
   import { FaEdit, FaTrashAlt } from "react-icons/fa";
-  
-  import CommonBreadcrumb from "../../component/common/bread-crumb";
-  import { useCategoryContext } from "../../helper/CategoryProvider";
+  import SearchIcon from "@mui/icons-material/Search";
+import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useMasterContext } from "../../helper/MasterProvider";
-import { Pagination, Stack } from "@mui/material";
-  // Register the necessary Chart.js components
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    BarController,
-    BarElement,
-    ArcElement,
-    Filler,
-    RadialLinearScale
-  );
+import { IconButton, Pagination, Stack, TextField } from "@mui/material";
+
   
   const CustomerList = () => {
     const navigate = useNavigate();
@@ -64,6 +25,7 @@ import { Pagination, Stack } from "@mui/material";
     const { allCustomerList,customerLists } = useMasterContext();
   
     const [open, setOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemperPage = 10;
@@ -74,11 +36,14 @@ import { Pagination, Stack } from "@mui/material";
       const dataToSend = {
         page: currentPage,
         limit: itemperPage,
+        keyword_search: searchTerm,
       };
         allCustomerList(dataToSend);
-    }, [currentPage]);
+    }, [currentPage,searchTerm]);
   
-    console.log(customerLists, "phlebotomistList");
+    const handleSearchChange = (e) => {
+      setSearchTerm(e.target.value);
+    };
   
     const onOpenModal = () => {
       navigate("/add-customer");
@@ -111,11 +76,37 @@ import { Pagination, Stack } from "@mui/material";
               <Card>
                 {/* <CommonCardHeader title="Product Sub Categoty" /> */}
                 <CardBody>
-                  <div className="btn-popup pull-right">
-                    <Button color="primary" onClick={onOpenModal}>
-                      Add Customer
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <form className="searchBx" style={{ display: "flex", alignItems: "center" }}>
+                    <TextField
+                      id="search-box"
+                      label="Search Customer"
+                      variant="outlined"
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      fullWidth
+                      sx={{
+                        maxWidth: "400px",
+                        backgroundColor: "#fff",
+                        borderRadius: "4px",
+                      }}
+                    />
+                    <IconButton type="submit" aria-label="search">
+                      <SearchIcon style={{ fill: "#979797" }} />
+                    </IconButton>
+                  </form>
+
+                  {/* Add Test Button */}
+                  <div className="btn-popup">
+                    <Button
+                      color="primary"
+                      onClick={onOpenModal}
+                      style={{ marginLeft: "15px" }}
+                    >
+                       Add Customer
                     </Button>
                   </div>
+                </div>
                   <div className="clearfix"></div>
                   <div id="basicScenario" className="product-physical">
                     <div className="promo-code-list">
