@@ -85,6 +85,7 @@ import OrderStatusList from "./Master/OrderStatus/OrderStatusList";
 import DistrictList from "./LocationManagement/DistrictList";
 import StateList from "./LocationManagement/StateList";
 import ItemGroup from "./StockManagement/ItemGroup";
+import EditTestPackage from "./Master/TestPackage/EditTestPackage";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -102,7 +103,7 @@ function App() {
           <Route path="/product/sub-category" element={<SubCategoryPage />} />
           <Route path="/unit-list" element={<UnitList />} />
           <Route path="/product-edit/:id" element={<ProductEdit />} />
-          <Route path="/banner-list" element={<BannerList />} />
+          <Route path="/banner-management" element={<BannerList />} />
           <Route path="/brand-master" element={<BrandList />} />
           <Route path="/variety-master" element={<VarityList />} />
           <Route path="/pack-size" element={<PackSize />} />
@@ -111,7 +112,7 @@ function App() {
           <Route path="/cms-management" element={<CmsList />} />
           <Route path="/currency" element={<CurrencyList />} />
           <Route path="/country" element={<Location />} />
-          <Route path="/faqs" element={<FaqList />} />
+          <Route path="/faq-management" element={<FaqList />} />
           <Route path="/sms-settings" element={<SmsSettings />} />
           <Route path="/subscribed-email" element={<SubscribeEmail />} />
           <Route path="/subcategory-List/:id" element={<SubCategoryList />} />
@@ -141,7 +142,7 @@ function App() {
 
           <Route path="/test-packages" element={<TestPackageList />} />
           <Route path="/add-test-packages" element={<AddTestPackage />} />
-
+          <Route path="/testpackage-edit/:id" element={<EditTestPackage />} />
           <Route path="/test-parameters" element={<TestParameter />} />
           <Route path="/test-parameter-units" element={<UnitMasterList />} />
 

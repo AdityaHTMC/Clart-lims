@@ -16,6 +16,8 @@ export const CategoryProvider = ({ children }) => {
   const [labDropdown, setlabDropdown] = useState({loading: true,data: []});
   const [unitDropdown, setUnitDropdown] = useState({loading: true,data: []});
   const [phlebotomistList, setPhlebotomistList] = useState({loading: true,data: [],total: ""});
+  const [ BannerList , setBannerList] = useState({ loading: true, data: [] , total:'' })
+  const [ FaqList , setFaqList] = useState({ loading: true, data: [] })
   const AuthToken = localStorage.getItem("Authtoken");
   // console.log(AuthToken)
   const base_url = import.meta.env.VITE_API_URL;
@@ -287,11 +289,194 @@ export const CategoryProvider = ({ children }) => {
     }
   };
 
+
+  const getFaqList = async (data) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/faq/list`,
+        {},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setFaqList({ data: response?.data?.data || [], loading: false });
+      } else {
+        setFaqList({...FaqList, loading: false});
+        toast.error("Failed to fetch varity list");
+      }
+    } catch (error) {
+      setFaqList({...FaqList, loading: false});
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const addFaq = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/faq/add`,
+        formDataToSend,  
+        { 
+          headers: { 
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' 
+          }
+        }
+      );
+      if (response.status === 200) {
+        toast.success('FAQ added successfully');
+        getFaqList();  
+      } else {
+        toast.error("Failed to add FAQ ");
+      }
+    } catch (error) {
+      console.error("Error adding FAQ:", error);
+      toast.error("An error occurred while adding the FAQ ");
+    }
+  };
+
+
+  const editFaq = async (id,formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/faq/update/${id}`,
+        formDataToSend,  
+        { 
+          headers: { 
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' 
+          }
+        }
+      );
+      if (response.status === 200) {
+        toast.success('FAQ edited successfully');
+        getFaqList();  
+      } else {
+        toast.error("Failed to edited FAQ ");
+      }
+    } catch (error) {
+      console.error("Error edited FAQ:", error);
+      toast.error("An error occurred while edited the FAQ ");
+    }
+  };
+
+
+  const getBannerList = async (data) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/banner/list`,
+        {},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setBannerList({ data: response?.data?.data || [], total: response.data.total , loading: false });
+      } else {
+        setBannerList({ data:[], total:'',  loading: false });
+        toast.error("Failed to fetch product list");
+      }
+    } catch (error) {
+      setBannerList({ data:[], total:'',  loading: false });
+    }
+  };
+
+  const addBanner = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/banner/add`,
+        formDataToSend,  // Pass FormData directly without spreading
+        { 
+          headers: { 
+            Authorization: AuthToken,
+            'Content-Type': 'multipart/form-data'  // Set correct content type for FormData
+          }
+        }
+      );
+      if (response.status === 200) {
+        toast.success('Banner added successfully');
+        getBannerList();  // Refresh the banner list after success
+      } else {
+        toast.error("Failed to add banner");
+      }
+    } catch (error) {
+      console.error("Error adding banner:", error);
+      toast.error("An error occurred while adding the banner");
+    }
+  };
+
+  const editBranner = async (id, formData) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/banner/update/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: AuthToken,
+            "Content-Type": "multipart/form-data", // Set this for FormData
+          },
+        }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        toast.success('Branner updated successfully');
+        getBannerList();  // Refresh the brand list after success
+      } else {
+        toast.error('Failed to update the Branner');
+      }
+    } catch (error) {
+      console.error('Error updating Branner:', error);
+      toast.error('An error occurred while updating the Branner');
+    }
+  };
+
+  const switchBranner = async (id, newStatus) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/banner/status/update/${id}`,
+        {status: newStatus},
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' 
+          },
+        }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        toast.success('status updated successfully');
+        getBannerList();  // Refresh the brand list after success
+      } else {
+        toast.error('Failed to update the status');
+      }
+    } catch (error) {
+      console.error('Error updating status:', error);
+      toast.error('An error occurred while updating the status');
+    }
+  };
+
+  
+  const bannerDelete = async (id) => { 
+    try {
+      const response = await axios.delete(
+        `${base_url}/banner/delete/${id}`,
+        { headers: { Authorization: AuthToken } }
+      );
+      
+      if (response.status === 200) {
+        toast.success('Banner deleted successfully');
+        getBannerList(); 
+      } else {
+        toast.error('Failed to delete Banner');
+      }
+    } catch (error) {
+      console.error('Error deleting banner:', error);
+      toast.error('An error occurred while deleting the Banner');
+    }
+  }
   
 
 
   const values = {
-   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist
+   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

@@ -1,21 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
-  ArcElement,
-  BarController,
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Filler,
-  Legend,
-  LineElement,
-  LinearScale,
-  PointElement,
-  RadialLinearScale,
-  Title,
-  Tooltip,
-} from "chart.js";
+
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import {
   Badge,
@@ -43,20 +29,7 @@ import { FaEdit } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import { HexColorPicker } from "react-colorful";
 // Register the necessary Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  BarController,
-  BarElement,
-  ArcElement,
-  Filler,
-  RadialLinearScale
-);
+
 
 import { FaTrashAlt } from "react-icons/fa";
 
@@ -66,8 +39,6 @@ const BannerList = () => {
   const {
     getBannerList,
     BannerList,
-    getCategoryList,
-    category,
     addBanner,
     bannerDelete,
     switchBranner,
@@ -103,7 +74,6 @@ const BannerList = () => {
   const [newImage, setNewImage] = useState(null);
   useEffect(() => {
     getBannerList();
-    getCategoryList();
   }, []);
 
   const onOpenModal = () => {
@@ -241,7 +211,7 @@ const BannerList = () => {
                         <th>Banner Title</th>
                         <th>Position</th>
                         <th>Status</th>
-                        <th>Banner Color</th>
+                        {/* <th>Banner Color</th> */}
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -302,7 +272,7 @@ const BannerList = () => {
                                 </label>
                               </div>
                             </td>
-                            <td>
+                            {/* <td>
                               <div
                                 style={{
                                   backgroundColor: product.primary_color,
@@ -311,7 +281,7 @@ const BannerList = () => {
                                   borderRadius: "50%",
                                 }}
                               />
-                            </td>
+                            </td> */}
                             <td>
                               <FaEdit
                                 size={20}
@@ -354,25 +324,7 @@ const BannerList = () => {
           {" "}
           {/* Scroll in Y-axis */}
           <Form>
-            {/* <FormGroup>
-                <Label htmlFor="category-select" className="col-form-label">
-                  Category :
-                </Label>
-                <Input
-                  type="select"
-                  name="category_id"
-                  id="category-select"
-                  onChange={handleInputChange}
-                  value={formData.category_id}
-                >
-                  <option value="">Select Category</option>
-                  {category?.data?.map((cat) => (
-                    <option key={cat.id} value={cat._id}>
-                      {cat.title}
-                    </option>
-                  ))}
-                </Input>
-              </FormGroup> */}
+         
 
             <FormGroup>
               <Label htmlFor="title" className="col-form-label">
@@ -395,11 +347,11 @@ const BannerList = () => {
                     <Input
                       type="radio"
                       name="type"
-                      value="slider"
-                      checked={formData.type === "slider"}
+                      value="home"
+                      checked={formData.type === "home"}
                       onChange={handleInputChange}
                     />
-                    Slider
+                    home
                   </Label>
                 </FormGroup>
                 <FormGroup check className="me-3">
@@ -412,42 +364,6 @@ const BannerList = () => {
                       onChange={handleInputChange}
                     />
                     Popup
-                  </Label>
-                </FormGroup>
-                <FormGroup check className="me-3">
-                  <Label check>
-                    <Input
-                      type="radio"
-                      name="type"
-                      value="parallax"
-                      checked={formData.type === "parallax"}
-                      onChange={handleInputChange}
-                    />
-                    Parallax
-                  </Label>
-                </FormGroup>
-                <FormGroup check className="me-3">
-                  <Label check>
-                    <Input
-                      type="radio"
-                      name="type"
-                      value="sidebar"
-                      checked={formData.type === "sidebar"}
-                      onChange={handleInputChange}
-                    />
-                    sidebar
-                  </Label>
-                </FormGroup>
-                <FormGroup check>
-                  <Label check>
-                    <Input
-                      type="radio"
-                      name="type"
-                      value="onpage"
-                      checked={formData.type === "onpage"}
-                      onChange={handleInputChange}
-                    />
-                    onpage
                   </Label>
                 </FormGroup>
               </div>
@@ -466,7 +382,7 @@ const BannerList = () => {
               />
             </FormGroup>
 
-            <FormGroup>
+            {/* <FormGroup>
               <Label htmlFor="title2" className="col-form-label">
                 Title 2 :
               </Label>
@@ -477,7 +393,7 @@ const BannerList = () => {
                 onChange={handleInputChange}
                 id="title2"
               />
-            </FormGroup>
+            </FormGroup> */}
 
             <FormGroup>
               <Label htmlFor="description" className="col-form-label">
@@ -492,7 +408,7 @@ const BannerList = () => {
               />
             </FormGroup>
 
-            <div className="row p-5">
+            {/* <div className="row p-5">
               <div className="col-md-6">
                 <div className="mb-3">
                   <label htmlFor="primary_color" className="form-label">
@@ -531,7 +447,7 @@ const BannerList = () => {
                   <strong>Selected Color:</strong> {formData.secondary_color}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <FormGroup>
               <Label htmlFor="banner-image" className="col-form-label">
@@ -571,25 +487,7 @@ const BannerList = () => {
           {" "}
           {/* Scroll in Y-axis */}
           <Form>
-            {/* <FormGroup>
-                <Label htmlFor="category-select" className="col-form-label">
-                  Category :
-                </Label>
-                <Input
-                  type="select"
-                  name="category_id"
-                  id="category-select"
-                  onChange={handleInputChange}
-                  value={formData.category_id}
-                >
-                  <option value="">Select Category</option>
-                  {category?.data?.map((cat) => (
-                    <option key={cat.id} value={cat._id}>
-                      {cat.title}
-                    </option>
-                  ))}
-                </Input>
-              </FormGroup> */}
+        
 
             <FormGroup>
               <Label htmlFor="title" className="col-form-label">
@@ -612,11 +510,11 @@ const BannerList = () => {
                     <Input
                       type="radio"
                       name="type"
-                      value="slider"
-                      checked={selectedBanner.type === "slider"}
+                      value="home"
+                      checked={selectedBanner.type === "home"}
                       onChange={handleInputChanges}
                     />
-                    Slider
+                    Home
                   </Label>
                 </FormGroup>
                 <FormGroup check className="me-3">
@@ -631,18 +529,7 @@ const BannerList = () => {
                     Popup
                   </Label>
                 </FormGroup>
-                <FormGroup check>
-                  <Label check>
-                    <Input
-                      type="radio"
-                      name="type"
-                      value="parallax"
-                      checked={selectedBanner.type === "parallax"}
-                      onChange={handleInputChanges}
-                    />
-                    Parallax
-                  </Label>
-                </FormGroup>
+               
               </div>
             </FormGroup>
 
@@ -659,7 +546,7 @@ const BannerList = () => {
               />
             </FormGroup>
 
-            <FormGroup>
+            {/* <FormGroup>
               <Label htmlFor="title2" className="col-form-label">
                 Title 2 :
               </Label>
@@ -670,7 +557,7 @@ const BannerList = () => {
                 onChange={handleInputChanges}
                 id="title2"
               />
-            </FormGroup>
+            </FormGroup> */}
 
             <FormGroup>
               <Label htmlFor="description" className="col-form-label">
@@ -685,7 +572,7 @@ const BannerList = () => {
               />
             </FormGroup>
 
-            <div className="row p-5">
+            {/* <div className="row p-5">
               <div className="col-md-6">
                 <div className="mb-3">
                   <label htmlFor="primary_color" className="form-label">
@@ -726,7 +613,7 @@ const BannerList = () => {
                   {selectedBanner.secondary_color}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <FormGroup>
               <Label htmlFor="image" className="col-form-label">

@@ -22,7 +22,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
   const TestPackageList = () => {
     const navigate = useNavigate();
   
-    const { getAllTestPackage , testpackageList } = useMasterContext();
+    const { getAllTestPackage , testpackageList,tpDelete } = useMasterContext();
   
   
     useEffect(() => {
@@ -35,13 +35,13 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
       navigate("/add-test-packages");
     };
     const handleEdit = (id) => {
-      // navigate(`/product-edit/${id}`);
+      navigate(`/testpackage-edit/${id}`);
     };
   
     const handleDelete = (id) => {
       if (window.confirm("Are you sure you wish to delete this item?")) {
         // delete product logic here
-        // ProductDelete(id);
+         tpDelete(id);
       }
     };
   

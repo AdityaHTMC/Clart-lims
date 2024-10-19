@@ -22,7 +22,7 @@ import { IconButton, Pagination, Stack, TextField } from "@mui/material";
   const CustomerList = () => {
     const navigate = useNavigate();
   
-    const { allCustomerList,customerLists } = useMasterContext();
+    const { allCustomerList,customerLists,customerDelete } = useMasterContext();
   
     const [open, setOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
@@ -53,9 +53,8 @@ import { IconButton, Pagination, Stack, TextField } from "@mui/material";
     };
   
     const handleDelete = (id) => {
-      if (window.confirm("Are you sure you wish to delete this item?")) {
-        // delete product logic here
-        // ProductDelete(id);
+      if (window.confirm("Are you sure you wish to delete this?")) {
+        customerDelete(id);
       }
     };
   

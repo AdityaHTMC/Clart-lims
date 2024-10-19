@@ -31,6 +31,7 @@ export const MasterProvider = ({ children }) => {
   const [allUnitList, setallUnitList] = useState({loading: true,data: []});
   const [allDistrictList, setallDistrictList] = useState({loading: true,data: []});
   const [allStateList, setallStateList] = useState({loading: true,data: []});
+  const [tpdetails, setTpdetails] = useState({loading: true,data: []});
   const AuthToken = localStorage.getItem("Authtoken");
   // console.log(AuthToken)
   const base_url = import.meta.env.VITE_API_URL;
@@ -180,11 +181,11 @@ export const MasterProvider = ({ children }) => {
     }
   };
 
-  const allCustomerList = async (data) => {
+  const allCustomerList = async (dataToSend) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/customers/list`,
-        {},
+        {...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
@@ -203,6 +204,26 @@ export const MasterProvider = ({ children }) => {
       toast.error("Failed to fetch customer list");
     }
   };
+
+
+  const customerDelete = async (id) => { 
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/customer/delete/${id}`,
+        { headers: { Authorization: AuthToken } }
+      );
+      
+      if (response.status === 200) {
+        toast.success('customer deleted successfully');
+        allCustomerList(); 
+      } else {
+        toast.error('Failed to delete customer');
+      }
+    } catch (error) {
+      console.error('Error deleting customer:', error);
+      toast.error('An error occurred while deleting the customer');
+    }
+  }
 
   const gettestCategoryList = async (dataToSend) => {
     try {
@@ -422,6 +443,30 @@ export const MasterProvider = ({ children }) => {
     }
   };
 
+  const editTestPackage = async (formDataToSend,id) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/test-package/update/${id}`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Test package added successfully");
+       navigate('/test-packages')
+      } else {
+        toast.error("Failed to add Test category");
+      }
+    } catch (error) {
+      console.error("Error adding Test package:", error);
+      toast.error("An error occurred while adding the Test package");
+    }
+  };
+
   const getAllTestPackage = async (data) => {
     try {
       const response = await axios.post(
@@ -444,6 +489,50 @@ export const MasterProvider = ({ children }) => {
       toast.error("Failed to fetch test list");
     }
   };
+
+  const tpDelete = async (id) => { 
+    try {
+      const response = await axios.get(
+        `${base_url}/admin/test-package/delete/${id}`,
+        { headers: { Authorization: AuthToken } }
+      );
+      
+      if (response.status === 200) {
+        toast.success('Test package deleted successfully');
+        getAllTestPackage(); 
+      } else {
+        toast.error('Failed to delete Test package');
+      }
+    } catch (error) {
+      console.error('Error deleting Test package:', error);
+      toast.error('An error occurred while deleting the Test package');
+    }
+  }
+
+  const TestPackageDetail = async (id) => {
+    try {
+      
+      const response = await axios.get(
+        `${base_url}/admin/test-package/details/${id}`,
+        
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setTpdetails({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setTpdetails({ data: [], total: "", loading: false });
+        toast.error("Failed to fetch test list");
+      }
+    } catch (error) {
+      setTpdetails({ data: [], total: "", loading: false });
+      toast.error("Failed to fetch test list");
+    }
+  };
+
 
 
   const addtask = async (formDataToSend) => {
@@ -848,8 +937,7 @@ export const MasterProvider = ({ children }) => {
 
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList
-
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };
