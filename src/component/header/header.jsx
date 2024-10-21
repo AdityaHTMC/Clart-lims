@@ -9,7 +9,7 @@ import UserMenu from "./user-menu";
 import Notification from "./notification";
 import { useAppDispatch, useAppSelector } from "../../Redux/Hooks";
 
-import companyLogo from '../../assets/logo.png'
+import companyLogo from '../../assets/small-logo.jpg'
 
 const Header = () => {
     const { sidebar, rightSidebar } = useAppSelector((store) => store.LayoutReducer);

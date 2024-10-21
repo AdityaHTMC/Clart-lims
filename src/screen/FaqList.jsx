@@ -352,7 +352,7 @@ const FaqList = () => {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleSubmits}>
-            Edit
+            Save
           </Button>
           <Button color="secondary" onClick={onCloseModal2}>
             Close

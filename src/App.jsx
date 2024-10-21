@@ -86,6 +86,9 @@ import DistrictList from "./LocationManagement/DistrictList";
 import StateList from "./LocationManagement/StateList";
 import ItemGroup from "./StockManagement/ItemGroup";
 import EditTestPackage from "./Master/TestPackage/EditTestPackage";
+import TestOrderList from "./OrderMenu/TestOrderList";
+import PackageOrder from "./OrderMenu/PackageOrder";
+import CreateOrder from "./OrderMenu/CreateOrder";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -158,6 +161,12 @@ function App() {
           <Route path="/item-groups" element={<ItemGroup />} />
 
           {/* stock end */}
+
+          {/* order start */}
+          <Route path="/test-order" element={<TestOrderList />} />
+          <Route path="/package-orders" element={<PackageOrder />} />
+          <Route path="/add-order" element={<CreateOrder />} />
+          {/* order end */}
           <Route path="/task-management" element={<TaskList />} />
           <Route path="/add-task" element={<AddTask />} />
           <Route path="/test-categories" element={<TestCategory />} />

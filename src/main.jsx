@@ -14,6 +14,7 @@ import { CMsProvider } from "./helper/CmsProvider.jsx";
 import { DashboardProvider } from "./helper/DashboardProvider.jsx";
 import { MasterProvider } from "./helper/MasterProvider.jsx";
 import { StockProvider } from "./helper/StockManagement.jsx";
+import { OrderProvider } from "./helper/OrderProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -26,7 +27,9 @@ createRoot(document.getElementById("root")).render(
                 <DashboardProvider>
                   <MasterProvider>
                     <StockProvider>
-                      <App />
+                      <OrderProvider>
+                              <App />
+                      </OrderProvider>
                     </StockProvider>
                   </MasterProvider>
                 </DashboardProvider>

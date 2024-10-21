@@ -141,7 +141,7 @@ const AddTestPackage = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="turn_around_time" className="col-form-label">
-                  Turn Around Time:
+                  Turn Around Time (in Hours):
                 </Label>
                 <Input
                   type="text"
@@ -161,7 +161,7 @@ const AddTestPackage = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="price" className="col-form-label">
-                  Price:
+                  Price(Rs):
                 </Label>
                 <Input
                   type="text"

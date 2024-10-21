@@ -13,6 +13,7 @@ export const DashboardProvider = ({ children }) => {
     const [cmsList, setCmsList] = useState({ loading: true, data: [] })
     const [dashboardOrderList, setDashboardOrderList] = useState({ loading: true, data: [] })
     const [dashboardOrderCount, setDashboardOrderCount] = useState({ loading: true, data: [] })
+    const [orderStatus, setOrderStatus] = useState({ loading: true, data: [] });
     const { Authtoken } = useAuthContext()
     const AuthToken = localStorage.getItem('Authtoken')
 
@@ -82,10 +83,31 @@ export const DashboardProvider = ({ children }) => {
       };
 
 
+  const getAllOrderStatus = async () => {
+        try {
+            const response = await axios.get(
+                `${base_url}/admin/dashboard/order/count`,
+                { headers: { Authorization: Authtoken } }
+            );
+            if (response.status === 200) {
+                setOrderStatus({
+                    data: response?.data?.data || [],
+                    loading: false,
+                });
+            } else {
+                setOrderStatus({ data: [], loading: false });
+            }
+        } catch (error) {
+            setOrderStatus({ data: [], loading: false });
+            // toast.error("Failed to test list");
+        }
+    };
+
+
 
 
     const values = {
-       getCmsList ,cmsList ,getDashboardOrderList,dashboardOrderList,getDashboardOrderCount,dashboardOrderCount
+       getCmsList ,cmsList ,getDashboardOrderList,dashboardOrderList,getDashboardOrderCount,dashboardOrderCount,getAllOrderStatus , orderStatus
     }
     return (
         <AppContext.Provider value={values} >

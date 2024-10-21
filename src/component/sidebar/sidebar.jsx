@@ -4,7 +4,7 @@ import { useAppSelector } from "../../Redux/Hooks";
 // import { useTranslation } from "@/app/i18n/client";
 import { Link } from "react-router-dom";
 import { Fragment, useState } from "react";
-import companyLogo from '../../assets/logo.png'
+import companyLogo from '../../assets/small-logo.jpg'
 import { useCommonContext } from "../../helper/CommonProvider";
 import { Spinner } from "reactstrap";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";

@@ -49,7 +49,7 @@ const LoginForm = () => {
 
       <div className="form-terms">
         <div className="custom-control custom-checkbox me-sm-2">
-          {/* <Label className="d-block">
+          <Label className="d-block">
             <Input className="checkbox_animated" id="chk-ani2" type="checkbox" />
             Reminder Me
             <span className="pull-right">
@@ -57,7 +57,7 @@ const LoginForm = () => {
                 lost your password
               </Button>
             </span>
-          </Label> */}
+          </Label>
         </div>
       </div>
 
@@ -66,10 +66,10 @@ const LoginForm = () => {
           {isLoading ? <Spinner size="sm" /> : "Login"}
         </Button>
       </div>
-      <div className="form-footer">
+      {/* <div className="form-footer">
         <span>Or Login up with social platforms</span>
         <SocialMediaIcons />
-      </div>
+      </div> */}
     </Form>
   );
 };

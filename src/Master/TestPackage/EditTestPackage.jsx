@@ -168,10 +168,10 @@ const EditTestPackage = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="turn_around_time" className="col-form-label">
-                  Turn Around Time:
+                  Turn Around Time (in Hours):
                 </Label>
                 <Input
-                  type="date"
+                  type="text"
                   name="turn_around_time"
                   value={inputData.turn_around_time}
                   onChange={handleInputChange}
@@ -188,7 +188,7 @@ const EditTestPackage = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="price" className="col-form-label">
-                  Price:
+                  Price(Rs.):
                 </Label>
                 <Input
                   type="text"

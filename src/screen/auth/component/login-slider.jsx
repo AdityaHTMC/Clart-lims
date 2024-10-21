@@ -2,7 +2,7 @@
 
 import Slider from "react-slick";
 import { Card, Col, Media } from "reactstrap";
-import companyLogo from '../../../assets/logo.png'
+import companyLogo from '../../../assets/small-logo.jpg'
 
 const LoginSlider = () => {
   const settings = {
