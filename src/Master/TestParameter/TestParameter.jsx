@@ -103,11 +103,16 @@ import { Pagination, Stack } from "@mui/material";
                           ) : (
                             testParameter?.data?.map((product, index) => (
                               <tr key={index}>
-                                <td>{product?.test_name}</td>
+                                {/* <td>{product?.test_name}</td> */}
+                                <td>
+                                {product?.test_name?.length > 20
+                                  ? `${product.test_name.slice(0, 20)}...`
+                                  : product.test_name}
+                              </td>
                                 <td>{product?.parameter}</td>
                                 <td>
-                                  {product?.upper_range} -{" "}
-                                  {product?.lower_range}{" "}
+                                  {product?.lower_range} -{" "}
+                                  {product?.upper_range}{" "}
                                 </td>
                                 <td>{product?.unit}</td>
                                 <td>

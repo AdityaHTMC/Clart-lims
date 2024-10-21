@@ -360,6 +360,26 @@ export const CategoryProvider = ({ children }) => {
   };
 
 
+  const faqDelete = async (id) => { 
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/faq/delete/${id}`,
+        { headers: { Authorization: AuthToken } }
+      );
+      
+      if (response.status === 200) {
+        toast.success('faq deleted successfully');
+        getFaqList(); 
+      } else {
+        toast.error('Failed to delete faq');
+      }
+    } catch (error) {
+      console.error('Error deleting Brand:', error);
+      toast.error('An error occurred while deleting the faq');
+    }
+  }
+
+
   const getBannerList = async (data) => {
     try {
       const response = await axios.post(
@@ -406,7 +426,7 @@ export const CategoryProvider = ({ children }) => {
   const editBranner = async (id, formData) => {
     try {
       const response = await axios.post(
-        `${base_url}/banner/update/${id}`,
+        `${base_url}/admin/banner/update/${id}`,
         formData,
         {
           headers: {
@@ -476,7 +496,7 @@ export const CategoryProvider = ({ children }) => {
 
 
   const values = {
-   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner
+   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

@@ -40,7 +40,7 @@ import { FaChevronDown } from "react-icons/fa";
 const FaqList = () => {
   const navigate = useNavigate();
 
-  const { getFaqList, FaqList,addFaq,editFaq } = useCategoryContext();
+  const { getFaqList, FaqList,addFaq,editFaq,faqDelete } = useCategoryContext();
 
   const [activeIndex, setActiveIndex] = useState(null);
 
@@ -103,8 +103,8 @@ const FaqList = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this item?")) {
-      // delete product logic here
-      //   varityDelete(id);
+      // delete logic here
+      faqDelete(id);
     }
   };
 

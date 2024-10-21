@@ -74,37 +74,40 @@ import SearchIcon from "@mui/icons-material/Search";
               <Card>
                 {/* <CommonCardHeader title="Product Sub Categoty" /> */}
                 <CardBody>
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                  <form className="searchBx" style={{ display: "flex", alignItems: "center" }}>
-                    <TextField
-                      id="search-box"
-                      label="Search Phlebotomist"
-                      variant="outlined"
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                      fullWidth
-                      sx={{
-                        maxWidth: "400px",
-                        backgroundColor: "#fff",
-                        borderRadius: "4px",
-                      }}
-                    />
-                    <IconButton type="submit" aria-label="search">
-                      <SearchIcon style={{ fill: "#979797" }} />
-                    </IconButton>
-                  </form>
-
-                  {/* Add Test Button */}
-                  <div className="btn-popup">
-                    <Button
-                      color="primary"
-                      onClick={onOpenModal}
-                      style={{ marginLeft: "15px" }}
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <form
+                      className="searchBx"
+                      style={{ display: "flex", alignItems: "center" }}
                     >
-                       Add Phlebotomist
-                    </Button>
+                      <TextField
+                        id="search-box"
+                        label="Search Phlebotomist"
+                        variant="outlined"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        fullWidth
+                        sx={{
+                          maxWidth: "400px",
+                          backgroundColor: "#fff",
+                          borderRadius: "4px",
+                        }}
+                      />
+                      <IconButton type="submit" aria-label="search">
+                        <SearchIcon style={{ fill: "#979797" }} />
+                      </IconButton>
+                    </form>
+
+                    {/* Add Test Button */}
+                    <div className="btn-popup">
+                      <Button
+                        color="primary"
+                        onClick={onOpenModal}
+                        style={{ marginLeft: "15px" }}
+                      >
+                        Add Phlebotomist
+                      </Button>
+                    </div>
                   </div>
-                </div>
 
                   <div className="clearfix"></div>
                   <div id="basicScenario" className="product-physical">
@@ -115,7 +118,7 @@ import SearchIcon from "@mui/icons-material/Search";
                             <th>Name </th>
                             <th>Email</th>
                             <th>Mobile</th>
-                            <th>Address</th>
+                            <th>Collection Center</th>
                             {/* <th>Pin Code</th> */}
                             <th>Action</th>
                           </tr>
@@ -141,9 +144,13 @@ import SearchIcon from "@mui/icons-material/Search";
                                 <td>{product?.name}</td>
                                 <td>{product?.email}</td>
                                 <td>{product?.mobile}</td>
-                                <td>{product?.address}</td>
+                                <td>
+                                  {product?.collection_centers
+                                    ?.map((center) => center.organization_name)
+                                    ?.join(", ")} <br/>
+                                </td>
                                 {/* <td>{product.pincode}</td> */}
-  
+
                                 <td>
                                   <div className="circelBtnBx">
                                     <Button

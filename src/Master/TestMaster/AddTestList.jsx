@@ -218,7 +218,7 @@ const AddTestList = () => {
                   Duration:
                 </Label>
                 <Input
-                  type="text"
+                  type="number"
                   name="duration"
                   value={inputData.duration}
                   onChange={handleInputChange}

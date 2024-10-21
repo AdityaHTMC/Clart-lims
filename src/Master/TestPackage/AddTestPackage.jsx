@@ -144,7 +144,7 @@ const AddTestPackage = () => {
                   Turn Around Time:
                 </Label>
                 <Input
-                  type="date"
+                  type="text"
                   name="turn_around_time"
                   value={inputData.turn_around_time}
                   onChange={handleInputChange}

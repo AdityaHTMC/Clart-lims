@@ -168,13 +168,13 @@ const BannerList = () => {
     const formData = new FormData();
 
     // Append title and brand ID
-    formData.append("title", selectedBanner.title);
-    formData.append("title2", selectedBanner.title2);
-    formData.append("description", selectedBanner.description);
-    formData.append("primary_color", selectedBanner.primary_color);
-    formData.append("secondary_color", selectedBanner.secondary_color);
-    formData.append("target_url", selectedBanner.target_url);
-    formData.append("type", selectedBanner.type);
+    formData.append("title", selectedBanner.title || '');
+    formData.append("title2", selectedBanner.title2 || '');
+    formData.append("description", selectedBanner.description || '');
+    formData.append("primary_color", selectedBanner.primary_color || '');
+    formData.append("secondary_color", selectedBanner.secondary_color ||'');
+    formData.append("target_url", selectedBanner.target_url || '');
+    formData.append("type", selectedBanner.type || '');
 
     // Append image only if a new image is selected, otherwise keep the existing one
     if (newImage) {
@@ -617,7 +617,7 @@ const BannerList = () => {
 
             <FormGroup>
               <Label htmlFor="image" className="col-form-label">
-                Branner Image:
+               existing Branner Image:
               </Label>
               {selectedBanner.image && (
                 <div>
@@ -641,7 +641,7 @@ const BannerList = () => {
                     }
                     style={{
                       position: "absolute",
-                      top: "192%",
+                      top: "118%",
                       right: "82%",
                       cursor: "pointer",
                       color: "red",

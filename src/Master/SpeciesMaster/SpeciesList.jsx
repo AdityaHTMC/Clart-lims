@@ -1,20 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
-    ArcElement,
-    BarController,
-    BarElement,
-    CategoryScale,
-    Chart as ChartJS,
-    Filler,
-    Legend,
-    LineElement,
-    LinearScale,
-    PointElement,
-    RadialLinearScale,
-    Title,
-    Tooltip,
-  } from "chart.js";
+
 
   import {
     Badge,
@@ -41,21 +27,7 @@ import {
 
   import { FaTrashAlt } from "react-icons/fa";
 
-  // Register the necessary Chart.js components
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    BarController,
-    BarElement,
-    ArcElement,
-    Filler,
-    RadialLinearScale
-  );
+
   import { Spinner } from "reactstrap";
   import ReactQuill from "react-quill";
   import "react-quill/dist/quill.snow.css";
@@ -162,7 +134,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                     <Table striped responsive>
                       <thead>
                         <tr>
-                          <th>Unit</th>
+                          <th>Species</th>
                           <th>Action</th>
                         </tr>
                       </thead>
