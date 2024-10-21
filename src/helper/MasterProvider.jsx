@@ -358,6 +358,7 @@ export const MasterProvider = ({ children }) => {
       if (response.status === 200) {
         setprofessionalList({
           data: response?.data?.data || [],
+          total: response.data.total,
           loading: false,
         });
       } else {

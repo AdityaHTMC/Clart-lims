@@ -89,6 +89,7 @@ import EditTestPackage from "./Master/TestPackage/EditTestPackage";
 import TestOrderList from "./OrderMenu/TestOrderList";
 import PackageOrder from "./OrderMenu/PackageOrder";
 import CreateOrder from "./OrderMenu/CreateOrder";
+import BarcodeList from "./Barcode/BarcodeList";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -167,6 +168,9 @@ function App() {
           <Route path="/package-orders" element={<PackageOrder />} />
           <Route path="/add-order" element={<CreateOrder />} />
           {/* order end */}
+         
+          <Route path="/barcode-management" element={<BarcodeList />} />
+
           <Route path="/task-management" element={<TaskList />} />
           <Route path="/add-task" element={<AddTask />} />
           <Route path="/test-categories" element={<TestCategory />} />

@@ -68,7 +68,7 @@ export const OrderProvider = ({ children }) => {
         try {
             setTestPackage({ ...test_package, loading: true });
             const response = await axios.get(
-                `${base_url}/org/test-packages/list`,
+                `${base_url}/admin/test-packages/list`,
                 { headers: { Authorization: Authtoken } }
             );
             if (response.status === 200) {

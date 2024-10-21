@@ -14,6 +14,7 @@ export const DashboardProvider = ({ children }) => {
     const [dashboardOrderList, setDashboardOrderList] = useState({ loading: true, data: [] })
     const [dashboardOrderCount, setDashboardOrderCount] = useState({ loading: true, data: [] })
     const [orderStatus, setOrderStatus] = useState({ loading: true, data: [] });
+    const [barcode, setbarcode] = useState({ loading: true, data: [], total:"" });
     const { Authtoken } = useAuthContext()
     const AuthToken = localStorage.getItem('Authtoken')
 
@@ -104,10 +105,32 @@ export const DashboardProvider = ({ children }) => {
     };
 
 
+    const getbarcode = async (dataToSend) => {
+      try {
+          const response = await axios.post(
+              `${base_url}/admin/barcode/list`,{...dataToSend},
+              { headers: { Authorization: Authtoken } }
+          );
+          if (response.status === 200) {
+            setbarcode({
+                  data: response?.data?.data || [],
+                  total: response.data.total,
+                  loading: false,
+              });
+          } else {
+            setbarcode({ data: [], loading: false });
+          }
+      } catch (error) {
+          setOrderStatus({ data: [], loading: false });
+          toast.error("Failed to fetch barcode list");
+      }
+  };
+
+
 
 
     const values = {
-       getCmsList ,cmsList ,getDashboardOrderList,dashboardOrderList,getDashboardOrderCount,dashboardOrderCount,getAllOrderStatus , orderStatus
+       getCmsList ,cmsList ,getDashboardOrderList,dashboardOrderList,getDashboardOrderCount,dashboardOrderCount,getAllOrderStatus , orderStatus,getbarcode,barcode
     }
     return (
         <AppContext.Provider value={values} >
