@@ -90,6 +90,8 @@ import TestOrderList from "./OrderMenu/TestOrderList";
 import PackageOrder from "./OrderMenu/PackageOrder";
 import CreateOrder from "./OrderMenu/CreateOrder";
 import BarcodeList from "./Barcode/BarcodeList";
+import TimeSlotsList from "./Master/TimeSlots/TimeSlotsList";
+import ItemManagement from "./StockManagement/ItemManagement";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -157,10 +159,11 @@ function App() {
           <Route path="/district-management" element={<DistrictList />} />
 
           <Route path="/state-management" element={<StateList />} />
+          <Route path="/timeslots-management" element={<TimeSlotsList />} />
 
           {/* stock start */}
           <Route path="/item-groups" element={<ItemGroup />} />
-
+          <Route path="/item-management" element={<ItemManagement />} />
           {/* stock end */}
 
           {/* order start */}

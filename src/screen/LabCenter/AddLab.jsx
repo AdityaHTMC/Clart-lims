@@ -111,7 +111,7 @@ const AddLab = () => {
 
     addlab(formDataToSend);
 
-    console.log(formDataToSend);
+  
   };
 
   return (

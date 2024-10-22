@@ -1,8 +1,20 @@
+/* eslint-disable no-unused-vars */
 import CountUp from "react-countup";
 import { Card, CardBody, Col, Media } from "reactstrap";
 import { TopDashboardCardsData } from "../../Data/Dashboard";
+import { useDashboardContext } from "../../helper/DashboardProvider";
+import { useEffect } from "react";
 
 const TopDashboardCards = () => {
+ 
+  const { getDashboardCount,orderCount } = useDashboardContext();
+
+  useEffect(() => {
+    getDashboardCount();
+  }, []);
+
+  console.log(orderCount,'orderCount')
+
   return (
     <>
       {TopDashboardCardsData.map((item, i) => (

@@ -16,14 +16,14 @@ import {
   Row,
   Spinner,
 } from "reactstrap";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, Box, Chip, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
 
 import { toast } from "react-toastify";
 import { FaCircleXmark } from "react-icons/fa6";
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useOrderContext } from "../helper/OrderProvider";
+import { useMasterContext } from "../helper/MasterProvider";
 
 const CreateOrder = () => {
   const {
@@ -37,8 +37,10 @@ const CreateOrder = () => {
     professionalFees,
     createNewOrder,
   } = useOrderContext();
-  const Navigate = useNavigate();
 
+  const { getAllTimeList, timeList, getAllPhelboList, allphelboList } =
+    useMasterContext();
+  const Navigate = useNavigate();
 
   const [search, setSearch] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -48,26 +50,33 @@ const CreateOrder = () => {
   const [selectedFees, setSelectedFees] = useState([]);
   const [formData, setFormData] = useState({
     pet: "",
-    type: "test",
+    type: "Home Visit",
     test_package: "",
     images: [],
     payment_mode: "Cash",
+    booking_date: '',
   });
 
   const [totalAmount, setTotalAmount] = useState(0);
+  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedPhelbo, setSelectedPhelbo] = useState("");
 
-  console.log(selectedCustomer,'selectedCustomer')
+  const handleSelect = (slot) => {
+    setSelectedSlot(slot);
+  };
+
+  // console.log(selectedCustomer,'selectedCustomer')
+  console.log(selectedSlot, "selectedSlot");
+  console.log(formData.booking_date, "booking_date");
+  console.log(selectedPhelbo, "phelobmist");
 
   useEffect(() => {
     getAllTest();
     getProfessionalFees();
+    getAllTimeList();
+    getTestPackageList();
+    getAllPhelboList();
   }, []);
-
-  useEffect(() => {
-    if (test_package.loading && formData.type === "health_package") {
-      getTestPackageList();
-    }
-  }, [test_package.loading, formData]);
 
   useEffect(() => {
     if (search && search.length > 2) {
@@ -83,14 +92,24 @@ const CreateOrder = () => {
 
     selectedTest.forEach((el) => {
       amount += el.sell_price;
+
+      // If formData.type is 'Home Visit', add collection_fee
+      if (formData.type === "Home Visit") {
+        amount += el.collection_fee || 0;
+      }
     });
 
     if (formData.test_package) {
       const packageDetail = test_package?.data?.find(
         (el) => el._id?.toString() === formData.test_package
       );
+      console.log(packageDetail, "package detail");
       if (packageDetail) {
         amount = amount + packageDetail?.sell_price || 0;
+      }
+      // If formData.type is 'Home Visit', add collection_fee for the package
+      if (formData.type === "Home Visit") {
+        amount += packageDetail?.total_collection_fees || 0;
       }
     }
 
@@ -98,7 +117,7 @@ const CreateOrder = () => {
       amount += el.expected_charges;
     });
     setTotalAmount(amount);
-  }, [selectedTest, formData.test_package, selectedFees]);
+  }, [selectedTest, formData.test_package, selectedFees, formData.type]);
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -120,16 +139,16 @@ const CreateOrder = () => {
 
   const onTestSelect = (data) => {
     setSelectedTest(data);
-    if (formData.test_package) {
-      setFormData({ ...formData, test_package: "" });
-    }
+    // if (formData.test_package) {
+    //   setFormData({ ...formData, test_package: "" });
+    // }
   };
 
   const onPackageSelect = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (selectedTest && selectedTest.length > 0) {
-      setSelectedTest([]);
-    }
+    // if (selectedTest && selectedTest.length > 0) {
+    //   setSelectedTest([]);
+    // }
   };
 
   const handleImageChange = (e) => {
@@ -139,6 +158,24 @@ const CreateOrder = () => {
       ...prevData,
       images: [...prevData.images, ...selectedFiles], // Append new images
     }));
+  };
+
+  const handleDateChange = (e) => {
+    const selectedDate = new Date(e.target.value); // Create a Date object from the selected date
+    const formattedDate = selectedDate.toISOString(); // Convert to ISO string format
+
+    setFormData((prevData) => ({
+      ...prevData,
+      booking_date: formattedDate, // Update booking_date in formData
+    }));
+  };
+
+  const getFormattedDate = (date) => {
+    if (!date) return ""; // If no date, return an empty string
+    const parsedDate = new Date(date);
+    return isNaN(parsedDate.getTime())
+      ? ""
+      : parsedDate.toISOString().split("T")[0]; // Only return the date part
   };
 
   const removeImage = (index) => {
@@ -160,6 +197,9 @@ const CreateOrder = () => {
     bodyData.append("district", selectedCustomer.district);
     bodyData.append("address", selectedCustomer.address);
     bodyData.append("pincode", selectedCustomer.pincode);
+    bodyData.append("phlebotomist_id", selectedPhelbo);
+    bodyData.append("booking_date", formData.booking_date);
+    bodyData.append("collection_type", formData.type);
     bodyData.append("pet_id", formData.pet);
     selectedTest.forEach((el, i) => {
       bodyData.append(`tests[${i}][test]`, el._id);
@@ -169,7 +209,7 @@ const CreateOrder = () => {
       bodyData.append(`professional_fees[${i}][professional_fee]`, el._id);
       bodyData.append(`professional_fees[${i}][price]`, el.expected_charges);
     });
-    if (formData.test_package && formData.type === "health_package") {
+    if (formData.test_package) {
       const packageDetail = test_package?.data?.find(
         (el) => el._id?.toString() === formData.test_package
       );
@@ -183,6 +223,9 @@ const CreateOrder = () => {
         bodyData.append(`prescription`, formData.images[i]);
       }
     }
+
+    bodyData.append("time_slot[start_time]", selectedSlot.start_time);
+    bodyData.append("time_slot[end_time]", selectedSlot.end_time);
 
     bodyData.append("payment_mode", formData.payment_mode);
     bodyData.append("total_amount", totalAmount);
@@ -357,94 +400,145 @@ const CreateOrder = () => {
                             />
                           </FormGroup>
 
-                          <FormGroup className="m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
+                          <FormGroup className="m-checkbox-inline mb-0 custom-radio-ml d-flex align-items-center">
+                            {/* Radio button for Home Collection */}
                             <Label className="d-block">
                               <Input
                                 className="radio_animated"
                                 type="radio"
                                 name="type"
-                                value="test"
+                                value="Home Visit"
                                 onChange={onChange}
                                 disabled={isProcessing}
-                                checked={formData.type === "test"}
+                                checked={formData.type === "Home Visit"}
                               />
-                              Lab Test
+                              Home Collection
                             </Label>
+
+                            {/* Radio button for Lab */}
                             <Label className="d-block mx-4">
                               <Input
                                 className="radio_animated"
                                 type="radio"
                                 name="type"
-                                disabled={isProcessing}
-                                value="health_package"
+                                value="Lab"
                                 onChange={onChange}
-                                checked={formData.type === "health_package"}
+                                disabled={isProcessing}
+                                checked={formData.type === "Lab"}
                               />
-                              Health Package
+                              Lab
                             </Label>
+
+                            {/* Date Picker */}
+                            {/* <Box sx={{ ml: 4, minWidth: 200 }}>
+                              <Typography variant="subtitle1" gutterBottom>
+                                Booking Date
+                              </Typography>
+                              <TextField
+                                type="date"
+                                value={getFormattedDate(formData.booking_date)} // Safely get and format the booking_date
+                                onChange={handleDateChange}
+                                fullWidth
+                              />
+                            </Box> */}
+                          </FormGroup>
+                          <FormGroup className="mt-2">
+                            <Label
+                              for="exampleSelect"
+                              style={{ fontWeight: 600 }}
+                            >
+                              Booking Date :
+                            </Label>
+                            <Input
+                              type="date"
+                              multiple
+                              disabled={isProcessing}
+                              name="booking_date"
+                              value={getFormattedDate(formData.booking_date)} // Safely get and format the booking_date
+                              onChange={handleDateChange}
+                            />
+                          </FormGroup>
+                       
+                       {
+                        formData.booking_date && (
+                          <Box
+                          sx={{ display: "flex", flexWrap: "wrap", gap: 1,marginBottom:'20px' }}
+                        >
+                          <Typography variant="h6" gutterBottom>
+                            Choose Time Slots :
+                          </Typography>
+                          {timeList.data.map((slot, index) => (
+                            <Chip
+                              key={index}
+                              label={`${slot.start_time} - ${slot.end_time}`} // Display time range
+                              clickable
+                              color={
+                                selectedSlot === slot ? "primary" : "default"
+                              }
+                              onClick={() => handleSelect(slot)} // Use index to select a slot
+                            />
+                          ))}
+                        </Box>
+                        )
+                       }
+
+                          <FormGroup>
+                            <Label
+                              for="exampleSelect"
+                              style={{ fontWeight: 600 }}
+                            >
+                              Select Test :
+                            </Label>
+                            <Autocomplete
+                              sx={{ m: 1 }}
+                              multiple
+                              options={allTest.data || []}
+                              getOptionLabel={(option) =>
+                                `${option?.test_name} (${option?.sell_price})` ||
+                                ""
+                              }
+                              value={selectedTest}
+                              disabled={isProcessing}
+                              onChange={(event, newValue) =>
+                                onTestSelect(newValue)
+                              }
+                              disableCloseOnSelect
+                              isOptionEqualToValue={(option, value) =>
+                                option?._id === value?._id
+                              }
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  variant="outlined"
+                                  label="Select Test"
+                                  placeholder="Select Test"
+                                />
+                              )}
+                            />
                           </FormGroup>
 
-                          {formData.type === "test" && (
-                            <FormGroup>
-                              <Label
-                                for="exampleSelect"
-                                style={{ fontWeight: 600 }}
-                              >
-                                Select Test :
-                              </Label>
-                              <Autocomplete
-                                sx={{ m: 1 }}
-                                multiple
-                                options={allTest.data || []}
-                                getOptionLabel={(option) =>
-                                  `${option?.test_name} (${option?.sell_price})` ||
-                                  ""
-                                }
-                                value={selectedTest}
-                                disabled={isProcessing}
-                                onChange={(event, newValue) =>
-                                  onTestSelect(newValue)
-                                }
-                                disableCloseOnSelect
-                                isOptionEqualToValue={(option, value) =>
-                                  option?._id === value?._id
-                                }
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    variant="outlined"
-                                    label="Select Test"
-                                    placeholder="Select Test"
-                                  />
-                                )}
-                              />
-                            </FormGroup>
-                          )}
-
-                          {formData.type === "health_package" && (
-                            <FormGroup>
-                              <Label
-                                for="exampleSelect"
-                                style={{ fontWeight: 600 }}
-                              >
-                                Select Health Package :
-                              </Label>
-                              <Input
-                                type="select"
-                                value={formData.test_package}
-                                name="test_package"
-                                disabled={isProcessing}
-                                onChange={(e) => onPackageSelect(e)}
-                              >
-                                <option value="">--Select--</option>
-                                {test_package?.data?.map((el, i) => (
-                                  <option key={i} value={el._id}>
-                                    {el?.package_name} ({el?.sell_price})
-                                  </option>
-                                ))}
-                              </Input>
-                            </FormGroup>
-                          )}
+                          <FormGroup>
+                            <Label
+                              for="exampleSelect"
+                              style={{ fontWeight: 600 }}
+                            >
+                              Select Health Package :
+                            </Label>
+                            <Input
+                              type="select"
+                              value={formData.test_package}
+                              name="test_package"
+                              disabled={isProcessing}
+                              onChange={(e) => onPackageSelect(e)}
+                            >
+                              <option value="">--Select--</option>
+                              {test_package?.data?.map((el, i) => (
+                                <option key={i} value={el._id}>
+                                  {el?.package_name} ({el?.sell_price})
+                                </option>
+                              ))}
+                            </Input>
+                          </FormGroup>
 
                           <FormGroup>
                             <Label
@@ -476,6 +570,28 @@ const CreateOrder = () => {
                                   variant="outlined"
                                   label="Select Professional Fees"
                                   placeholder="Select Professional Fees"
+                                />
+                              )}
+                            />
+                          </FormGroup>
+
+
+
+                          <FormGroup
+                            style={{ ml: 4, minWidth: 200, marginTop: "20px" }}
+                          >
+                            <Autocomplete
+                              options={allphelboList.data} // Assuming allphelboList.data is an array
+                              getOptionLabel={(option) => option.name} // Display 'name' from the options
+                              onChange={(event, newValue) => {
+                                setSelectedPhelbo(newValue ? newValue._id : ""); // Store the entire object
+                              }}
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  label="Select Phlebotomist"
+                                  variant="outlined"
+                                  fullWidth
                                 />
                               )}
                             />
@@ -528,6 +644,7 @@ const CreateOrder = () => {
                           )}
                         </div>
                       )}
+
                       <hr className="mt-4" />
                       <div className="d-flex justify-content-between align-items-center">
                         <p

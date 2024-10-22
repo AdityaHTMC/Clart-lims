@@ -4,12 +4,13 @@ import { createContext, useContext, useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuthContext } from './AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 const AppContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export const OrderProvider = ({ children }) => {
-
+   const navigate = useNavigate()
     const base_url = import.meta.env.VITE_API_URL
     const { Authtoken } = useAuthContext()
 
@@ -106,14 +107,38 @@ export const OrderProvider = ({ children }) => {
         }
     };
 
+    // const createNewOrder = async (bodyData) => {
+    //     try {
+    //         const { data } = await axios.post(`${base_url}/org/order/add`, bodyData, {headers: {'Authorization': Authtoken}})
+    //         return data
+    //     } catch (error) {
+    //         return error?.response?.data || null
+    //     }
+    // }
+
     const createNewOrder = async (bodyData) => {
         try {
-            const { data } = await axios.post(`${base_url}/org/order/add`, bodyData, {headers: {'Authorization': Authtoken}})
-            return data
+          const response = await axios.post(
+            `${base_url}/admin/order/place`,
+            bodyData,
+            {
+              headers: {
+                Authorization: Authtoken,
+                'Content-Type': 'multipart/form',
+              },
+            }
+          );
+          if (response.status === 200) {
+            toast.success(response?.data?.message);
+            navigate('/test-order')
+          } else {
+            toast.error(response?.data?.message)
+          }
         } catch (error) {
-            return error?.response?.data || null
+          console.error("Error:", error);
+          toast.error(error.response?.data?.message || 'Server error');
         }
-    }
+      };
 
     
     const getAllOrderList = async (dataToSend) => {

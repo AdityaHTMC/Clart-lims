@@ -42,10 +42,13 @@ const TestCategory = () => {
 
   const [formData, setFormData] = useState({
     name: "",
+    discount_percentage:'',
   });
 
   const [selectedvarity, setSelectedvarity] = useState({
     name: "",
+    discount_percentage:'',
+ 
   });
 
   useEffect(() => {
@@ -228,6 +231,18 @@ const TestCategory = () => {
                 value={formData.name}
                 onChange={handleInputChange}
                 id="title"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="discount_percentage" className="col-form-label">
+                Discount :
+              </Label>
+              <Input
+                type="text"
+                name="discount_percentage"
+                value={formData.discount_percentage}
+                onChange={handleInputChange}
+                id="discount_percentage"
               />
             </FormGroup>
           </Form>

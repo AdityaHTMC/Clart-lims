@@ -32,6 +32,8 @@ export const MasterProvider = ({ children }) => {
   const [allDistrictList, setallDistrictList] = useState({loading: true,data: []});
   const [allStateList, setallStateList] = useState({loading: true,data: []});
   const [tpdetails, setTpdetails] = useState({loading: true,data: []});
+  const [timeList, settimeList] = useState({loading: true,data: [],total: ""});
+  const [allphelboList, setPhelboList] = useState({loading: true,data: [],total: ""});
   const AuthToken = localStorage.getItem("Authtoken");
   // console.log(AuthToken)
   const base_url = import.meta.env.VITE_API_URL;
@@ -934,11 +936,127 @@ export const MasterProvider = ({ children }) => {
   };
 
 
+  const getAllTimeList = async () => {
+    try {
+      const response = await axios.get(
+        `${base_url}/admin/time-slot/getAll`,
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        settimeList({
+          data: response?.data?.data || [],
+          total: response.data.total,
+          loading: false,
+        });
+      } else {
+        settimeList({ data: [], loading: false });
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      settimeList({ data: [], loading: false });
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+  const addTimeMaster = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/time-slot/create`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getAllTimeList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+  const editTimeMaster = async (id,dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/time-slot/update/${id}`,
+        {...dataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getAllTimeList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+  const timeDelete = async (id) => { 
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/time-slot/delete/${id}`,
+        { headers: { Authorization: AuthToken } }
+      );
+      
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getAllTimeList(); 
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  }
+
+
+  const getAllPhelboList = async () => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/phlebotomists/list`,{},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setPhelboList({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setPhelboList({ data: [], loading: false });
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      setPhelboList({ data: [], loading: false });
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
 
 
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

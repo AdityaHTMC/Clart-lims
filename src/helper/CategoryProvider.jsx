@@ -489,7 +489,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Error deleting banner:', error);
-      toast.error('An error occurred while deleting the Banner');
+      toast.error(error.response?.data?.message || "Server error");
     }
   }
   
