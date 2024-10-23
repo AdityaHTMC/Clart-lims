@@ -48,6 +48,7 @@ const ItemManagement = () => {
     item_group:'',
     amount:'',
     low_quantity_alert:'',
+    stock_quantity:'',
   });
 
   const [open, setOpen] = useState(false);
@@ -58,6 +59,7 @@ const ItemManagement = () => {
     item_group:'',
     amount:'',
     low_quantity_alert:'',
+    stock_quantity:''
   });
 
  
@@ -73,7 +75,11 @@ const ItemManagement = () => {
   // Close the modal
   const onCloseModal2 = () => {
     setModalOpen(false);
-    setSelectedvarity({ title: "", image: "", _id: "" });
+    setSelectedvarity({   name: "",
+      item_group:'',
+      amount:'',
+      low_quantity_alert:'',
+      stock_quantity:'', _id: "" });
   };
 
   const onCloseModal = () => {
@@ -196,18 +202,19 @@ const ItemManagement = () => {
       <Modal
         isOpen={open}
         toggle={onCloseModal}
-        className="modal-xs" // Increases the width
+        className="modal-lg" // Increases the width
       >
         <ModalHeader toggle={onCloseModal}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-            Add Item Group
+            Add Item 
           </h5>
         </ModalHeader>
         <ModalBody>
           {" "}
           {/* Scroll in Y-axis */}
           <Form>
-            <FormGroup>
+            <div className="row">
+            <FormGroup className="col-md-6">
               <Label htmlFor="name" className="col-form-label">
                Name :
               </Label>
@@ -219,7 +226,7 @@ const ItemManagement = () => {
                 id="name"
               />
             </FormGroup>
-            <FormGroup>
+            <FormGroup className="col-md-6">
               <Label htmlFor="amount" className="col-form-label">
               Amount :
               </Label>
@@ -231,9 +238,11 @@ const ItemManagement = () => {
                 id="amount"
               />
             </FormGroup>
-            <FormGroup>
+            </div>
+            <div className="row">
+            <FormGroup className="col-md-6">
               <Label htmlFor="low_quantity_alert" className="col-form-label">
-              low_quantity_alert :
+              Low Quantity Alert :
               </Label>
               <Input
                 type="text"
@@ -243,6 +252,19 @@ const ItemManagement = () => {
                 id="low_quantity_alert"
               />
             </FormGroup>
+            <FormGroup className="col-md-6">
+              <Label htmlFor="stock_quantity" className="col-form-label">
+              Stock Quantity :
+              </Label>
+              <Input
+                type="text"
+                name="stock_quantity"
+                value={formData.stock_quantity}
+                onChange={handleInputChange}
+                id="stock_quantity"
+              />
+            </FormGroup>
+            </div>
             <FormGroup>
               <Label htmlFor="item_group" className="col-form-label">
                 Item Group:

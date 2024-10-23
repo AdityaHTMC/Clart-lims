@@ -121,6 +121,20 @@ const AddTestParameter = () => {
 
           {/* First row with two col-md-6 */}
           <div className="row">
+          <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="lower_range" className="col-form-label">
+                  Lower Range:
+                </Label>
+                <Input
+                  type="text"
+                  name="lower_range"
+                  value={inputData.lower_range}
+                  onChange={handleInputChange}
+                  id="lower_range"
+                />
+              </FormGroup>
+            </div>
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="upper_range" className="col-form-label">
@@ -135,20 +149,7 @@ const AddTestParameter = () => {
                 />
               </FormGroup>
             </div>
-            <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="lower_range" className="col-form-label">
-                  Lower Range:
-                </Label>
-                <Input
-                  type="text"
-                  name="lower_range"
-                  value={inputData.lower_range}
-                  onChange={handleInputChange}
-                  id="lower_range"
-                />
-              </FormGroup>
-            </div>
+           
           </div>
 
           <div className="row">

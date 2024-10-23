@@ -1,20 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
-    ArcElement,
-    BarController,
-    BarElement,
-    CategoryScale,
-    Chart as ChartJS,
-    Filler,
-    Legend,
-    LineElement,
-    LinearScale,
-    PointElement,
-    RadialLinearScale,
-    Title,
-    Tooltip,
-  } from "chart.js";
+
   
   import {
     Button,
@@ -41,42 +27,32 @@ import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 
   
-  // Register the necessary Chart.js components
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    BarController,
-    BarElement,
-    ArcElement,
-    Filler,
-    RadialLinearScale
-  );
-  
+
   const ProfessionalList = () => {
     const navigate = useNavigate();
   
-    const {getProfessionalList,professionalList,addProfessional } = useMasterContext();
+    const {getProfessionalList,professionalList,addProfessional,getAllItemList, allItemList } = useMasterContext();
   
     const [open, setOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
 
+    console.log(allItemList,'allItemList')
+    
     const [formData, setFormData] = useState({
         name: "",
         expected_charges:"",
+        item_id: "",
       });
 
     const [selectedvarity, setSelectedvarity] = useState({
         name: "",
         expected_charges:"",
+        item_id: "",
       });
   
     useEffect(() => {
         getProfessionalList();
+        getAllItemList();
     }, []);
   
 
@@ -259,6 +235,24 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                 id="expected_charges"
               />
             </FormGroup>
+
+            <FormGroup>
+                <Label for="item_id">Choose Item </Label>
+                <Input
+                  type="select"
+                  name="item_id"
+                  id="item_id"
+                  value={formData.item_id}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select Item</option>
+                  {allItemList?.data?.map((test) => (
+                    <option key={test._id} value={test._id}>
+                      {test.name}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
 
           </Form>
         </ModalBody>

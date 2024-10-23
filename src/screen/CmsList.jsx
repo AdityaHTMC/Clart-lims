@@ -326,7 +326,7 @@ const CmsList = () => {
                   placeholder="Enter a detailed description"
                   style={{
                     borderRadius: "8px",
-                    height: "300px",
+                    height: "350px",
                     boxShadow: "0 0 5px rgba(0, 0, 0, 0.1)",
                     overflow: "hidden",
                   }}

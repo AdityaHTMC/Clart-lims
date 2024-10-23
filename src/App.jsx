@@ -92,6 +92,9 @@ import CreateOrder from "./OrderMenu/CreateOrder";
 import BarcodeList from "./Barcode/BarcodeList";
 import TimeSlotsList from "./Master/TimeSlots/TimeSlotsList";
 import ItemManagement from "./StockManagement/ItemManagement";
+import VendorManagement from "./StockManagement/VendorManagement";
+import PurchaseList from "./StockManagement/PurchaseList";
+import StockReport from "./StockManagement/StockReport";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -164,6 +167,9 @@ function App() {
           {/* stock start */}
           <Route path="/item-groups" element={<ItemGroup />} />
           <Route path="/item-management" element={<ItemManagement />} />
+          <Route path="/vendor-management" element={<VendorManagement/>} />
+          <Route path="/purchase-to-stock" element={<PurchaseList/>} />
+          <Route path="/stock-reports" element={<StockReport/>} />
           {/* stock end */}
 
           {/* order start */}

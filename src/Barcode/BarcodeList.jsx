@@ -99,7 +99,7 @@ import { Pagination, Stack } from "@mui/material";
                             // Show "No products found" when there's no data
                             <tr>
                               <td colSpan="7" className="text-center">
-                                No test Package List Found
+                                No Barcode Found
                               </td>
                             </tr>
                           ) : (

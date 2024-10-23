@@ -10,17 +10,13 @@ const AppContext = createContext();
 export const StockProvider = ({ children }) => {
   const base_url = import.meta.env.VITE_API_URL;
   const [cmsList, setCmsList] = useState({ loading: true, data: [] });
-  const [itemgroup, setitemgroup] = useState({
-    loading: true,
-    data: [],
-    total: "",
-  });
+  const [itemgroup, setitemgroup] = useState({loading: true,data: [],total: "",});
   const [imList, setIMList] = useState({ loading: true, data: [], total: "" });
-  const [imAllList, setIMAllList] = useState({
-    loading: true,
-    data: [],
-    total: "",
-  });
+  const [imAllList, setIMAllList] = useState({loading: true,data: [],total: "",});
+  const [vendorList, setVendorList] = useState({loading: true,data: [],total: "",});
+  const [purchaseList, setPurchaseList] = useState({loading: true,data: [],total: "",});
+  const [stockreport, setStockreport] = useState({loading: true,data: [],total: "",});
+  const [allvendorList, setallvendorList] = useState({ loading: true, data: [] });
   const { Authtoken } = useAuthContext();
   const AuthToken = localStorage.getItem("Authtoken");
 
@@ -79,6 +75,7 @@ export const StockProvider = ({ children }) => {
       if (response.status === 200) {
         setitemgroup({
           data: response?.data?.data || [],
+          total: response.data.total,
           loading: false,
         });
       } else {
@@ -125,6 +122,7 @@ export const StockProvider = ({ children }) => {
       if (response.status === 200) {
         setIMList({
           data: response?.data?.data || [],
+          total: response.data.total,
           loading: false,
         });
       } else {
@@ -225,19 +223,192 @@ export const StockProvider = ({ children }) => {
     }
   };
 
-  const values = {
-    getCmsList,
-    cmsList,
-    addCms,
-    getItemGrList,
-    itemgroup,
-    addItemGr,
-    getIMList,
-    addIM,
-    imList,
-    imAllList,
-    getallIMList,
-    editIM,deleteIMList
+
+  const getvendorList = async () => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/vendors/list`,
+        {},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setVendorList({
+          data: response?.data?.data || [],
+          total: response.data.total,
+          loading: false,
+        });
+      } else {
+        setVendorList({ data: [], loading: false });
+        toast.error("server errors");
+      }
+    } catch (error) {
+      setVendorList({ data: [], loading: false });
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+  const addVendor = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/vendor/add`,
+        { ...formDataToSend },
+        {
+          headers: {
+            Authorization: AuthToken,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getvendorList();
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+  const editVendor = async (id, formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/item/update/${id}`,
+        { ...formDataToSend },
+        {
+          headers: {
+            Authorization: AuthToken,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getvendorList();
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+  const deletevendor = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/item/delete/${id}`,
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getvendorList();
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      setIMAllList({ data: [], loading: false });
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+  const getPurchaseList = async () => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/purchase-to-stock/list`,
+        {},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setPurchaseList({
+          data: response?.data?.data || [],
+          total: response.data.total,
+          loading: false,
+        });
+      } else {
+        setPurchaseList({ data: [], loading: false });
+        toast.error("server errors");
+      }
+    } catch (error) {
+      setPurchaseList({ data: [], loading: false });
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+  const getStockreport = async () => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/stock-reports/list`,
+        {},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setStockreport({
+          data: response?.data?.data || [],
+          total: response.data.total,
+          loading: false,
+        });
+      } else {
+        setStockreport({ data: [], loading: false });
+        toast.error("server errors");
+      }
+    } catch (error) {
+      setStockreport({ data: [], loading: false });
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+  const getallvendorlist = async () => {
+    try {
+      const response = await axios.post(
+        `${base_url}/all/vendors/list`,
+        {},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setallvendorList({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setallvendorList({ data: [], loading: false });
+        toast.error("server errors");
+      }
+    } catch (error) {
+      setallvendorList({ data: [], loading: false });
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+
+  const addPurchase = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/purchase-to-stock/add`,
+        formDataToSend ,
+        {
+          headers: {
+            Authorization: AuthToken,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getPurchaseList();
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+  const values = {getCmsList,cmsList,addCms,getItemGrList,itemgroup,addItemGr,getIMList, addIM,imList,imAllList,getallIMList,editIM,deleteIMList ,getvendorList , addVendor ,editVendor, deletevendor,vendorList,getPurchaseList, purchaseList, getStockreport , stockreport,getallvendorlist , allvendorList,addPurchase
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };
