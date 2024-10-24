@@ -18,11 +18,12 @@ import {
   ModalHeader,
   Row,
   Table,
+  UncontrolledTooltip,
 } from "reactstrap";
 import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaHistory } from "react-icons/fa";
 
 import { FaTrashAlt } from "react-icons/fa";
 
@@ -32,23 +33,45 @@ import "react-quill/dist/quill.snow.css";
 import { useMasterContext } from "../helper/MasterProvider";
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useStockContext } from "../helper/StockManagement";
+import { Pagination, Stack } from "@mui/material";
 
 const ItemManagement = () => {
   const navigate = useNavigate();
 
-  const { getItemGrList, itemgroup,getIMList,addIM,imList,editIM,deleteIMList } = useStockContext();
+  const {
+    getItemGrList,
+    itemgroup,
+    getIMList,
+    addIM,
+    imList,
+    editIM,
+    deleteIMList,
+  } = useStockContext();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemperPage = 8;
+
+  const totalPages =
+  imList?.total && Math.ceil(imList?.total / itemperPage);
 
   useEffect(() => {
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+    };
     getItemGrList();
-    getIMList()
-  }, []);
+    getIMList(dataToSend);
+  }, [currentPage]);
+
+
 
   const [formData, setFormData] = useState({
     name: "",
-    item_group:'',
-    amount:'',
-    low_quantity_alert:'',
-    stock_quantity:'',
+    item_group: "",
+    amount: "",
+    low_quantity_alert: "",
+    stock_quantity: "",
   });
 
   const [open, setOpen] = useState(false);
@@ -56,13 +79,11 @@ const ItemManagement = () => {
 
   const [selectedvarity, setSelectedvarity] = useState({
     name: "",
-    item_group:'',
-    amount:'',
-    low_quantity_alert:'',
-    stock_quantity:''
+    item_group: "",
+    amount: "",
+    low_quantity_alert: "",
+    stock_quantity: "",
   });
-
- 
 
   const onOpenModal = () => {
     setOpen(true);
@@ -75,11 +96,14 @@ const ItemManagement = () => {
   // Close the modal
   const onCloseModal2 = () => {
     setModalOpen(false);
-    setSelectedvarity({   name: "",
-      item_group:'',
-      amount:'',
-      low_quantity_alert:'',
-      stock_quantity:'', _id: "" });
+    setSelectedvarity({
+      name: "",
+      item_group: "",
+      amount: "",
+      low_quantity_alert: "",
+      stock_quantity: "",
+      _id: "",
+    });
   };
 
   const onCloseModal = () => {
@@ -107,6 +131,9 @@ const ItemManagement = () => {
       deleteIMList(id);
     }
   };
+  const handlehistory = (id) => {
+   navigate(`/stock-history/${id}`)
+  };
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -121,6 +148,10 @@ const ItemManagement = () => {
   const handleSubmit = () => {
     addIM(formData);
     onCloseModal();
+  };
+
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
   };
 
   return (
@@ -145,52 +176,91 @@ const ItemManagement = () => {
                         <th>Item Name</th>
                         <th>Group Name</th>
                         <th>Amount</th>
-                        <th>Low quantity alert</th>
+                        <th>Stock Quantity</th>
+                        <th>Low Quantity alert</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       {imList?.loading ? (
                         <tr>
-                          <td colSpan="5" className="text-center">
+                          <td colSpan="6" className="text-center">
                             <Spinner color="secondary" className="my-4" />
                           </td>
                         </tr>
                       ) : imList?.data?.length === 0 ? (
                         <tr>
-                          <td colSpan="5" className="text-center">
+                          <td colSpan="6" className="text-center">
                             No Data Found
                           </td>
                         </tr>
                       ) : (
                         imList?.data?.map((product, index) => (
                           <tr key={index}>
-                            <td>{product.name}</td>
-                            <td>{product.item_group_name}</td>
-                            <td>{product.amount}</td>
-                            <td>{product.low_quantity_alert}</td>
+                            <td>{product?.name}</td>
+                            <td>{product?.item_group_name}</td>
+                            <td>{product?.amount}</td>
+                            <td>{product?.stock_quantity}</td>
+                            <td>{product?.low_quantity_alert}</td>
                             <td>
                               <div className="circelBtnBx">
                                 <Button
                                   className="btn"
                                   color="link"
-                                  onClick={() => onOpenModal2(product)}
+                                  id={`editTooltip-${product._id}`}
                                 >
-                                  <FaEdit />
+                                  <FaEdit
+                                    onClick={() => onOpenModal2(product)}
+                                  />
                                 </Button>
+                                <UncontrolledTooltip
+                                  target={`editTooltip-${product._id}`}
+                                >
+                                  Edit
+                                </UncontrolledTooltip>
+
                                 <Button
                                   className="btn"
                                   color="link"
-                                  onClick={() => handleDelete(product._id)}
+                                  id={`deleteTooltip-${product._id}`}
                                 >
-                                  <FaTrashAlt />
+                                  <FaTrashAlt
+                                    onClick={() => handleDelete(product._id)}
+                                  />
                                 </Button>
+                                <UncontrolledTooltip
+                                  target={`deleteTooltip-${product._id}`}
+                                >
+                                  Delete
+                                </UncontrolledTooltip>
+
+                                <Button
+                                  className="btn"
+                                  color="link"
+                                  id={`historyTooltip-${product._id}`}
+                                >
+                                  <FaHistory onClick={() => handlehistory(product._id)} />
+                                </Button>
+                                <UncontrolledTooltip
+                                  target={`historyTooltip-${product._id}`}
+                                >
+                                  Stock History
+                                </UncontrolledTooltip>
                               </div>
                             </td>
                           </tr>
                         ))
                       )}
                     </tbody>
+                    <Stack className="rightPagination mt10" spacing={2}>
+                      <Pagination
+                        color="primary"
+                        count={totalPages}
+                        page={currentPage}
+                        shape="rounded"
+                        onChange={(event, value) => handlepagechange(value)}
+                      />
+                    </Stack>
                   </Table>
                 </div>
               </CardBody>
@@ -206,7 +276,7 @@ const ItemManagement = () => {
       >
         <ModalHeader toggle={onCloseModal}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-            Add Item 
+            Add Item
           </h5>
         </ModalHeader>
         <ModalBody>
@@ -214,56 +284,56 @@ const ItemManagement = () => {
           {/* Scroll in Y-axis */}
           <Form>
             <div className="row">
-            <FormGroup className="col-md-6">
-              <Label htmlFor="name" className="col-form-label">
-               Name :
-              </Label>
-              <Input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                id="name"
-              />
-            </FormGroup>
-            <FormGroup className="col-md-6">
-              <Label htmlFor="amount" className="col-form-label">
-              Amount :
-              </Label>
-              <Input
-                type="text"
-                name="amount"
-                value={formData.amount}
-                onChange={handleInputChange}
-                id="amount"
-              />
-            </FormGroup>
+              <FormGroup className="col-md-6">
+                <Label htmlFor="name" className="col-form-label">
+                  Name :
+                </Label>
+                <Input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  id="name"
+                />
+              </FormGroup>
+              <FormGroup className="col-md-6">
+                <Label htmlFor="amount" className="col-form-label">
+                  Amount :
+                </Label>
+                <Input
+                  type="text"
+                  name="amount"
+                  value={formData.amount}
+                  onChange={handleInputChange}
+                  id="amount"
+                />
+              </FormGroup>
             </div>
             <div className="row">
-            <FormGroup className="col-md-6">
-              <Label htmlFor="low_quantity_alert" className="col-form-label">
-              Low Quantity Alert :
-              </Label>
-              <Input
-                type="text"
-                name="low_quantity_alert"
-                value={formData.low_quantity_alert}
-                onChange={handleInputChange}
-                id="low_quantity_alert"
-              />
-            </FormGroup>
-            <FormGroup className="col-md-6">
-              <Label htmlFor="stock_quantity" className="col-form-label">
-              Stock Quantity :
-              </Label>
-              <Input
-                type="text"
-                name="stock_quantity"
-                value={formData.stock_quantity}
-                onChange={handleInputChange}
-                id="stock_quantity"
-              />
-            </FormGroup>
+              <FormGroup className="col-md-6">
+                <Label htmlFor="low_quantity_alert" className="col-form-label">
+                  Low Quantity Alert :
+                </Label>
+                <Input
+                  type="text"
+                  name="low_quantity_alert"
+                  value={formData.low_quantity_alert}
+                  onChange={handleInputChange}
+                  id="low_quantity_alert"
+                />
+              </FormGroup>
+              <FormGroup className="col-md-6">
+                <Label htmlFor="stock_quantity" className="col-form-label">
+                  Stock Quantity :
+                </Label>
+                <Input
+                  type="text"
+                  name="stock_quantity"
+                  value={formData.stock_quantity}
+                  onChange={handleInputChange}
+                  id="stock_quantity"
+                />
+              </FormGroup>
             </div>
             <FormGroup>
               <Label htmlFor="item_group" className="col-form-label">
@@ -323,7 +393,7 @@ const ItemManagement = () => {
             </FormGroup> */}
             <FormGroup>
               <Label htmlFor="name" className="col-form-label">
-               Name :
+                Name :
               </Label>
               <Input
                 type="text"
@@ -335,7 +405,7 @@ const ItemManagement = () => {
             </FormGroup>
             <FormGroup>
               <Label htmlFor="amount" className="col-form-label">
-              Amount :
+                Amount :
               </Label>
               <Input
                 type="text"
@@ -347,7 +417,7 @@ const ItemManagement = () => {
             </FormGroup>
             <FormGroup>
               <Label htmlFor="low_quantity_alert" className="col-form-label">
-              low_quantity_alert :
+                low_quantity_alert :
               </Label>
               <Input
                 type="text"

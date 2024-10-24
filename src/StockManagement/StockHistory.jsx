@@ -22,37 +22,39 @@
   } from "reactstrap";
   import { useEffect, useState } from "react";
 
-  import { useNavigate } from "react-router-dom";
+  import { useNavigate, useParams } from "react-router-dom";
   import { FaEdit } from "react-icons/fa";
 
   import { FaTrashAlt } from "react-icons/fa";
 
+  // Register the necessary Chart.js components
 
   import { Spinner } from "reactstrap";
   import ReactQuill from "react-quill";
   import "react-quill/dist/quill.snow.css";
-import { useMasterContext } from "../../helper/MasterProvider";
-import CommonBreadcrumb from "../../component/common/bread-crumb";
+import { useMasterContext } from "../helper/MasterProvider";
+import CommonBreadcrumb from "../component/common/bread-crumb";
+import { useStockContext } from "../helper/StockManagement";
 import { Pagination, Stack } from "@mui/material";
 
-  const SpeciesList = () => {
-    const navigate = useNavigate();
-  
-    const {  getSpeciesMasterList,speciesMasterList,addSpeciesMasterList } = useMasterContext();
-   
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchTerm, setSearchTerm] = useState("");
-    const itemperPage = 8;
-  
-    const totalPages =
-    speciesMasterList?.total && Math.ceil(speciesMasterList?.total / itemperPage);
 
+  const StockHistory = () => {
+    const navigate = useNavigate();
+    const {id} = useParams()
+    const {  getItemGrList, itemgroup,addItemGr,getStockHistoryList,stockhistory } = useStockContext();
+  
     const [formData, setFormData] = useState({
       title: "",
     });
   
     const [open, setOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const itemperPage = 8;
+  
+    const totalPages =
+    stockhistory?.total && Math.ceil(stockhistory?.total / itemperPage);
   
     const [selectedvarity, setSelectedvarity] = useState({
       title: "",
@@ -60,12 +62,14 @@ import { Pagination, Stack } from "@mui/material";
     });
   
     useEffect(() => {
-      const dataToSend = {
+      const dataToSend={
+        item_id: id,
         page: currentPage,
-        limit: itemperPage,
-      };
-    getSpeciesMasterList(dataToSend);
-    }, [currentPage]);
+       limit: itemperPage,
+      }
+      getStockHistoryList(dataToSend)
+      getItemGrList();
+    }, [id,currentPage]);
   
     const onOpenModal = () => {
       setOpen(true);
@@ -122,73 +126,64 @@ import { Pagination, Stack } from "@mui/material";
   
     // Handle form submission
     const handleSubmit = () => {
-      // Send formData to the backend
-      addSpeciesMasterList(formData);
-      onCloseModal(); // Close modal after saving
+      addItemGr(formData);
+      onCloseModal(); 
     };
 
     const handlepagechange = (newpage) => {
       setCurrentPage(newpage);
     };
   
+  
     return (
       <>
-        <CommonBreadcrumb title="Species List"  />
+        <CommonBreadcrumb title="Stock History"  />
         <Container fluid>
           <Row>
             <Col sm="12">
               <Card>
                 {/* <CommonCardHeader title="Product Sub Categoty" /> */}
                 <CardBody>
-                  <div className="btn-popup pull-right">
+                  {/* <div className="btn-popup pull-right">
                     <Button color="primary" onClick={onOpenModal}>
-                      Add Species
+                      Add 
                     </Button>
-                  </div>
+                  </div> */}
                   <div className="clearfix"></div>
                   <div id="basicScenario" className="product-physical">
                     <Table striped responsive>
                       <thead>
                         <tr>
-                          <th>Species</th>
-                          <th>Action</th>
+                          <th>Item Name</th>
+                          <th>Purchased Quantity</th>
+                          <th>Used Quantity</th>
+                          <th>Stock Quantity</th>
+                          <th>Vendor Name</th>
+                          
                         </tr>
                       </thead>
                       <tbody>
-                        {speciesMasterList?.loading ? (
+                        {stockhistory?.loading ? (
                           <tr>
-                            <td colSpan="4" className="text-center">
+                            <td colSpan="7" className="text-center">
                               <Spinner color="secondary" className="my-4" />
                             </td>
                           </tr>
-                        ) : speciesMasterList?.data?.length === 0 ? (
+                        ) : stockhistory?.data?.length === 0 ? (
                           <tr>
-                            <td colSpan="4" className="text-center">
+                            <td colSpan="7" className="text-center">
                               No Data Found
                             </td>
                           </tr>
                         ) : (
-                            speciesMasterList?.data?.map((product, index) => (
+                          stockhistory?.data?.map((product, index) => (
                             <tr key={index}>
-                              <td>{product.title}</td>
-                              <td>
-                                <div className="circelBtnBx">
-                                  <Button
-                                    className="btn"
-                                    color="link"
-                                    onClick={() => onOpenModal2(product)}
-                                  >
-                                    <FaEdit />
-                                  </Button>
-                                  <Button
-                                    className="btn"
-                                    color="link"
-                                    onClick={() => handleDelete(product._id)}
-                                  >
-                                    <FaTrashAlt />
-                                  </Button>
-                                </div>
-                              </td>
+                              <td>{product?.item_name}</td>
+                              <td>{product?.purchased_quantity}</td>
+                              <td>{product?.used_quantity}</td>
+                              <td>{product?.stock_quantity}</td>
+                              <td>{product?.vendor_name}</td>
+                              
                             </tr>
                           ))
                         )}
@@ -213,11 +208,11 @@ import { Pagination, Stack } from "@mui/material";
         <Modal
           isOpen={open}
           toggle={onCloseModal}
-          className="modal-lg" // Increases the width
+          className="modal-xs" // Increases the width
         >
           <ModalHeader toggle={onCloseModal}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-              Add Species
+              Add Item Group
             </h5>
           </ModalHeader>
           <ModalBody>
@@ -226,7 +221,7 @@ import { Pagination, Stack } from "@mui/material";
             <Form>
               <FormGroup>
                 <Label htmlFor="title" className="col-form-label">
-                  Species Name :
+                  Item Group :
                 </Label>
                 <Input
                   type="text"
@@ -288,5 +283,5 @@ import { Pagination, Stack } from "@mui/material";
     );
   };
   
-  export default SpeciesList;
+  export default StockHistory;
   

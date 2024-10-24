@@ -157,7 +157,7 @@ const AddTask = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label for="New">Test</Label>
+                <Label for="New">Phlebotomist</Label>
                 <Autocomplete
                   sx={{ m: 1 }}
                   multiple
@@ -170,8 +170,8 @@ const AddTask = () => {
                     <TextField
                       {...params}
                       variant="outlined"
-                      label="Select Collection Center"
-                      placeholder="Select Collection Center"
+                      label="Select Phlebotomist"
+                      placeholder="Select Phlebotomist"
                     />
                   )}
                 />

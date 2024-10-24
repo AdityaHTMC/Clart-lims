@@ -1,92 +1,94 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
 
-  
-  import {
-    Button,
-    Card,
-    CardBody,
-    Col,
-    Container,
-    Form,
-    FormGroup,
-    Input,
-    Label,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    Row,
-    Spinner,
-    Table,
-  } from "reactstrap";
-  import { useEffect, useState } from "react";
-  import { useNavigate } from "react-router-dom";
-  import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import {
+  Button,
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Form,
+  FormGroup,
+  Input,
+  Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Row,
+  Spinner,
+  Table,
+} from "reactstrap";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
+import { Autocomplete, TextField } from "@mui/material";
 
-  
+const ProfessionalList = () => {
+  const navigate = useNavigate();
 
-  const ProfessionalList = () => {
-    const navigate = useNavigate();
-  
-    const {getProfessionalList,professionalList,addProfessional,getAllItemList, allItemList } = useMasterContext();
-  
-    const [open, setOpen] = useState(false);
-    const [modalOpen, setModalOpen] = useState(false);
+  const {
+    getProfessionalList,
+    professionalList,
+    addProfessional,
+    getAllItemList,
+    allItemList,
+  } = useMasterContext();
 
-    console.log(allItemList,'allItemList')
-    
-    const [formData, setFormData] = useState({
-        name: "",
-        expected_charges:"",
-        item_id: "",
-      });
+  const [open, setOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
-    const [selectedvarity, setSelectedvarity] = useState({
-        name: "",
-        expected_charges:"",
-        item_id: "",
-      });
-  
-    useEffect(() => {
-        getProfessionalList();
-        getAllItemList();
-    }, []);
-  
+  console.log(allItemList, "allItemList");
 
- 
-    const handleEdit = (id) => {
-      // navigate(`/product-edit/${id}`);
-    };
-  
-    const handleDelete = (id) => {
-      if (window.confirm("Are you sure you wish to delete this item?")) {
-        // delete product logic here
-        // ProductDelete(id);
-      }
-    };
-  
-    const onOpenModal = () => {
-        setOpen(true);
-      };
-      const onOpenModal2 = (product) => {
-        setSelectedvarity(product);
-        setModalOpen(true);
-      };
-    
-      // Close the modal
-      const onCloseModal2 = () => {
-        setModalOpen(false);
-        setSelectedvarity({ name:'' });
-      };
-    
-      const onCloseModal = () => {
-        setOpen(false);
-      };
+  const [formData, setFormData] = useState({
+    name: "",
+    expected_charges: "",
+    item_id: "",
+  });
 
-        // Handle form input change
+  const [selectedvarity, setSelectedvarity] = useState({
+    name: "",
+    expected_charges: "",
+    item_id: "",
+  });
+
+  useEffect(() => {
+    getProfessionalList();
+    getAllItemList();
+  }, []);
+
+  const handleEdit = (id) => {
+    // navigate(`/product-edit/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you wish to delete this item?")) {
+      // delete product logic here
+      // ProductDelete(id);
+    }
+  };
+
+  const onOpenModal = () => {
+    setOpen(true);
+  };
+  const onOpenModal2 = (product) => {
+    setSelectedvarity(product);
+    setModalOpen(true);
+  };
+
+  // Close the modal
+  const onCloseModal2 = () => {
+    setModalOpen(false);
+    setSelectedvarity({ name: "" });
+  };
+
+  const onCloseModal = () => {
+    setOpen(false);
+  };
+
+  // Handle form input change
   const handleInputChanges = (e) => {
     const { name, value } = e.target;
     setSelectedvarity((prevState) => ({
@@ -116,88 +118,83 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
     onCloseModal(); // Close modal after saving
   };
 
-  
-    return (
-      <>
-        <CommonBreadcrumb
-          title="Professional Fees List"
-        />
-        <Container fluid>
-          <Row>
-            <Col sm="12">
-              <Card>
-                {/* <CommonCardHeader title="Product Sub Categoty" /> */}
-                <CardBody>
-                  <div className="btn-popup pull-right">
-                    <Button color="primary" onClick={onOpenModal}>
-                      Add
-                    </Button>
-                  </div>
-                  <div className="clearfix"></div>
-                  <div id="basicScenario" className="product-physical">
-                    <div className="promo-code-list">
-                      <Table hover responsive>
-                        <thead>
+  return (
+    <>
+      <CommonBreadcrumb title="Professional Fees List" />
+      <Container fluid>
+        <Row>
+          <Col sm="12">
+            <Card>
+              {/* <CommonCardHeader title="Product Sub Categoty" /> */}
+              <CardBody>
+                <div className="btn-popup pull-right">
+                  <Button color="primary" onClick={onOpenModal}>
+                    Add
+                  </Button>
+                </div>
+                <div className="clearfix"></div>
+                <div id="basicScenario" className="product-physical">
+                  <div className="promo-code-list">
+                    <Table hover responsive>
+                      <thead>
+                        <tr>
+                          <th>Name </th>
+                          <th>Expected Charges</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* Show loading spinner */}
+                        {professionalList?.loading ? (
                           <tr>
-                            <th>Name </th>
-                            <th>Expected Charges</th>
-                            <th>Action</th>
+                            <td colSpan="7" className="text-center">
+                              <Spinner color="secondary" className="my-4" />
+                            </td>
                           </tr>
-                        </thead>
-                        <tbody>
-                          {/* Show loading spinner */}
-                          {professionalList?.loading ? (
-                            <tr>
-                              <td colSpan="7" className="text-center">
-                                <Spinner color="secondary" className="my-4" />
+                        ) : professionalList?.data?.length === 0 ? (
+                          // Show "No products found" when there's no data
+                          <tr>
+                            <td colSpan="7" className="text-center">
+                              No professional List Found
+                            </td>
+                          </tr>
+                        ) : (
+                          professionalList?.data?.map((product, index) => (
+                            <tr key={index}>
+                              <td>{product?.name}</td>
+                              <td>{product?.expected_charges}</td>
+                              <td>
+                                <div className="circelBtnBx">
+                                  <Button
+                                    className="btn"
+                                    color="link"
+                                    onClick={() => handleEdit(product._id)}
+                                  >
+                                    <FaEdit />
+                                  </Button>
+                                  <Button
+                                    className="btn"
+                                    color="link"
+                                    onClick={() => handleDelete(product._id)}
+                                  >
+                                    <FaTrashAlt />
+                                  </Button>
+                                </div>
                               </td>
                             </tr>
-                          ) : professionalList?.data?.length === 0 ? (
-                            // Show "No products found" when there's no data
-                            <tr>
-                              <td colSpan="7" className="text-center">
-                                No professional List Found
-                              </td>
-                            </tr>
-                          ) : (
-                            professionalList?.data?.map((product, index) => (
-                              <tr key={index}>
-                                <td>{product?.name}</td>
-                                <td>{product?.expected_charges}</td>
-                                <td>
-                                  <div className="circelBtnBx">
-                                    <Button
-                                      className="btn"
-                                      color="link"
-                                      onClick={() => handleEdit(product._id)}
-                                    >
-                                      <FaEdit />
-                                    </Button>
-                                    <Button
-                                      className="btn"
-                                      color="link"
-                                      onClick={() => handleDelete(product._id)}
-                                    >
-                                      <FaTrashAlt />
-                                    </Button>
-                                  </div>
-                                </td>
-                              </tr>
-                            ))
-                          )}
-                        </tbody>
-                      </Table>
-                    </div>
+                          ))
+                        )}
+                      </tbody>
+                    </Table>
                   </div>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
 
-
-
-        <Modal
+      <Modal
         isOpen={open}
         toggle={onCloseModal}
         className="modal-lg" // Increases the width
@@ -225,7 +222,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
             </FormGroup>
             <FormGroup>
               <Label htmlFor="expected_charges" className="col-form-label">
-               Expected Charges :
+                Expected Charges :
               </Label>
               <Input
                 type="text"
@@ -237,23 +234,29 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
             </FormGroup>
 
             <FormGroup>
-                <Label for="item_id">Choose Item </Label>
-                <Input
-                  type="select"
-                  name="item_id"
-                  id="item_id"
-                  value={formData.item_id}
-                  onChange={handleInputChange}
-                >
-                  <option value="">Select Item</option>
-                  {allItemList?.data?.map((test) => (
-                    <option key={test._id} value={test._id}>
-                      {test.name}
-                    </option>
-                  ))}
-                </Input>
-              </FormGroup>
-
+              <Autocomplete
+                options={allItemList?.data || []}
+                getOptionLabel={(option) => option.name} // Display name in the dropdown
+                onChange={(event, newValue) => {
+                  // Update the formData with the selected item's ID
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    item_id: newValue ? newValue._id : "", // Set item_id or empty string
+                  }));
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Select Item"
+                    variant="outlined"
+                    fullWidth
+                  />
+                )}
+                isOptionEqualToValue={(option, value) =>
+                  option._id === value._id
+                } // Check if option is equal to value
+              />
+            </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
@@ -276,7 +279,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
           <Form>
             <FormGroup>
               <Label htmlFor="name" className="col-form-label">
-               Name:
+                Name:
               </Label>
               <Input
                 type="text"
@@ -289,7 +292,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
 
             <FormGroup>
               <Label htmlFor="expected_charges" className="col-form-label">
-               Expected Charges:
+                Expected Charges:
               </Label>
               <Input
                 type="text"
@@ -310,9 +313,8 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
           </Button>
         </ModalFooter>
       </Modal>
-      </>
-    );
-  };
-  
-  export default ProfessionalList;
-  
+    </>
+  );
+};
+
+export default ProfessionalList;

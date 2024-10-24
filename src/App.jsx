@@ -95,6 +95,7 @@ import ItemManagement from "./StockManagement/ItemManagement";
 import VendorManagement from "./StockManagement/VendorManagement";
 import PurchaseList from "./StockManagement/PurchaseList";
 import StockReport from "./StockManagement/StockReport";
+import StockHistory from "./StockManagement/StockHistory";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -170,6 +171,7 @@ function App() {
           <Route path="/vendor-management" element={<VendorManagement/>} />
           <Route path="/purchase-to-stock" element={<PurchaseList/>} />
           <Route path="/stock-reports" element={<StockReport/>} />
+          <Route path="/stock-history/:id" element={<StockHistory/>} />
           {/* stock end */}
 
           {/* order start */}

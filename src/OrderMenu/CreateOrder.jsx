@@ -54,10 +54,11 @@ const CreateOrder = () => {
     test_package: "",
     images: [],
     payment_mode: "Cash",
-    booking_date: '',
+    booking_date: "",
   });
 
   const [totalAmount, setTotalAmount] = useState(0);
+  const [collectionFees, setCollectionFees] = useState(0);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [selectedPhelbo, setSelectedPhelbo] = useState("");
 
@@ -89,13 +90,14 @@ const CreateOrder = () => {
 
   useEffect(() => {
     let amount = 0;
-
+    let amount2 = 0;
     selectedTest.forEach((el) => {
       amount += el.sell_price;
 
       // If formData.type is 'Home Visit', add collection_fee
       if (formData.type === "Home Visit") {
         amount += el.collection_fee || 0;
+        amount2 += el.collection_fee;
       }
     });
 
@@ -109,7 +111,7 @@ const CreateOrder = () => {
       }
       // If formData.type is 'Home Visit', add collection_fee for the package
       if (formData.type === "Home Visit") {
-        amount += packageDetail?.total_collection_fees || 0;
+        amount2 += packageDetail?.total_collection_fees || 0;
       }
     }
 
@@ -117,7 +119,10 @@ const CreateOrder = () => {
       amount += el.expected_charges;
     });
     setTotalAmount(amount);
+    setCollectionFees(amount2);
   }, [selectedTest, formData.test_package, selectedFees, formData.type]);
+
+  console.log(collectionFees, "collection fee");
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -458,29 +463,34 @@ const CreateOrder = () => {
                               onChange={handleDateChange}
                             />
                           </FormGroup>
-                       
-                       {
-                        formData.booking_date && (
-                          <Box
-                          sx={{ display: "flex", flexWrap: "wrap", gap: 1,marginBottom:'20px' }}
-                        >
-                          <Typography variant="h6" gutterBottom>
-                            Choose Time Slots :
-                          </Typography>
-                          {timeList.data.map((slot, index) => (
-                            <Chip
-                              key={index}
-                              label={`${slot.start_time} - ${slot.end_time}`} // Display time range
-                              clickable
-                              color={
-                                selectedSlot === slot ? "primary" : "default"
-                              }
-                              onClick={() => handleSelect(slot)} // Use index to select a slot
-                            />
-                          ))}
-                        </Box>
-                        )
-                       }
+
+                          {formData.booking_date && (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: 1,
+                                marginBottom: "20px",
+                              }}
+                            >
+                              <Typography variant="h6" gutterBottom>
+                                Choose Time Slots :
+                              </Typography>
+                              {timeList.data.map((slot, index) => (
+                                <Chip
+                                  key={index}
+                                  label={`${slot.start_time} - ${slot.end_time}`} // Display time range
+                                  clickable
+                                  color={
+                                    selectedSlot === slot
+                                      ? "primary"
+                                      : "default"
+                                  }
+                                  onClick={() => handleSelect(slot)} // Use index to select a slot
+                                />
+                              ))}
+                            </Box>
+                          )}
 
                           <FormGroup>
                             <Label
@@ -575,8 +585,6 @@ const CreateOrder = () => {
                             />
                           </FormGroup>
 
-
-
                           <FormGroup
                             style={{ ml: 4, minWidth: 200, marginTop: "20px" }}
                           >
@@ -647,12 +655,19 @@ const CreateOrder = () => {
 
                       <hr className="mt-4" />
                       <div className="d-flex justify-content-between align-items-center">
-                        <p
-                          className="mb-0"
-                          style={{ fontWeight: 600, fontSize: 18 }}
-                        >
-                          Total Amount : ₹ {totalAmount}
-                        </p>
+                        <div className="d-flex flex-column gap-1">
+                          {
+                            collectionFees > 0 && (
+                              <>
+                                <p className="mb-0">
+                                  Collection Fees : ₹ {collectionFees}
+                                </p>
+                                <p className="mb-0" style={{ fontWeight: 600, fontSize: 18 }}>
+                                  Total Amount : ₹ {totalAmount}
+                                </p>
+                              </>
+                            )}
+                        </div>
                         <Button
                           color="primary"
                           disabled={

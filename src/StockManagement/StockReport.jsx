@@ -32,6 +32,8 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useStockContext } from "../helper/StockManagement";
 import { IoCloseSharp } from "react-icons/io5";
 import { AiOutlinePlus } from "react-icons/ai";
+import { useCategoryContext } from "../helper/CategoryProvider";
+import { Autocomplete, TextField } from "@mui/material";
 const StockReport = () => {
   const navigate = useNavigate();
   const {
@@ -39,15 +41,79 @@ const StockReport = () => {
     purchaseList,
     getallvendorlist,
     allvendorList,
-    addPurchase,
+    addPurchase,addStockissue, getStockReportList ,srList
   } = useStockContext();
   const { getAllItemList, allItemList } = useMasterContext();
+
+  const {
+    getAllUnit,
+    unitDropdown,
+    labDropdown,
+    getAllLabs,
+    getAllCollection,
+    collectionDropdown,
+    getAllphlebotomist,
+    phlebotomistList,
+  } = useCategoryContext();
 
   useEffect(() => {
     getPurchaseList();
     getAllItemList();
     getallvendorlist();
+    getStockReportList()
   }, []);
+
+  const [selectedOption, setSelectedOption] = useState(""); // For storing which radio is selected
+  const [dropdownData, setDropdownData] = useState([]); // For storing dropdown data
+  const [selectedStockIssue, setSelectedStockIssue] = useState(""); // For storing the selected dropdown value
+
+  // Handle radio button change
+  const handleOptionChange = (e) => {
+    setSelectedOption(e.target.value); // Set the selected radio button option
+  };
+
+  // Fetch data when the selected option changes
+  useEffect(() => {
+    const fetchData = async () => {
+      if (selectedOption === "unit") {
+        await getAllUnit(); // Fetch unit data
+      } else if (selectedOption === "lab") {
+        await getAllLabs(); // Fetch lab data
+      } else if (selectedOption === "collection") {
+        await getAllCollection(); // Fetch collection data
+      } else if (selectedOption === "phlebotomist") {
+        await getAllphlebotomist(); // Fetch phlebotomist data
+      }
+    };
+
+    if (selectedOption) {
+      fetchData(); // Fetch the appropriate data only if a radio button is selected
+    }
+  }, [selectedOption]);
+
+  // Use another useEffect to update dropdown data when context values change
+  useEffect(() => {
+    if (selectedOption === "unit") {
+      setDropdownData(unitDropdown); // Set dropdown data when unitDropdown updates
+    } else if (selectedOption === "lab") {
+      setDropdownData(labDropdown); // Set dropdown data when labDropdown updates
+    } else if (selectedOption === "collection") {
+      setDropdownData(collectionDropdown); // Set dropdown data when collectionDropdown updates
+    } else if (selectedOption === "phlebotomist") {
+      setDropdownData(phlebotomistList); // Set dropdown data when phlebotomistList updates
+    }
+  }, [
+    selectedOption,
+    unitDropdown,
+    labDropdown,
+    collectionDropdown,
+    phlebotomistList,
+  ]);
+
+  // Handle dropdown change to store selected value
+  const handleStockIssueChange = (e) => {
+    setSelectedStockIssue(e.target.value);
+  };
 
   const [formData, setFormData] = useState({
     vendor_id: "",
@@ -65,34 +131,50 @@ const StockReport = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const [selectedvarity, setSelectedvarity] = useState({
-    item_id: "",
     vendor_id: "",
-    quantity: "",
-    amount: "",
+    stock: [
+      {
+        item_id: "",
+        quantity: "",
+        stock_quantity: "",
+        amount: "",
+      },
+    ],
   });
 
   const onOpenModal = () => {
     setOpen(true);
-  };
-  const onOpenModal2 = (product) => {
-    setSelectedvarity(product);
-    setModalOpen(true);
   };
 
   // Close the modal
   const onCloseModal2 = () => {
     setModalOpen(false);
     setSelectedvarity({
-      item_id: "",
       vendor_id: "",
-      quantity: "",
-      amount: "",
-      _id: "",
+      stock: [
+        {
+          item_id: "",
+          quantity: "",
+          stock_quantity: "",
+          amount: "",
+        },
+      ],
     });
   };
 
   const onCloseModal = () => {
     setOpen(false);
+    setFormData({
+      vendor_id: "",
+      stock: [
+        {
+          item_id: "",
+          quantity: "",
+          stock_quantity: "",
+          amount: "",
+        },
+      ],
+    });
   };
 
   // Handle form input change
@@ -145,7 +227,7 @@ const StockReport = () => {
 
   const handleVendorChange = (e) => {
     const { value } = e.target;
-  
+
     setFormData((prevData) => ({
       ...prevData,
       vendor_id: value, // Update vendor_id directly
@@ -177,16 +259,25 @@ const StockReport = () => {
     const formDataToSend = new FormData();
 
     // Append the fields to FormData
-    formDataToSend.append("vendor_id", formData.vendor_id);
+
+    if (selectedOption === "unit") {
+      formDataToSend.append("issued_to_unit", selectedStockIssue);
+    } else if (selectedOption === "lab") {
+      formDataToSend.append("issued_to_lab", selectedStockIssue);
+    } else if (selectedOption === "collection") {
+      formDataToSend.append("issued_to_collection_center", selectedStockIssue);
+    } else if (selectedOption === "phlebotomist") {
+      formDataToSend.append("issued_to_phlebotomist", selectedStockIssue);
+    }
 
     // Append each stock item to FormData
     formData.stock.forEach((item, index) => {
       formDataToSend.append(`stock[${index}][item_id]`, item.item_id);
       formDataToSend.append(`stock[${index}][quantity]`, item.quantity);
-      formDataToSend.append(`stock[${index}][amount]`, item.amount); 
+      formDataToSend.append(`stock[${index}][amount]`, item.amount);
     });
 
-    addPurchase(formDataToSend);
+    addStockissue(formDataToSend);
     onCloseModal();
   };
 
@@ -201,7 +292,7 @@ const StockReport = () => {
               <CardBody>
                 <div className="btn-popup pull-right">
                   <Button color="primary" onClick={onOpenModal}>
-                    Add
+                    Stock issue
                   </Button>
                 </div>
                 <div className="clearfix"></div>
@@ -212,19 +303,22 @@ const StockReport = () => {
                         <th>Item Name </th>
                         <th>Vendor Name</th>
                         <th>Quantity</th>
+                        <th>Used Quantity</th>
+                        <th>Purchased Quantity</th>
                         <th>Amount</th>
+                        <th>Issued_to</th>
                         <th>Date</th>
                       </tr>
                     </thead>
                     <tbody>
                       {/* Show loading spinner */}
-                      {purchaseList?.loading ? (
+                      {srList?.loading ? (
                         <tr>
                           <td colSpan="7" className="text-center">
                             <Spinner color="secondary" className="my-4" />
                           </td>
                         </tr>
-                      ) : purchaseList?.data?.length === 0 ? (
+                      ) : srList?.data?.length === 0 ? (
                         // Show "No products found" when there's no data
                         <tr>
                           <td colSpan="7" className="text-center">
@@ -232,12 +326,15 @@ const StockReport = () => {
                           </td>
                         </tr>
                       ) : (
-                        purchaseList?.data?.map((product, index) => (
+                        srList?.data?.map((product, index) => (
                           <tr key={index}>
                             <td>{product.item_name}</td>
                             <td>{product.vendor_name}</td>
                             <td>{product.quantity}</td>
+                            <td>{product.used_quantity}</td>
+                            <td>{product.purchased_quantity}</td>
                             <td>{product.amount}</td>
+                            <td>{product.issued_to}</td>
                             <td>
                               {product?.date
                                 ? new Date(product.date).toLocaleDateString(
@@ -260,53 +357,111 @@ const StockReport = () => {
       <Modal isOpen={open} toggle={onCloseModal} className="modal-lg">
         <ModalHeader toggle={onCloseModal}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-            Add New Stock
+            Add Stock Issue
           </h5>
         </ModalHeader>
         <ModalBody>
           <Form>
-          <div className="row mt-3">
-              <FormGroup className="col-md-6">
-                <Label for="vendor_id">Choose Vendor </Label>
+            <div className="form-group mb-4">
+              <Label>Select Stock Issue To</Label>
+              <div style={{ display: "flex", gap: "20px", padding: "10px 0" }}>
+                <Label check style={{ marginRight: "10px" }}>
+                  <Input
+                    type="radio"
+                    value="unit"
+                    checked={selectedOption === "unit"}
+                    onChange={handleOptionChange}
+                  />{" "}
+                  Unit
+                </Label>
+                <Label check style={{ marginRight: "10px" }}>
+                  <Input
+                    type="radio"
+                    value="lab"
+                    checked={selectedOption === "lab"}
+                    onChange={handleOptionChange}
+                  />{" "}
+                  Lab
+                </Label>
+                <Label check style={{ marginRight: "10px" }}>
+                  <Input
+                    type="radio"
+                    value="collection"
+                    checked={selectedOption === "collection"}
+                    onChange={handleOptionChange}
+                  />{" "}
+                  Collection Center
+                </Label>
+                <Label check>
+                  <Input
+                    type="radio"
+                    value="phlebotomist"
+                    checked={selectedOption === "phlebotomist"}
+                    onChange={handleOptionChange}
+                  />{" "}
+                  Phlebotomist
+                </Label>
+              </div>
+            </div>
+
+            {/* Stock Issue dropdown, rendered conditionally */}
+            {selectedOption && (
+              <FormGroup>
+                <Label htmlFor="stockIssueDropdown">Stock Issue</Label>
                 <Input
                   type="select"
-                  name="vendor_id"
-                  id="vendor_id"
-                  value={formData.vendor_id}
-                  onChange={handleVendorChange}
+                  id="stockIssueDropdown"
+                  value={selectedStockIssue}
+                  onChange={handleStockIssueChange}
                 >
-                  <option value="">Select Vendor</option>
-                  {allvendorList?.data?.map((test) => (
-                    <option key={test._id} value={test._id}>
-                      {test.name}
+                  <option value="">Select Stock Issue</option>
+                  {dropdownData?.data?.map((item) => (
+                    <option key={item._id} value={item._id}>
+                      {/* Display organization_name for Unit, Lab, and Collection Center */}
+                      {selectedOption === "unit" ||
+                      selectedOption === "lab" ||
+                      selectedOption === "collection"
+                        ? item.organization_name
+                        : item.name}
                     </option>
                   ))}
                 </Input>
               </FormGroup>
-            </div>
+            )}
+
             {formData.stock.map((item, index) => (
               <div className="row" key={index}>
-                <FormGroup className="col-md-4">
-                <Label htmlFor={`amount_${index}`}>Item</Label>
-                  <Input
-                    type="select"
-                    name="item_id"
-                    id={`item_id_${index}`}
-                    value={item.item_id}
-                    onChange={(e) => handleInputChange(e, index)}
-                    placeholder="Choose Item"
-                  >
-                    <option value="">Select Item</option>
-                    {allItemList?.data?.map((test) => (
-                      <option key={test._id} value={test._id}>
-                        {test.name}
-                      </option>
-                    ))}
-                  </Input>
+                <FormGroup className="col-md-3">
+                  <Label htmlFor={`item_id_${index}`}>Item</Label>
+                  <Autocomplete
+                    options={allItemList?.data || []}
+                    getOptionLabel={(option) => option.name}
+                    onChange={(event, newValue) => {
+                      handleInputChange(
+                        {
+                          target: {
+                            name: "item_id",
+                            value: newValue?._id || "",
+                          },
+                        },
+                        index
+                      );
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Choose Item"
+                        variant="outlined"
+                      />
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                      option._id === value._id
+                    }
+                  />
                 </FormGroup>
 
                 <FormGroup className="col-md-2">
-                <Label htmlFor={`amount_${index}`}>Stock Quantity</Label>
+                  <Label htmlFor={`amount_${index}`}>Stock Quantity</Label>
                   <Input
                     type="text"
                     name="stock_quantity"
@@ -317,26 +472,25 @@ const StockReport = () => {
                 </FormGroup>
 
                 <FormGroup className="col-md-2">
-                <Label htmlFor={`amount_${index}`}>Quantity</Label>
+                  <Label htmlFor={`amount_${index}`}>Quantity</Label>
                   <Input
                     type="text"
                     name="quantity"
                     value={item.quantity}
                     onChange={(e) => handleInputChange(e, index)}
                     id={`quantity_${index}`}
-                    placeholder="Quantity:"
                   />
                 </FormGroup>
                 <FormGroup className="col-md-2">
-              <Label htmlFor={`amount_${index}`}>Amount</Label>
-              <Input
-                type="text"
-                name="amount"
-                value={item.amount}
-                onChange={(e) => handleInputChange(e, index)}
-                id={`amount_${index}`}
-              />
-            </FormGroup>
+                  <Label htmlFor={`amount_${index}`}>Amount</Label>
+                  <Input
+                    type="text"
+                    name="amount"
+                    value={item.amount}
+                    onChange={(e) => handleInputChange(e, index)}
+                    id={`amount_${index}`}
+                  />
+                </FormGroup>
 
                 <FormGroup className="col-md-2 d-flex align-items-center">
                   {formData.stock.length > 1 && (
@@ -368,8 +522,6 @@ const StockReport = () => {
                 &nbsp;<span>Add More</span>
               </Button>
             </div>
-
-            
           </Form>
         </ModalBody>
         <ModalFooter>

@@ -21,16 +21,8 @@ import {
   Table,
 } from "reactstrap";
 import { useEffect, useState } from "react";
-import { TiDeleteOutline } from "react-icons/ti";
-
 import { useNavigate } from "react-router-dom";
-import { FaEdit } from "react-icons/fa";
-
-import { FaTrashAlt } from "react-icons/fa";
-
 import { Spinner } from "reactstrap";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import { useMasterContext } from "../helper/MasterProvider";
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useStockContext } from "../helper/StockManagement";
@@ -38,6 +30,8 @@ import { useStockContext } from "../helper/StockManagement";
 import { IoCloseSharp } from "react-icons/io5";
 
 import { AiOutlinePlus } from "react-icons/ai";
+import { Autocomplete, Pagination, Stack, TextField } from "@mui/material";
+
 const PurchaseList = () => {
   const navigate = useNavigate();
 
@@ -49,14 +43,22 @@ const PurchaseList = () => {
     addPurchase,
   } = useStockContext();
   const { getAllItemList, allItemList } = useMasterContext();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemperPage = 8;
 
-  console.log(allItemList,'allItemList')
+  const totalPages =
+    purchaseList?.total && Math.ceil(purchaseList?.total / itemperPage);
 
   useEffect(() => {
-    getPurchaseList();
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+    };
+    getPurchaseList(dataToSend);
     getAllItemList();
     getallvendorlist();
-  }, []);
+  }, [currentPage]);
 
   const [formData, setFormData] = useState({
     vendor_id: "",
@@ -152,15 +154,13 @@ const PurchaseList = () => {
     }));
   };
 
-  const handleVendorChange = (e) => {
-    const { value } = e.target;
-  
+  const handleVendorChange = (newValue) => {
+    // Update vendor_id in formData
     setFormData((prevData) => ({
       ...prevData,
-      vendor_id: value, // Update vendor_id directly
+      vendor_id: newValue ? newValue._id : "", // Update vendor_id based on selection
     }));
   };
-
   // Add new row for stock
   const addStockRow = () => {
     setFormData((prevData) => ({
@@ -192,11 +192,15 @@ const PurchaseList = () => {
     formData.stock.forEach((item, index) => {
       formDataToSend.append(`stock[${index}][item_id]`, item.item_id);
       formDataToSend.append(`stock[${index}][quantity]`, item.quantity);
-      formDataToSend.append(`stock[${index}][amount]`, item.amount); 
+      formDataToSend.append(`stock[${index}][amount]`, item.amount);
     });
 
     addPurchase(formDataToSend);
     onCloseModal();
+  };
+
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
   };
 
   return (
@@ -258,6 +262,15 @@ const PurchaseList = () => {
                         ))
                       )}
                     </tbody>
+                    <Stack className="rightPagination mt10" spacing={2}>
+                      <Pagination
+                        color="primary"
+                        count={totalPages}
+                        page={currentPage}
+                        shape="rounded"
+                        onChange={(event, value) => handlepagechange(value)}
+                      />
+                    </Stack>
                   </Table>
                 </div>
               </CardBody>
@@ -274,48 +287,66 @@ const PurchaseList = () => {
         </ModalHeader>
         <ModalBody>
           <Form>
-          <div className="row mt-3">
+            <div className="row mt-3">
               <FormGroup className="col-md-6">
-                <Label for="vendor_id">Choose Vendor </Label>
-                <Input
-                  type="select"
-                  name="vendor_id"
-                  id="vendor_id"
-                  value={formData.vendor_id}
-                  onChange={handleVendorChange}
-                >
-                  <option value="">Select Vendor</option>
-                  {allvendorList?.data?.map((test) => (
-                    <option key={test._id} value={test._id}>
-                      {test.name}
-                    </option>
-                  ))}
-                </Input>
+                <Label for="vendor_id">Choose Vendor</Label>
+                <Autocomplete
+                  options={allvendorList?.data || []}
+                  getOptionLabel={(option) => option.name}
+                  value={
+                    allvendorList.data?.find(
+                      (vendor) => vendor._id === formData.vendor_id
+                    ) || null
+                  } // Show the selected vendor
+                  onChange={(event, newValue) => {
+                    handleVendorChange(newValue);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Select Vendor"
+                      variant="outlined"
+                    />
+                  )}
+                  isOptionEqualToValue={(option, value) =>
+                    option._id === value._id
+                  }
+                />
               </FormGroup>
             </div>
             {formData.stock.map((item, index) => (
               <div className="row" key={index}>
-                <FormGroup className="col-md-4">
-                <Label htmlFor={`amount_${index}`}>Item</Label>
-                  <Input
-                    type="select"
-                    name="item_id"
-                    id={`item_id_${index}`}
-                    value={item.item_id}
-                    onChange={(e) => handleInputChange(e, index)}
-                    placeholder="Choose Item"
-                  >
-                    <option value="">Select Item</option>
-                    {allItemList?.data?.map((test) => (
-                      <option key={test._id} value={test._id}>
-                        {test.name}
-                      </option>
-                    ))}
-                  </Input>
+                <FormGroup className="col-md-3">
+                  <Label htmlFor={`item_id_${index}`}>Item</Label>
+                  <Autocomplete
+                    options={allItemList?.data || []}
+                    getOptionLabel={(option) => option.name}
+                    onChange={(event, newValue) => {
+                      handleInputChange(
+                        {
+                          target: {
+                            name: "item_id",
+                            value: newValue?._id || "",
+                          },
+                        },
+                        index
+                      );
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Choose Item"
+                        variant="outlined"
+                      />
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                      option._id === value._id
+                    }
+                  />
                 </FormGroup>
 
                 <FormGroup className="col-md-2">
-                <Label htmlFor={`amount_${index}`}>Stock Quantity</Label>
+                  <Label htmlFor={`amount_${index}`}>Present Stock</Label>
                   <Input
                     type="text"
                     name="stock_quantity"
@@ -325,8 +356,8 @@ const PurchaseList = () => {
                   />
                 </FormGroup>
 
-                <FormGroup className="col-md-2">
-                <Label htmlFor={`amount_${index}`}>Quantity</Label>
+                <FormGroup className="col-md-3">
+                  <Label htmlFor={`amount_${index}`}>Purchased Quantity</Label>
                   <Input
                     type="text"
                     name="quantity"
@@ -337,15 +368,15 @@ const PurchaseList = () => {
                   />
                 </FormGroup>
                 <FormGroup className="col-md-2">
-              <Label htmlFor={`amount_${index}`}>Amount</Label>
-              <Input
-                type="text"
-                name="amount"
-                value={item.amount}
-                onChange={(e) => handleInputChange(e, index)}
-                id={`amount_${index}`}
-              />
-            </FormGroup>
+                  <Label htmlFor={`amount_${index}`}>Full Amount</Label>
+                  <Input
+                    type="text"
+                    name="amount"
+                    value={item.amount}
+                    onChange={(e) => handleInputChange(e, index)}
+                    id={`amount_${index}`}
+                  />
+                </FormGroup>
 
                 <FormGroup className="col-md-2 d-flex align-items-center">
                   {formData.stock.length > 1 && (
@@ -377,8 +408,6 @@ const PurchaseList = () => {
                 &nbsp;<span>Add More</span>
               </Button>
             </div>
-
-            
           </Form>
         </ModalBody>
         <ModalFooter>

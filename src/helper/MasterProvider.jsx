@@ -729,16 +729,17 @@ export const MasterProvider = ({ children }) => {
   };
 
 
-  const getSpeciesMasterList = async () => {
+  const getSpeciesMasterList = async (dataToSend) => {
     try {
       const response = await axios.post(
-        `${base_url}/admin/species/list`,{},
+        `${base_url}/admin/species/list`,{...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
       if (response.status === 200) {
         setSpeciesMasterList({
           data: response?.data?.data || [],
+          total: response.data.total,
           loading: false,
         });
       } else {
