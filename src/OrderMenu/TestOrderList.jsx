@@ -22,13 +22,17 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useOrderContext } from "../helper/OrderProvider";
 import { useMasterContext } from "../helper/MasterProvider";
 import { Pagination, Stack } from "@mui/material";
+import { useDashboardContext } from "../helper/DashboardProvider";
 
 const TestOrderList = () => {
   const Navigate = useNavigate();
-  const { allOrder, getAllOrderList, getAllOrderStatus, orderStatus } =
+  const { allOrder, getAllOrderList } =
     useOrderContext();
   const { getOrderMasterList, addOrderMasterList, orderMasterList } =
     useMasterContext();
+
+    const { getAllOrderStatus ,orderStatus } =
+    useDashboardContext();
 
   const [selectedStatus, setSelectedStatus] = useState("");
 
@@ -50,6 +54,7 @@ const TestOrderList = () => {
 
   useEffect(() => {
     getOrderMasterList();
+    getAllOrderStatus()
   }, []);
 
   // useEffect(() => {
@@ -85,17 +90,19 @@ const TestOrderList = () => {
                   >
                     All
                   </Button>
-                  {orderMasterList?.data?.map((el, i) => (
-                    <Button
-                      color={selectedStatus === el.title ? "primary" : "danger"}
-                      key={i}
-                      style={{ minWidth: "max-content" }}
-                      onClick={() => setSelectedStatus(el.title)}
-                      size="sm"
-                    >
-                      {el.title}
-                    </Button>
-                  ))}
+                  {orderStatus?.data
+  ?.filter((el) => el.title !== "All") // Filter out the "All" status
+  .map((el, i) => (
+    <Button
+      color={selectedStatus === el.title ? "primary" : "danger"}
+      key={i}
+      style={{ minWidth: "max-content" }}
+      onClick={() => setSelectedStatus(el.title)}
+      size="sm"
+    >
+      {el.title} ({el.total})
+    </Button>
+  ))}
                 </div>
                 <div className="promo-code-list">
                   <Table hover responsive>
