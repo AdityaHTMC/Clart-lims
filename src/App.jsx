@@ -96,6 +96,7 @@ import VendorManagement from "./StockManagement/VendorManagement";
 import PurchaseList from "./StockManagement/PurchaseList";
 import StockReport from "./StockManagement/StockReport";
 import StockHistory from "./StockManagement/StockHistory";
+import StockLQA from "./StockManagement/StockLQA";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -172,6 +173,7 @@ function App() {
           <Route path="/purchase-to-stock" element={<PurchaseList/>} />
           <Route path="/stock-reports" element={<StockReport/>} />
           <Route path="/stock-history/:id" element={<StockHistory/>} />
+          <Route path="/low-quantity-stocks" element={<StockLQA/>} />
           {/* stock end */}
 
           {/* order start */}

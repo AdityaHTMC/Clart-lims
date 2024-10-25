@@ -191,11 +191,14 @@ const PurchaseList = () => {
     // Append each stock item to FormData
     formData.stock.forEach((item, index) => {
       formDataToSend.append(`stock[${index}][item_id]`, item.item_id);
-      formDataToSend.append(`stock[${index}][quantity]`, item.quantity);
-      formDataToSend.append(`stock[${index}][amount]`, item.amount);
+      formDataToSend.append(`stock[${index}][quantity]`, Number(item.quantity)); 
+      formDataToSend.append(`stock[${index}][amount]`, Number(item.amount));
     });
 
     addPurchase(formDataToSend);
+    console.log("Quantity Type:", typeof Number(formData.stock[0].quantity)); // should be 'number'
+console.log("Amount Type:", typeof Number(formData.stock[0].amount)); // should be 'number'
+
     onCloseModal();
   };
 
@@ -359,7 +362,7 @@ const PurchaseList = () => {
                 <FormGroup className="col-md-3">
                   <Label htmlFor={`amount_${index}`}>Purchased Quantity</Label>
                   <Input
-                    type="text"
+                    type="number"
                     name="quantity"
                     value={item.quantity}
                     onChange={(e) => handleInputChange(e, index)}
@@ -370,7 +373,7 @@ const PurchaseList = () => {
                 <FormGroup className="col-md-2">
                   <Label htmlFor={`amount_${index}`}>Full Amount</Label>
                   <Input
-                    type="text"
+                    type="number"
                     name="amount"
                     value={item.amount}
                     onChange={(e) => handleInputChange(e, index)}

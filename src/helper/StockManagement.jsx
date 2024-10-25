@@ -19,6 +19,7 @@ export const StockProvider = ({ children }) => {
   const [stockreport, setStockreport] = useState({loading: true,data: [],total: "",});
   const [stockhistory, setStockhistory] = useState({loading: true,data: [],total: "",});
   const [allvendorList, setallvendorList] = useState({ loading: true, data: [] });
+  const [stocklqa, setStocklqa] = useState({loading: true,data: [],total: "",});
   const { Authtoken } = useAuthContext();
   const AuthToken = localStorage.getItem("Authtoken");
 
@@ -482,8 +483,32 @@ export const StockProvider = ({ children }) => {
     }
   };
 
+  const getStockLQAList = async (dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/low-quantity-stocks/list`,
+        {...dataToSend},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setStocklqa({
+          data: response?.data?.data || [],
+          total: response.data.total,
+          loading: false,
+        });
+      } else {
+        setStocklqa({ data: [], loading: false });
+        toast.error("server errors");
+      }
+    } catch (error) {
+      setStocklqa({ data: [], loading: false });
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
 
-  const values = {getCmsList,cmsList,addCms,getItemGrList,itemgroup,addItemGr,getIMList, addIM,imList,imAllList,getallIMList,editIM,deleteIMList ,getvendorList , addVendor ,editVendor, deletevendor,vendorList,getPurchaseList, purchaseList, getStockreport , stockreport,getallvendorlist , allvendorList,addPurchase,addStockissue, getStockReportList ,srList,getStockHistoryList,stockhistory
+
+  const values = {getCmsList,cmsList,addCms,getItemGrList,itemgroup,addItemGr,getIMList, addIM,imList,imAllList,getallIMList,editIM,deleteIMList ,getvendorList , addVendor ,editVendor, deletevendor,vendorList,getPurchaseList, purchaseList, getStockreport , stockreport,getallvendorlist , allvendorList,addPurchase,addStockissue, getStockReportList ,srList,getStockHistoryList,stockhistory,getStockLQAList,stocklqa
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };
