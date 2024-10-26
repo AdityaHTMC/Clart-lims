@@ -17,9 +17,10 @@ import { Autocomplete, TextField } from "@mui/material";
 const AddCustomer = () => {
   const navigate = useNavigate();
 
-  const { addBreed, allBreedList, allbreed,addCustomer } = useMasterContext();
+  const { addBreed, allBreedList, allbreed,addCustomer,getSpeciesMasterList,speciesMasterList } = useMasterContext();
   useEffect(() => {
     allBreedList();
+    getSpeciesMasterList();
   }, []);
 
   console.log(allbreed, "allBreedList");
@@ -39,6 +40,8 @@ const AddCustomer = () => {
         date_of_birth: "",
         sex: "",
         color: "",
+        breed: "", 
+        species: "",
       },
     ],
   });
@@ -56,6 +59,16 @@ const AddCustomer = () => {
     const { value } = e.target;
     const updatedPets = [...inputData.pet];
     updatedPets[index].breed = value;
+    setInputData((prevData) => ({
+      ...prevData,
+      pet: updatedPets,
+    }));
+  };
+
+  const handleSpeciesChange = (e, index) => {
+    const { value } = e.target;
+    const updatedPets = [...inputData.pet];
+    updatedPets[index].species = value;
     setInputData((prevData) => ({
       ...prevData,
       pet: updatedPets,
@@ -83,6 +96,7 @@ const AddCustomer = () => {
           sex: "",
           color: "",
           breed: "", 
+          species:''
         },
       ],
     }));
@@ -117,6 +131,7 @@ const AddCustomer = () => {
       formDataToSend.append(`pet[${index}][sex]`, pet.sex);
       formDataToSend.append(`pet[${index}][color]`, pet.color);
       formDataToSend.append(`pet[${index}][breed]`, pet.breed);
+      formDataToSend.append(`pet[${index}][species]`, pet.species);
     });
 
     // inputData.images.forEach((image, index) => {
@@ -135,9 +150,11 @@ const AddCustomer = () => {
         <form
           onSubmit={handleSubmit}
           style={{
-            backgroundColor: "#f9f9f9",
-            padding: "20px",
+            backgroundColor: "#ffffff",
+            padding: "30px",
             borderRadius: "10px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            border: "1px solid #e0e0e0",
           }}
         >
           <div className="row">
@@ -278,7 +295,7 @@ const AddCustomer = () => {
               <Card className="mb-3" key={index}>
                 <CardBody>
                   <div className="row">
-                    <div className="col-md-3">
+                    <div className="col-md-2">
                       <FormGroup>
                         <Label for={`date_of_birth_${index}`}>
                           Date of Birth
@@ -292,7 +309,7 @@ const AddCustomer = () => {
                         />
                       </FormGroup>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-md-2">
                       <FormGroup>
                         <Label for={`sex_${index}`}>Sex</Label>
                         <Input
@@ -304,7 +321,7 @@ const AddCustomer = () => {
                         />
                       </FormGroup>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-md-2">
                       <FormGroup>
                         <Label for={`color_${index}`}>Color</Label>
                         <Input
@@ -316,7 +333,7 @@ const AddCustomer = () => {
                         />
                       </FormGroup>
                     </div>
-                    <div className="col-md-3">
+                    <div className="col-md-2">
                       <FormGroup>
                         <Label for={`breed-${index}`}>Breed</Label>
                         <Input
@@ -330,6 +347,25 @@ const AddCustomer = () => {
                           {allbreed?.data?.map((breed) => (
                             <option key={breed._id} value={breed.name}>
                               {breed.name}
+                            </option>
+                          ))}
+                        </Input>
+                      </FormGroup>
+                    </div>
+                    <div className="col-md-2">
+                      <FormGroup>
+                        <Label for={`species-${index}`}>Species</Label>
+                        <Input
+                          type="select"
+                          name="species"
+                          id={`species-${index}`}
+                          value={pet.species}
+                          onChange={(e) => handleSpeciesChange(e, index)}
+                        >
+                          <option value="">Select Species</option>
+                          {speciesMasterList?.data?.map((breed) => (
+                            <option key={breed._id} value={breed.title}>
+                              {breed.title}
                             </option>
                           ))}
                         </Input>

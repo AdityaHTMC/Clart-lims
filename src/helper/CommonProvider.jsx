@@ -366,7 +366,7 @@ export const CommonProvider = ({ children }) => {
 
     const getEventList = async () => {
         try {
-            const response = await axios.post(`${base_url}/admin/event/list`,{}, { headers: { 'Authorization': Authtoken }});
+            const response = await axios.post(`${base_url}/admin/news-event/list`,{}, { headers: { 'Authorization': Authtoken }});
             if (response.status === 200) {
                 setEventList({ data: response?.data?.data || [], loading: false })
             } else {
@@ -383,7 +383,7 @@ export const CommonProvider = ({ children }) => {
     const addEvent = async (formDataToSend) => {
         try {
           const response = await axios.post(
-            `${base_url}/admin/event/add`,
+            `${base_url}/admin/news-event/add`,
             formDataToSend,  
             { 
               headers: { 
@@ -394,7 +394,7 @@ export const CommonProvider = ({ children }) => {
           );
           if (response.status === 200) {
             toast.success('Event added successfully');
-            navigate('/event-news')
+            navigate('/news-events')
           } else {
             toast.error("Failed to add Event");
           }
@@ -408,7 +408,7 @@ export const CommonProvider = ({ children }) => {
       const eventDelete = async (id) => { 
         try {
           const response = await axios.delete(
-            `${base_url}/admin/event/delete/${id}`,
+            `${base_url}/admin/news-event/delete/${id}`,
             { headers: { 'Authorization': Authtoken }}
           );
           

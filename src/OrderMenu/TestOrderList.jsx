@@ -26,13 +26,11 @@ import { useDashboardContext } from "../helper/DashboardProvider";
 
 const TestOrderList = () => {
   const Navigate = useNavigate();
-  const { allOrder, getAllOrderList } =
-    useOrderContext();
+  const { allOrder, getAllOrderList } = useOrderContext();
   const { getOrderMasterList, addOrderMasterList, orderMasterList } =
     useMasterContext();
 
-    const { getAllOrderStatus ,orderStatus } =
-    useDashboardContext();
+  const { getAllOrderStatus, orderStatus } = useDashboardContext();
 
   const [selectedStatus, setSelectedStatus] = useState("");
 
@@ -54,7 +52,7 @@ const TestOrderList = () => {
 
   useEffect(() => {
     getOrderMasterList();
-    getAllOrderStatus()
+    getAllOrderStatus();
   }, []);
 
   // useEffect(() => {
@@ -91,18 +89,20 @@ const TestOrderList = () => {
                     All
                   </Button>
                   {orderStatus?.data
-  ?.filter((el) => el.title !== "All") // Filter out the "All" status
-  .map((el, i) => (
-    <Button
-      color={selectedStatus === el.title ? "primary" : "danger"}
-      key={i}
-      style={{ minWidth: "max-content" }}
-      onClick={() => setSelectedStatus(el.title)}
-      size="sm"
-    >
-      {el.title} ({el.total})
-    </Button>
-  ))}
+                    ?.filter((el) => el.title !== "All") // Filter out the "All" status
+                    .map((el, i) => (
+                      <Button
+                        color={
+                          selectedStatus === el.title ? "primary" : "danger"
+                        }
+                        key={i}
+                        style={{ minWidth: "max-content" }}
+                        onClick={() => setSelectedStatus(el.title)}
+                        size="sm"
+                      >
+                        {el.title} ({el.total})
+                      </Button>
+                    ))}
                 </div>
                 <div className="promo-code-list">
                   <Table hover responsive>

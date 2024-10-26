@@ -152,6 +152,30 @@ export const DashboardProvider = ({ children }) => {
   };
 
 
+  const Barcodeprint = async (dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/barcode/bulk-print`,
+        dataToSend ,
+        {
+          headers: {
+            Authorization: AuthToken,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        // getbarcode()
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+
   const getDashboardCount = async (dataToSend) => {
     try {
         const response = await axios.get(
@@ -174,7 +198,7 @@ export const DashboardProvider = ({ children }) => {
 
 
     const values = {
-       getCmsList ,cmsList ,getDashboardOrderList,dashboardOrderList,getDashboardOrderCount,dashboardOrderCount,getAllOrderStatus , orderStatus,getbarcode,barcode,getDashboardCount,orderCount,generateBarcode
+       getCmsList ,cmsList ,getDashboardOrderList,dashboardOrderList,getDashboardOrderCount,dashboardOrderCount,getAllOrderStatus , orderStatus,getbarcode,barcode,getDashboardCount,orderCount,generateBarcode,Barcodeprint
     }
     return (
         <AppContext.Provider value={values} >

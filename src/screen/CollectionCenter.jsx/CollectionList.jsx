@@ -1,20 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
-  ArcElement,
-  BarController,
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Filler,
-  Legend,
-  LineElement,
-  LinearScale,
-  PointElement,
-  RadialLinearScale,
-  Title,
-  Tooltip,
-} from "chart.js";
+
 
 import {
   Button,
@@ -39,23 +25,10 @@ import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { useCategoryContext } from "../../helper/CategoryProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
+import { Pagination, Stack } from "@mui/material";
 
 
-// Register the necessary Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  BarController,
-  BarElement,
-  ArcElement,
-  Filler,
-  RadialLinearScale
-);
+
 
 const CollectionList = () => {
   const navigate = useNavigate();
@@ -63,12 +36,27 @@ const CollectionList = () => {
   const { collectionLists , getCollectionList } = useCategoryContext();
 
   const [open, setOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemperPage = 15;
+
+  const totalPages = collectionLists?.total && Math.ceil(collectionLists?.total / itemperPage);
+
 
   useEffect(() => {
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+      search: searchTerm,
+    };
     getCollectionList();
-  }, []);
+  }, [currentPage]);
 
-  console.log(collectionLists, "labLists");
+  
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
+  };
+
 
   const onOpenModal = () => {
     navigate("/add-connection");
@@ -164,6 +152,15 @@ const CollectionList = () => {
                         )}
                       </tbody>
                     </Table>
+                    <Stack className="rightPagination mt10" spacing={2}>
+                        <Pagination
+                          color="primary"
+                          count={totalPages}
+                          page={currentPage}
+                          shape="rounded"
+                          onChange={(event, value) => handlepagechange(value)}
+                        />
+                      </Stack>
                   </div>
                 </div>
               </CardBody>

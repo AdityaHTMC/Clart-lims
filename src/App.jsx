@@ -227,7 +227,7 @@ function App() {
           <Route path="/promo-code" element={<PromoCodeList />} />
 
           <Route path="/fulfillment-center" element={<VendorList />} />
-          <Route path="/event-news" element={<EventList />} />
+          <Route path="/news-events" element={<EventList />} />
 
           <Route path="/featured-section" element={<FeaturedSection />} />
 

@@ -1,20 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
-  ArcElement,
-  BarController,
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Filler,
-  Legend,
-  LineElement,
-  LinearScale,
-  PointElement,
-  RadialLinearScale,
-  Title,
-  Tooltip,
-} from "chart.js";
+
 
 import {
   Button,
@@ -40,21 +26,9 @@ import { FaEdit, FaTrashAlt } from "react-icons/fa";
 
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useCategoryContext } from "../../helper/CategoryProvider";
+import { Pagination, Stack } from "@mui/material";
 // Register the necessary Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  BarController,
-  BarElement,
-  ArcElement,
-  Filler,
-  RadialLinearScale
-);
+
 
 const LabList = () => {
   const navigate = useNavigate();
@@ -63,11 +37,24 @@ const LabList = () => {
 
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    getLabsList();
-  }, []);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemperPage = 15;
 
-  console.log(labLists, "labLists");
+  const totalPages = labLists?.total && Math.ceil(labLists?.total / itemperPage);
+
+  useEffect(() => {
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+      search: searchTerm,
+    };
+    getLabsList(dataToSend);
+  }, [currentPage]);
+
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
+  };
 
   const onOpenModal = () => {
     navigate("/add-lab");
@@ -163,6 +150,15 @@ const LabList = () => {
                         )}
                       </tbody>
                     </Table>
+                    <Stack className="rightPagination mt10" spacing={2}>
+                        <Pagination
+                          color="primary"
+                          count={totalPages}
+                          page={currentPage}
+                          shape="rounded"
+                          onChange={(event, value) => handlepagechange(value)}
+                        />
+                      </Stack>
                   </div>
                 </div>
               </CardBody>

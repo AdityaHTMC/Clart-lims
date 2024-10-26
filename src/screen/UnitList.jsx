@@ -1,20 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
-  ArcElement,
-  BarController,
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Filler,
-  Legend,
-  LineElement,
-  LinearScale,
-  PointElement,
-  RadialLinearScale,
-  Title,
-  Tooltip,
-} from "chart.js";
+
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import {
   Button,
@@ -39,21 +25,9 @@ import { useCategoryContext } from "../helper/CategoryProvider";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
+import { Pagination, Stack } from "@mui/material";
 // Register the necessary Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  BarController,
-  BarElement,
-  ArcElement,
-  Filler,
-  RadialLinearScale
-);
+
 
 const UnitList = () => {
   const navigate = useNavigate();
@@ -62,11 +36,25 @@ const UnitList = () => {
 
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    getunitList();
-  }, []);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemperPage = 15;
 
-  console.log(unitLists,'unitLists');
+  const totalPages = unitLists?.total && Math.ceil(unitLists?.total / itemperPage);
+
+  useEffect(() => {
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+      search: searchTerm,
+    };
+    getunitList(dataToSend);
+  }, [currentPage]);
+
+
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
+  };
 
   const onOpenModal = () => {
     navigate("/add-products");
@@ -161,6 +149,15 @@ const UnitList = () => {
                         )}
                       </tbody>
                     </Table>
+                    <Stack className="rightPagination mt10" spacing={2}>
+                        <Pagination
+                          color="primary"
+                          count={totalPages}
+                          page={currentPage}
+                          shape="rounded"
+                          onChange={(event, value) => handlepagechange(value)}
+                        />
+                      </Stack>
                   </div>
                 </div>
               </CardBody>

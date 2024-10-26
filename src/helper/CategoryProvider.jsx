@@ -22,11 +22,11 @@ export const CategoryProvider = ({ children }) => {
   // console.log(AuthToken)
   const base_url = import.meta.env.VITE_API_URL;
 
-  const getunitList = async (data) => {
+  const getunitList = async (dataToSend) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/unit/list`,
-        {},
+        {...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
@@ -70,11 +70,11 @@ export const CategoryProvider = ({ children }) => {
     }
   };
 
-  const getLabsList = async (data) => {
+  const getLabsList = async (dataToSend) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/lab/list`,
-        {},
+        {...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
@@ -118,11 +118,11 @@ export const CategoryProvider = ({ children }) => {
     }
   };
 
-  const getCollectionList = async (data) => {
+  const getCollectionList = async (dataToSend) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/collection-center/list`,
-        {},
+        {...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
