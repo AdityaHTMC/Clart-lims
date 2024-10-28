@@ -13,6 +13,7 @@
   import { useEffect, useState } from "react";
   import { useNavigate } from "react-router-dom";
   import { FaEdit, FaTrashAlt } from "react-icons/fa";
+  import { IoAddCircle } from "react-icons/io5";
   import SearchIcon from "@mui/icons-material/Search";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useMasterContext } from "../../helper/MasterProvider";
@@ -50,6 +51,10 @@ import { IconButton, Pagination, Stack, TextField } from "@mui/material";
     };
     const handleEdit = (id) => {
       // navigate(`/product-edit/${id}`);
+    };
+
+    const handleaddPet = (id) => {
+      navigate(`/add-pet/${id}`);
     };
   
     const handleDelete = (id) => {
@@ -159,6 +164,13 @@ import { IconButton, Pagination, Stack, TextField } from "@mui/material";
                                       onClick={() => handleDelete(product?._id)}
                                     >
                                       <FaTrashAlt />
+                                    </Button>
+                                    <Button
+                                      className="btn"
+                                      color="link"
+                                      onClick={() => handleaddPet(product?._id)}
+                                    >
+                                     <IoAddCircle />
                                     </Button>
                                   </div>
                                 </td>

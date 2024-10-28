@@ -97,6 +97,7 @@ import PurchaseList from "./StockManagement/PurchaseList";
 import StockReport from "./StockManagement/StockReport";
 import StockHistory from "./StockManagement/StockHistory";
 import StockLQA from "./StockManagement/StockLQA";
+import AddPet from "./screen/Customers/AddPet";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -181,7 +182,9 @@ function App() {
           <Route path="/package-orders" element={<PackageOrder />} />
           <Route path="/add-order" element={<CreateOrder />} />
           {/* order end */}
-         
+          
+          <Route path="/add-pet/:id" element={<AddPet />} />
+
           <Route path="/barcode-management" element={<BarcodeList />} />
 
           <Route path="/task-management" element={<TaskList />} />
