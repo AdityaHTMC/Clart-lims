@@ -147,7 +147,7 @@ const CurrencyList = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Currency List" parent="Physical" />
+      <CommonBreadcrumb title="Currency List"  />
       <Container fluid>
         <Row>
           <Col sm="12">

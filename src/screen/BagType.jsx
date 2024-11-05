@@ -146,7 +146,7 @@ import {
   
     return (
       <>
-        <CommonBreadcrumb title="Bag Type List" parent="Physical" />
+        <CommonBreadcrumb title="Bag Type List" />
         <Container fluid>
           <Row>
             <Col sm="12">

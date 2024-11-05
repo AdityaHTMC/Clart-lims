@@ -72,7 +72,7 @@ const AddBread = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Add Breed" parent="Physical" />
+      <CommonBreadcrumb title="Add Breed"  />
       <div className="product-form-container" style={{ padding: "2px" }}>
         <form
           onSubmit={handleSubmit}

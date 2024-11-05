@@ -179,7 +179,7 @@ const BrandList = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Brand List" parent="Physical" />
+      <CommonBreadcrumb title="Brand List"  />
       <Container fluid>
         <Row>
           <Col sm="12">

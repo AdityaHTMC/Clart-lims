@@ -104,7 +104,7 @@ const AddEvent = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Add Event" parent="Physical" />
+      <CommonBreadcrumb title="Add Event"  />
       <div className="product-form-container" style={{ padding: "2px" }}>
         <form
           onSubmit={handleSubmit}

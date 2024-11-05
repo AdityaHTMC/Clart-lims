@@ -129,7 +129,7 @@ const CmsList = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="CMS List" parent="Physical" />
+      <CommonBreadcrumb title="CMS List"  />
       <Container fluid>
         <Row>
           <Col sm="12">

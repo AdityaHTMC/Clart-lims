@@ -117,7 +117,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
   
     return (
       <>
-        <CommonBreadcrumb title="Unit Master List" parent="Physical" />
+        <CommonBreadcrumb title="Unit Master List"  />
         <Container fluid>
           <Row>
             <Col sm="12">

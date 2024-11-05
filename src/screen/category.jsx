@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Datatable from "../component/common/data-table";
 import { ProductCategoryData } from "../Data/Product/Physical";
 import { useCategoryContext } from "../helper/CategoryProvider";
-import { useAuthContext } from "../helper/AuthProvider";
+
 import { toast } from "react-toastify";
 // Register the necessary Chart.js components
 // ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, BarController, BarElement, ArcElement, Filler, RadialLinearScale);
@@ -46,7 +46,7 @@ const CategoryPage = () => {
 
     return (
         <>
-            <CommonBreadcrumb title="Category" parent="Physical" />
+            <CommonBreadcrumb title="Category"  />
             <Container fluid>
                 <Row>
                     <Col sm="12">

@@ -77,7 +77,7 @@ const AddDeliveryBoy = () => {
 
   return (
     <>
-      <CommonBreadcrumb title=" Add Delivery Boy" parent="Physical" />
+      <CommonBreadcrumb title=" Add Delivery Boy"  />
       <div className="product-form-container" style={{ padding: "10px" }}>
       <form
         onSubmit={handleSubmit}

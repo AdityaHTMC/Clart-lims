@@ -74,7 +74,7 @@ const AddCoupon = () => {
 
   return (
     <>
-     <CommonBreadcrumb title="Add coupon" parent="Physical" />
+     <CommonBreadcrumb title="Add coupon"  />
     <Container className="mt-5">
       <div className="border p-4 rounded shadow-sm bg-white">
         <h4 className="mb-4"><i className="fa fa-plus-circle mr-2"></i>Add New Coupon</h4>

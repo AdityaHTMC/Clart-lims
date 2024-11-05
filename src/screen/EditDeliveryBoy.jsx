@@ -115,7 +115,7 @@ const EditDeliveryBoy = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Edit Delivery Boy" parent="Physical" />
+      <CommonBreadcrumb title="Edit Delivery Boy"  />
       {boyDetails.loading ? (
         <div
           style={{

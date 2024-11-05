@@ -69,7 +69,7 @@ const EditFeatured = () => {
 
   return (
     <div>
-      <CommonBreadcrumb title="Edit Section" parent="Physical" />
+      <CommonBreadcrumb title="Edit Section" />
       <Container fluid>
         <Row>
           <Col>

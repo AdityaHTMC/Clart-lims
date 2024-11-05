@@ -94,7 +94,7 @@ import {
   
     return (
       <>
-        <CommonBreadcrumb title="Delivery Boy List" parent="Physical" />
+        <CommonBreadcrumb title="Delivery Boy List"  />
         <Container fluid>
           <Row>
             <Col sm="12">

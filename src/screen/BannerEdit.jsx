@@ -103,7 +103,7 @@ const BannerEdit = () => {
   return(
     <>
     
-    <CommonBreadcrumb title="Edit Banner" parent="Physical" />
+    <CommonBreadcrumb title="Edit Banner"  />
     <Container>
       <Form onSubmit={handleSubmit}>
         {/* Title */}

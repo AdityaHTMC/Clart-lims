@@ -159,7 +159,7 @@ const Categories = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Category List" parent="Physical" />
+      <CommonBreadcrumb title="Category List" />
       <Container fluid>
         <Row>
           <Col sm="12">

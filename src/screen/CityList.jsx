@@ -154,7 +154,7 @@ const CityList = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="City List" parent="Physical" />
+      <CommonBreadcrumb title="City List"  />
       <Container fluid>
         <Row>
           <Col sm="12">
